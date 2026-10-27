@@ -164,7 +164,8 @@ h1, h2, h3 {
 /* Arco vermelho grande (canto inferior direito) */
 .hero__arco {
   position: absolute;
-  right: -120px;
+  /* Mantém o arco fora do bloco central de 720px, com 24px de respiro. */
+  right: min(-120px, calc((100vw - 720px) / 2 - 544px));
   bottom: -1px;
   width: 520px;
   height: 520px;
@@ -176,7 +177,7 @@ h1, h2, h3 {
 /* Arco vermelho invertido (canto superior esquerdo) */
 .hero__arco--topo {
   top: -200px;
-  left: -120px;
+  left: min(-120px, calc((100vw - 720px) / 2 - 424px));
   right: auto;
   bottom: auto;
   width: 400px;
@@ -187,9 +188,7 @@ h1, h2, h3 {
 .hero__inner {
   position: relative;
   z-index: 1;
-  max-width: var(--container);
-  /* Reserva os 400px visíveis do arco e 24px de respiro à direita. */
-  padding-right: 424px;
+  max-width: 720px;
 }
 
 .hero__titulo {
@@ -534,12 +533,8 @@ h1, h2, h3 {
   }
 
   .hero {
-    padding: 120px 0 80px;
-  }
-
-  .hero__inner {
-    /* No tablet, o arco ocupa 240px dentro da tela. */
-    padding-right: 264px;
+    /* O arco fica abaixo do conteúdo sem deslocar o bloco para a esquerda. */
+    padding: 140px 0 340px;
   }
 
   /* Arco inferior direito — tablet */
@@ -568,10 +563,6 @@ h1, h2, h3 {
   .hero {
     /* No celular, a figura fica abaixo do conteúdo, sem estreitar o texto. */
     padding-bottom: 240px;
-  }
-
-  .hero__inner {
-    padding-right: 24px;
   }
 
   .hero__acoes {
