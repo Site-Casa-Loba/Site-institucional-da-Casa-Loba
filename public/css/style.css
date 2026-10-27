@@ -187,7 +187,9 @@ h1, h2, h3 {
 .hero__inner {
   position: relative;
   z-index: 1;
-  max-width: 720px;
+  max-width: var(--container);
+  /* Reserva os 400px visíveis do arco e 24px de respiro à direita. */
+  padding-right: 424px;
 }
 
 .hero__titulo {
@@ -535,6 +537,11 @@ h1, h2, h3 {
     padding: 120px 0 80px;
   }
 
+  .hero__inner {
+    /* No tablet, o arco ocupa 240px dentro da tela. */
+    padding-right: 264px;
+  }
+
   /* Arco inferior direito — tablet */
   .hero__arco {
     width: 320px;
@@ -556,6 +563,15 @@ h1, h2, h3 {
 @media (max-width: 560px) {
   .nav-links a:not(.btn) {
     display: none;
+  }
+
+  .hero {
+    /* No celular, a figura fica abaixo do conteúdo, sem estreitar o texto. */
+    padding-bottom: 240px;
+  }
+
+  .hero__inner {
+    padding-right: 24px;
   }
 
   .hero__acoes {
