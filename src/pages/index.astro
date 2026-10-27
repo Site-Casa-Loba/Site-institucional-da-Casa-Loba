@@ -11,7 +11,7 @@ import Layout from "../layouts/Layout.astro";
     <!-- navegação flutuante -->
     <nav class="nav-flutuante" id="navFlutuante">
       <div class="container nav-flutuante__inner">
-        <a href="#topo" class="logo" aria-label="Casa Loba — início">
+        <a href="#topo" class="logo">
           <span class="logo__texto">casa</span>
           <img src="/assets/images/lobo_logo.svg" alt="Loba uivando" class="logo__icone" />
           <span class="logo__texto">loba</span>
@@ -19,8 +19,8 @@ import Layout from "../layouts/Layout.astro";
         <div class="nav-links">
           <a href="#secao-sobre">Sobre a Casa</a>
           <a href="#secao-frentes">Nossas frentes</a>
-          <a href="#secao-planos">Comunidade</a>
-          <a href="#secao-planos" class="btn btn--sm btn--vermelho">Conhecer a comunidade</a>
+          <a href="#secao-planos">Planos</a>
+          <a href="#secao-planos" class="btn btn--sm btn--vermelho">Ver planos</a>
         </div>
       </div>
     </nav>
@@ -31,16 +31,17 @@ import Layout from "../layouts/Layout.astro";
 
     <!-- Conteúdo do hero -->
     <div class="container hero__inner">
-      <p class="tag">Uma rede para mulheres e mães</p>
+      <p class="tag">Rede de apoio</p>
       <h1 class="hero__titulo">
-        Quem cuida também precisa de <span class="destaque">uma rede.</span>
+        Quem cuida<br />
+        também precisa <span class="destaque">de uma rede.</span>
       </h1>
       <p class="hero__texto">
-        A Casa Loba conecta mulheres e mães que empreendem, trabalham e buscam apoio para seus projetos. Uma comunidade para trocar experiências, compartilhar saberes e abrir espaço para novas possibilidades.
+        Uma comunidade para mulheres e mães que empreendem, compartilham saberes e constroem caminhos em rede.
       </p>
       <div class="hero__acoes">
         <a href="#secao-planos" class="btn btn--vermelho">Quero fazer parte</a>
-        <a href="#secao-sobre" class="btn btn--ghost">Conhecer a Casa Loba</a>
+        <a href="#secao-sobre" class="btn btn--ghost">Conhecer a Casa</a>
       </div>
     </div>
   </section>
@@ -57,7 +58,7 @@ import Layout from "../layouts/Layout.astro";
       </h2>
 
       <p class="manifesto__texto">
-        A Casa Loba nasce para aproximar cuidado, trabalho e empreendedorismo. Nossa proposta reúne Cuidadoteca, conexões com espaços de coworking e encontros entre mulheres, para que mães também encontrem espaço para participar, aprender e desenvolver seus projetos. Essas iniciativas estão em construção e chegam em breve.
+        A Casa Loba aproxima cuidado, trabalho e empreendedorismo. Em breve, Cuidadoteca, parcerias com coworkings e encontros para mulheres farão parte dessa rede.
       </p>
     </div>
   </section>
@@ -66,33 +67,33 @@ import Layout from "../layouts/Layout.astro";
   <section class="frentes" id="secao-frentes">
     <div class="container">
       <header class="section-head">
-        <p class="tag tag--ameixa">Cuidado, trabalho e conexão</p>
-        <h2 class="section-titulo">Como essa rede ganha vida</h2>
+        <p class="tag tag--ameixa">Nossas frentes</p>
+        <h2 class="section-titulo">Cuidado, trabalho e conexão.</h2>
       </header>
 
       <div class="grid-3">
 
         <article class="card">
           <div class="card__arco card__arco--vermelho"></div>
-          <h3 class="card__titulo">Cuidadoteca — em breve</h3>
+          <h3 class="card__titulo">Cuidadoteca</h3>
           <p class="card__texto">
-            Uma proposta de cuidado infantil em eventos e encontros, pensada para ampliar a participação das mães. Porque estar presente também depende de ter com quem compartilhar o cuidado.
+            Em breve: cuidado infantil em eventos e encontros, para que mães também tenham espaço para participar, aprender e criar conexões.
           </p>
         </article>
 
         <article class="card">
           <div class="card__arco card__arco--azul"></div>
-          <h3 class="card__titulo">Coworking e parcerias — em breve</h3>
+          <h3 class="card__titulo">Coworking</h3>
           <p class="card__texto">
-            Estamos preparando conexões com espaços parceiros para aproximar mulheres que trabalham e empreendem. Uma frente pensada para favorecer trocas, colaboração e novas possibilidades profissionais.
+            Em breve: conexões com espaços parceiros para trabalhar, trocar experiências e aproximar mulheres que empreendem.
           </p>
         </article>
 
         <article class="card">
           <div class="card__arco card__arco--agua"></div>
-          <h3 class="card__titulo">Eventos e encontros — em breve</h3>
+          <h3 class="card__titulo">Eventos</h3>
           <p class="card__texto">
-            Estamos preparando encontros para compartilhar experiências, aprender e criar vínculos entre mulheres. Conversas que aproximam trajetórias e abrem espaço para ideias, parcerias e projetos.
+            Em breve: encontros para compartilhar saberes, fortalecer vínculos e abrir espaço para novas ideias e parcerias.
           </p>
         </article>
 
@@ -100,17 +101,58 @@ import Layout from "../layouts/Layout.astro";
     </div>
   </section>
 
-  <!-- Comunidade: planos ainda em definição pelas sócias. -->
+  <!-- planos -->
   <section class="planos" id="secao-planos">
     <div class="container">
       <header class="section-head">
-        <p class="tag tag--ameixa">Comunidade Casa Loba</p>
-        <h2 class="section-titulo">Estamos preparando novas formas de fazer parte.</h2>
+        <p class="tag tag--ameixa">Assinatura</p>
+        <h2 class="section-titulo">Encontre seu lugar na Casa.</h2>
         <p class="section-sub">
-          Os planos da Casa Loba estão em construção. Em breve, você poderá
-          conhecer as opções de participação e as próximas etapas da comunidade.
+          Proposta de planos: nomes, valores e benefícios sujeitos à confirmação. Assinaturas em breve.
         </p>
       </header>
+
+      <div class="grid-3">
+
+        <article class="plano">
+          <span class="plano__selo plano__selo--rosa">Para começar</span>
+          <h3 class="plano__nome">Loba</h3>
+          <p class="plano__preco"><span>A definir</span>/mês</p>
+          <ul class="plano__lista">
+            <li>Participação na comunidade</li>
+            <li>Trocas entre empreendedoras</li>
+            <li>Novidades da Casa Loba</li>
+          </ul>
+          <a href="#" class="btn btn--rosa btn--full">Em breve</a>
+        </article>
+
+        <article class="plano plano--destaque">
+          <span class="plano__selo plano__selo--azul">Para se conectar</span>
+          <h3 class="plano__nome">Matilha</h3>
+          <p class="plano__preco"><span>A definir</span>/mês</p>
+          <ul class="plano__lista">
+            <li>Tudo do plano Loba</li>
+            <li>Mural de conexões</li>
+            <li>Seleção de cursos gravados</li>
+            <li>Divulgação do seu negócio</li>
+          </ul>
+          <a href="#" class="btn btn--azul btn--full">Em breve</a>
+        </article>
+
+        <article class="plano">
+          <span class="plano__selo plano__selo--vermelho">Para ir além</span>
+          <h3 class="plano__nome">Alcateia</h3>
+          <p class="plano__preco"><span>A definir</span>/mês</p>
+          <ul class="plano__lista">
+            <li>Tudo do plano Matilha</li>
+            <li>Mais cursos gravados</li>
+            <li>Encontros exclusivos</li>
+            <li>Condições com parceiros</li>
+          </ul>
+          <a href="#" class="btn btn--vermelho btn--full">Em breve</a>
+        </article>
+
+      </div>
     </div>
   </section>
 
@@ -118,12 +160,12 @@ import Layout from "../layouts/Layout.astro";
   <section class="publico" id="secao-publico">
     <div class="container publico__inner">
       <div class="publico__texto">
-        <p class="tag tag--ameixa">Seu momento também cabe aqui</p>
-        <h2 class="section-titulo">Para mulheres que cuidam, criam e empreendem.</h2>
+        <p class="tag tag--ameixa">Para quem é</p>
+        <h2 class="section-titulo">Para mulheres.<br />Para seus projetos.</h2>
         <p>
-          Se você é mãe, empreende ou busca conexões para desenvolver suas ideias, a Casa Loba é um convite para estar em rede. Aqui, a proposta é aproximar mulheres em diferentes momentos, com espaço para suas experiências, seus desafios e seus projetos.
+          Para mães e mulheres que empreendem e buscam com quem contar. Um convite para compartilhar experiências, criar vínculos e dar espaço às suas ideias.
         </p>
-        <a href="#secao-planos" class="btn btn--ameixa">Quero conhecer a comunidade</a>
+        <a href="#secao-planos" class="btn btn--ameixa">Quero fazer parte</a>
       </div>
       <div class="publico__foto" aria-hidden="true">
         <div class="foto-arco"></div>
@@ -134,9 +176,9 @@ import Layout from "../layouts/Layout.astro";
   <!-- cta final -->
   <section class="cta-final">
     <div class="container cta-final__inner">
-      <h2>Seu próximo passo pode começar com uma conexão.</h2>
-      <p>Conheça a Casa Loba e encontre novas formas de compartilhar experiências e construir caminhos em rede.</p>
-      <a href="#secao-planos" class="btn btn--vermelho">Quero fazer parte da Casa Loba</a>
+      <h2>Seu próximo passo começa em rede.</h2>
+      <p>Conheça a Casa Loba e descubra novas formas de construir caminhos com outras mulheres.</p>
+      <a href="#secao-planos" class="btn btn--vermelho">Conhecer os planos</a>
     </div>
   </section>
 
@@ -150,10 +192,10 @@ import Layout from "../layouts/Layout.astro";
       <div class="footer__links">
         <a href="#secao-sobre">Sobre a Casa</a>
         <a href="#secao-frentes">Nossas frentes</a>
-        <a href="#secao-planos">Comunidade</a>
+        <a href="#secao-planos">Planos</a>
         <a href="#secao-publico">Para quem é</a>
       </div>
-      <p class="footer__copy">© 2026 Casa Loba. Feito com cuidado.</p>
+      <p class="footer__copy">© 2026 Casa Loba · feito com cuidado</p>
     </div>
   </footer>
 
