@@ -1,0 +1,115 @@
+---
+// Página de pré-inscrição: substitui o checkout enquanto os planos estão em construção.
+// Sem rodapé por enquanto: o rodapé da landing ainda não é um componente.
+import Layout from "../layouts/Layout.astro";
+import Cabecalho from "../components/Cabecalho.astro";
+---
+
+<Layout titulo="pré-inscrição">
+  <Cabecalho solido />
+
+  <main class="pagina-bordo">
+    <div class="container">
+      <header class="section-head">
+        <h1 class="section-titulo">Estamos preparando novas formas de fazer parte</h1>
+        <p class="section-sub">
+          Os planos da Casa Loba estão em construção. Em breve, você poderá conhecer as opções de
+          participação e as próximas etapas da comunidade.
+        </p>
+      </header>
+
+      <section class="pre-inscricao" aria-labelledby="pre-inscricao-titulo">
+        <!-- PLACEHOLDER: arco vazio, reservado para uma foto futura mascarada em arco -->
+        <div class="pre-inscricao__foto" aria-hidden="true">
+          <div class="foto-arco foto-arco--bordo"></div>
+        </div>
+
+        <div class="pre-inscricao__conteudo">
+          <h2 id="pre-inscricao-titulo" class="pre-inscricao__titulo">Continue por perto</h2>
+          <p>
+            Cadastre seu melhor e-mail para acompanhar as novidades da Casa Loba e descobrir as
+            próximas formas de participar.
+          </p>
+
+          <!-- PLACEHOLDER: o formulário não envia nada, só impede o recarregamento da página.
+               Quem trata o data-form-placeholder é src/scripts/modais.js, que chega a esta página
+               pelos modais do Cabecalho. Para virar funcional, precisa gravar o e-mail (ex.: nos
+               contatos do Wix). -->
+          <form class="pre-inscricao__form" data-form-placeholder>
+            <label class="campo">
+              <span>Email</span>
+              <input class="campo__entrada" type="email" name="email" autocomplete="email" />
+            </label>
+
+            <button type="submit" class="btn btn--vermelho">quero receber novidades</button>
+          </form>
+        </div>
+      </section>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  /* Card creme com o arco à esquerda, encostado na base, e o texto à direita */
+  .pre-inscricao {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--gap);
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 48px 0;
+    background: var(--creme);
+    color: var(--ameixa);
+    border-radius: var(--raio);
+    overflow: hidden;
+  }
+
+  .pre-inscricao__foto {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .pre-inscricao__conteudo {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-self: center;
+    padding-bottom: 40px;
+    text-align: center;
+  }
+
+  /* H3 de card no guia visual: Outfit 700, 1.5rem */
+  .pre-inscricao__titulo {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .pre-inscricao__form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 8px;
+    text-align: left;
+  }
+
+  .pre-inscricao__form .btn {
+    align-self: center;
+  }
+
+  @media (max-width: 560px) {
+    .pre-inscricao {
+      grid-template-columns: 1fr;
+      padding: 40px 24px 0;
+    }
+
+    /* No celular, o arco desce para baixo do formulário e continua encostado na base */
+    .pre-inscricao__foto {
+      order: 1;
+    }
+
+    .foto-arco {
+      max-width: 220px;
+    }
+  }
+</style>

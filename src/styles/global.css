@@ -396,6 +396,10 @@ h1, h2, h3 {
   background-image: linear-gradient(135deg, var(--creme), #f5e6dd);
 }
 
+.foto-arco--bordo {
+  background: var(--bordo);
+}
+
 /* Regra de proteção: em seções com fundo rosa, nunca usar botão vermelho */
 .publico .btn--vermelho {
   background: var(--ameixa);
