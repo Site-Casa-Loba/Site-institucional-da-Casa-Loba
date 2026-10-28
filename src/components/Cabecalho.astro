@@ -1,0 +1,288 @@
+---
+import ModalLogin from "./ModalLogin.astro";
+
+interface Props {
+  solido?: boolean;
+}
+
+const { solido = false } = Astro.props;
+---
+
+<!-- navegação flutuante -->
+<nav
+  class:list={["nav-flutuante", { "is-scrolled": solido }]}
+  id="navFlutuante"
+  data-sempre-solido={solido ? "" : undefined}
+>
+  <div class="container nav-flutuante__inner">
+    <a href="/#topo" class="logo">
+      <span class="logo__texto">casa</span>
+      <img src="/assets/images/lobo_logo.svg" alt="Loba uivando" class="logo__icone" />
+      <span class="logo__texto">loba</span>
+    </a>
+    <div class="nav-links">
+      <a href="/#secao-sobre">[LINK: sobre a casa]</a>
+      <a href="/#secao-frentes">[LINK: frentes]</a>
+      <a href="/membros" class="nav-planos">planos</a>
+      <div class="nav-auth" data-nav-auth>
+        <button class="btn btn--sm btn--vermelho" type="button" data-abrir-modal="modalLogin">Entrar</button>
+        <a class="nav-auth__cadastro" href="/cadastro">Cadastrar</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script src="../scripts/menu.js"></script>
+<script>
+  import { auth } from "../lib/auth";
+
+  const area = document.querySelector<HTMLElement>("[data-nav-auth]");
+  if (area) {
+    try {
+      const usuaria = await auth.usuariaAtual();
+      area.replaceChildren();
+      if (usuaria) {
+        const menu = document.createElement("details");
+        menu.className = "perfil-menu";
+        const resumo = document.createElement("summary");
+        resumo.className = "perfil-link";
+        resumo.setAttribute("aria-label", `Menu da conta de ${usuaria.nome}`);
+        const avatar = document.createElement("span");
+        avatar.className = "perfil-link__avatar";
+        avatar.setAttribute("aria-hidden", "true");
+        if (usuaria.imagem) {
+          const imagem = document.createElement("img");
+          imagem.src = usuaria.imagem;
+          imagem.alt = "";
+          avatar.append(imagem);
+        } else {
+          avatar.textContent = usuaria.nome.charAt(0).toUpperCase();
+        }
+        const nome = document.createElement("span");
+        nome.className = "perfil-link__nome";
+        nome.textContent = usuaria.nome;
+        resumo.append(avatar, nome);
+
+        const opcoes = document.createElement("div");
+        opcoes.className = "perfil-menu__opcoes";
+        const perfil = document.createElement("a");
+        perfil.href = "/membros/perfil";
+        perfil.textContent = "Perfil";
+        const sair = document.createElement("button");
+        sair.type = "button";
+        sair.className = "perfil-menu__sair";
+        sair.textContent = "Sair";
+        sair.addEventListener("click", async () => {
+          try {
+            await auth.sair();
+            window.location.assign("/");
+          } catch (erro) {
+            const aviso = document.createElement("span");
+            aviso.setAttribute("role", "alert");
+            aviso.textContent = erro instanceof Error ? erro.message : "Não foi possível sair da conta.";
+            area.append(aviso);
+          }
+        });
+        opcoes.append(perfil, sair);
+        menu.append(resumo, opcoes);
+        area.append(menu);
+      } else {
+        const entrar = document.createElement("button");
+        entrar.type = "button";
+        entrar.className = "btn btn--sm btn--vermelho";
+        entrar.dataset.abrirModal = "modalLogin";
+        entrar.textContent = "Entrar";
+        const cadastro = document.createElement("a");
+        cadastro.className = "nav-auth__cadastro";
+        cadastro.href = "/cadastro";
+        cadastro.textContent = "Cadastrar";
+        area.append(entrar, cadastro);
+      }
+    } catch (erro) {
+      console.error("Não foi possível carregar a sessão no cabeçalho.", erro);
+    }
+  }
+</script>
+<ModalLogin />
+
+<style>
+  /* menu*/
+  .nav-flutuante {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 20px 0;
+    transition: background 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .nav-flutuante__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* LOGO */
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-titulo);
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: -0.03em;
+    color: var(--ameixa);
+    transition: opacity 0.2s;
+  }
+
+  .logo:hover {
+    opacity: 0.8;
+  }
+
+  .logo__texto {
+    line-height: 1;
+  }
+
+  .logo__icone {
+    width: auto;
+    height: 1.5em;
+    display: block;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    font-family: var(--font-titulo);
+    font-weight: 600;
+  }
+
+  .nav-auth {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .nav-auth__cadastro,
+  .nav-links a,
+  .nav-links button {
+    font-size: 0.95rem;
+    transition: opacity 0.2s;
+  }
+
+  .nav-links button {
+    line-height: inherit;
+  }
+
+  .nav-links a:hover,
+  .nav-links button:hover {
+    opacity: 0.6;
+  }
+
+  /* Estado "rolado": barra sólida no topo */
+  .nav-flutuante.is-scrolled {
+    background: var(--creme);
+    padding: 12px 0;
+    box-shadow: 0 1px 0 rgba(43, 28, 46, 0.08);
+  }
+
+  /* Estado logado: cápsula com contorno ameixa, avatar e nome */
+  .perfil-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 16px 4px 4px;
+    border: 1.5px solid var(--ameixa);
+    border-radius: var(--capsula);
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .perfil-link::-webkit-details-marker {
+    display: none;
+  }
+
+  .perfil-menu {
+    position: relative;
+  }
+
+  .perfil-menu__opcoes {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    display: grid;
+    min-width: 150px;
+    gap: 4px;
+    padding: 8px;
+    border: 1px solid rgba(43, 28, 46, 0.15);
+    border-radius: 16px;
+    background: var(--creme);
+    box-shadow: 0 8px 24px rgba(43, 28, 46, 0.16);
+  }
+
+  .perfil-menu__opcoes a,
+  .perfil-menu__sair {
+    padding: 8px 12px;
+    border-radius: 10px;
+    font: inherit;
+    text-align: left;
+  }
+
+  .perfil-menu__sair {
+    color: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+
+  .perfil-link__avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--capsula);
+    overflow: hidden;
+    background: var(--vermelho);
+    color: var(--creme);
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .perfil-link__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 860px) {
+    .nav-links {
+      gap: 16px;
+      font-size: 0.85rem;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .nav-links a:not(.btn, .perfil-link, .nav-planos) {
+      display: none;
+    }
+
+    .perfil-link {
+      padding: 4px;
+    }
+
+    .perfil-link__nome {
+      display: none;
+    }
+
+    .nav-auth {
+      gap: 8px;
+    }
+
+    .nav-auth__cadastro {
+      display: none;
+    }
+  }
+</style>

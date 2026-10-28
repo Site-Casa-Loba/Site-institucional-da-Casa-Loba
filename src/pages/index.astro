@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Cabecalho from "../components/Cabecalho.astro";
 ---
 
 <Layout>
@@ -8,22 +9,7 @@ import Layout from "../layouts/Layout.astro";
   <!--hero-->
   <section class="hero" id="topo">
 
-    <!-- navegação flutuante -->
-    <nav class="nav-flutuante" id="navFlutuante">
-      <div class="container nav-flutuante__inner">
-        <a href="#topo" class="logo">
-          <span class="logo__texto">casa</span>
-          <img src="/assets/images/lobo_logo.svg" alt="Loba uivando" class="logo__icone" />
-          <span class="logo__texto">loba</span>
-        </a>
-        <div class="nav-links">
-          <a href="#secao-sobre">Sobre a Casa</a>
-          <a href="#secao-frentes">Nossas frentes</a>
-          <a href="#secao-planos">Planos</a>
-          <a href="#secao-planos" class="btn btn--sm btn--vermelho">Ver planos</a>
-        </div>
-      </div>
-    </nav>
+    <Cabecalho />
 
     <!-- Arcos decorativos do hero -->
     <div class="hero__arco hero__arco--topo" aria-hidden="true"></div>
@@ -201,6 +187,4 @@ import Layout from "../layouts/Layout.astro";
     </div>
   </footer>
 
-
-  <script is:inline src="/js/script.js"></script>
 </Layout>

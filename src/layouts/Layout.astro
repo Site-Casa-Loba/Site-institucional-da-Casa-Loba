@@ -1,12 +1,19 @@
 ---
 // Layout base do site institucional da Casa Loba.
-// Metadados e estrutura compartilhada das páginas.
+// Metadados, CSS compartilhado e estrutura comum das páginas.
+import "../styles/global.css";
+import "../styles/formulario.css";
+import "../styles/membros.css";
+
 interface Props {
   title?: string;
   noindex?: boolean;
 }
 
-const { title = "Casa Loba — Rede de apoio para mulheres e mães", noindex = false } = Astro.props;
+const {
+  title = "Casa Loba — Rede de apoio para mulheres e mães",
+  noindex = false,
+} = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -30,8 +37,6 @@ const { title = "Casa Loba — Rede de apoio para mulheres e mães", noindex = f
       href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Nunito:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
-
-    <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body>
     <slot />

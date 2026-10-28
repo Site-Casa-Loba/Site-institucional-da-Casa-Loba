@@ -38,8 +38,6 @@ Cada arquivo em `src/pages/` vira uma URL: `src/pages/login.astro` → `/login`.
 | Página | Arquivo | Observação |
 |---|---|---|
 | Landing (home) | `src/pages/index.astro` | Já implementada. Textos ainda provisórios |
-| Cadastro | `src/pages/cadastro.astro` | Criar conta, via recursos de membros do Wix |
-| Login | `src/pages/login.astro` | Via recursos de membros do Wix |
 | Recuperar senha | `src/pages/recuperar-senha.astro` | Via recursos de membros do Wix |
 | Perfil da usuária | `src/pages/perfil.astro` | Ver e editar dados |
 | Planos | `src/pages/planos.astro` | Comparação dos planos |
@@ -51,6 +49,8 @@ Cada arquivo em `src/pages/` vira uma URL: `src/pages/login.astro` → `/login`.
 | Conteúdo bloqueado | `src/pages/membros/bloqueado.astro` | Aviso "faça upgrade" para quem não tem o plano |
 | Termos de uso | `src/pages/termos-de-uso.astro` | Texto precisa de revisão jurídica antes de ser final |
 | Política de privacidade | `src/pages/politica-de-privacidade.astro` | LGPD. Mesma observação dos termos |
+
+> Login e cadastro não são páginas: são modais em `src/components/` (`ModalLogin.astro` e `ModalCadastro.astro`), que abrem por cima da página atual. Não existem as rotas `/login` nem `/cadastro`.
 
 ### Versão 2
 
