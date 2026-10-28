@@ -37,20 +37,22 @@ Cada arquivo em `src/pages/` vira uma URL: `src/pages/login.astro` → `/login`.
 
 | Página | Arquivo | Observação |
 |---|---|---|
-| Landing (home) | `src/pages/index.astro` | Já implementada. Textos ainda provisórios |
-| Recuperar senha | `src/pages/recuperar-senha.astro` | Via recursos de membros do Wix |
-| Perfil da usuária | `src/pages/perfil.astro` | Ver e editar dados |
+| Landing (home) | `src/pages/index.astro` | Textos da versão atual; planos ainda sem preço definido |
+| Cadastro | `src/pages/cadastro.astro` | Cadastro local de demonstração |
+| Login | `src/pages/entrar.astro` | Página de login; o cabeçalho também abre em modal (`ModalLogin.astro`) |
+| Recuperar senha | `src/pages/recuperar-senha.astro` | Simulado; envio real de e-mail só na versão Wix |
+| Perfil da usuária | `src/pages/perfil.astro` | Redireciona para `/membros/perfil` |
 | Planos | `src/pages/planos.astro` | Comparação dos planos |
 | Pré-inscrição / lista de espera | `src/pages/pre-inscricao.astro` | Substitui o checkout enquanto a comunidade paga não for lançada |
 | Checkout | `src/pages/checkout.astro` | Pagamento por cartão dentro do site. Só entra se a cobrança for lançada |
 | Confirmação de pagamento | `src/pages/confirmacao.astro` | Só entra junto com o checkout |
-| Home da área de membros | `src/pages/membros/index.astro` | Mostra apenas o que o plano da pessoa libera |
-| Conteúdo de exemplo | `src/pages/membros/exemplo.astro` | Vídeo ou curso de teste para demonstrar o controle de acesso |
-| Conteúdo bloqueado | `src/pages/membros/bloqueado.astro` | Aviso "faça upgrade" para quem não tem o plano |
-| Termos de uso | `src/pages/termos-de-uso.astro` | Texto precisa de revisão jurídica antes de ser final |
-| Política de privacidade | `src/pages/politica-de-privacidade.astro` | LGPD. Mesma observação dos termos |
+| Home da área de membros | `src/pages/membros/index.astro` | Mostra apenas o que o plano da pessoa libera (mock local) |
+| Conteúdo de exemplo | `src/pages/membros/[slug].astro` | Inclui o vídeo de boas-vindas e os demais conteúdos de demonstração |
+| Conteúdo bloqueado | `src/pages/membros/[slug].astro` | Tela de upgrade quando o plano não libera o conteúdo |
+| Termos de uso | `src/pages/termos-de-uso.astro` | Minuta 0.2 com revisão jurídica pendente |
+| Política de privacidade | `src/pages/politica-de-privacidade.astro` | Minuta LGPD 0.2 com revisão jurídica pendente |
 
-> Login e cadastro não são páginas: são modais em `src/components/` (`ModalLogin.astro` e `ModalCadastro.astro`), que abrem por cima da página atual. Não existem as rotas `/login` nem `/cadastro`.
+> Login e cadastro são páginas (`/entrar` e `/cadastro`); o login também abre em modal pelo cabeçalho. A rota `/login` não existe. A autenticação atual é um mock local — veja `docs/INSTRUCOES-MOCKCUP.md`.
 
 ### Versão 2
 
@@ -90,6 +92,10 @@ Os planos ainda não foram definidos pelas sócias (quantidade, nomes, preços e
 ## Identidade visual
 
 Cores, fontes, formas, componentes, arcos, logo e tom de voz estão em [identidade-visual.md](identidade-visual.md).
+
+## Documentos legais
+
+Os textos de termos de uso e política de privacidade ficam em `src/content/legal/` e são renderizados por `src/layouts/LegalLayout.astro`. As páginas usam `noindex,nofollow` e exibem aviso de minuta; a publicação definitiva depende do preenchimento dos campos `PREENCHER_`, da conferência do que Wix e Ticto tratam de fato e da revisão jurídica.
 
 ## Rodando o projeto
 

@@ -26,6 +26,7 @@ export const conteudosMembros = [
     categoria: "Comece por aqui",
     resumo: "Conheça a comunidade e encontre seu lugar na matilha.",
     plano: "loba",
+    video: "https://www.youtube.com/embed/HO0svGjVEP8",
     conteudo:
       "Este é o seu espaço para chegar com calma, conhecer a Casa Loba e descobrir as possibilidades da comunidade.",
   },

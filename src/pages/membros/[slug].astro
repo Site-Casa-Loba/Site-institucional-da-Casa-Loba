@@ -7,9 +7,12 @@ import { conteudosMembros } from "../../lib/membros";
 export function getStaticPaths() {
   return conteudosMembros.map(({ slug }) => ({ params: { slug } }));
 }
+
+const { slug } = Astro.params;
+const conteudoAtual = conteudosMembros.find((item) => item.slug === slug);
 ---
 
-<Layout titulo="Conteúdo da Casa Loba">
+<Layout title={`${conteudoAtual?.titulo ?? "Conteúdo"} — Casa Loba`}>
   <Cabecalho solido />
   <AreaProtegida>
     <main class="pagina-conteudo-membro" data-pagina-conteudo>
@@ -54,6 +57,18 @@ export function getStaticPaths() {
       texto.textContent = conteudo.conteudo;
       const nota = document.createElement("p");
       nota.textContent = "Este conteúdo é uma demonstração e poderá ser expandido com os materiais da Casa Loba.";
+      if ("video" in conteudo && conteudo.video) {
+        const videoWrapper = document.createElement("div");
+        videoWrapper.className = "video-wrapper";
+        const iframe = document.createElement("iframe");
+        iframe.src = conteudo.video;
+        iframe.title = `Vídeo: ${conteudo.titulo}`;
+        iframe.loading = "lazy";
+        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+        iframe.allowFullscreen = true;
+        videoWrapper.append(iframe);
+        corpo.append(videoWrapper);
+      }
       corpo.append(texto, nota);
       artigo.append(categoria, titulo, resumo, corpo);
       destino.append(artigo);

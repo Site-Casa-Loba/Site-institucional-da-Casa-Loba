@@ -21,9 +21,9 @@ const { solido = false } = Astro.props;
       <span class="logo__texto">loba</span>
     </a>
     <div class="nav-links">
-      <a href="/#secao-sobre">[LINK: sobre a casa]</a>
-      <a href="/#secao-frentes">[LINK: frentes]</a>
-      <a href="/membros" class="nav-planos">planos</a>
+      <a href="/#secao-sobre">Sobre a Casa</a>
+      <a href="/#secao-frentes">Nossas frentes</a>
+      <a href="/#secao-planos" class="nav-planos">Planos</a>
       <div class="nav-auth" data-nav-auth>
         <button class="btn btn--sm btn--vermelho" type="button" data-abrir-modal="modalLogin">Entrar</button>
         <a class="nav-auth__cadastro" href="/cadastro">Cadastrar</a>
@@ -65,6 +65,9 @@ const { solido = false } = Astro.props;
 
         const opcoes = document.createElement("div");
         opcoes.className = "perfil-menu__opcoes";
+        const areaMembros = document.createElement("a");
+        areaMembros.href = "/membros";
+        areaMembros.textContent = "Área de membros";
         const perfil = document.createElement("a");
         perfil.href = "/membros/perfil";
         perfil.textContent = "Perfil";
@@ -83,7 +86,7 @@ const { solido = false } = Astro.props;
             area.append(aviso);
           }
         });
-        opcoes.append(perfil, sair);
+        opcoes.append(areaMembros, perfil, sair);
         menu.append(resumo, opcoes);
         area.append(menu);
       } else {

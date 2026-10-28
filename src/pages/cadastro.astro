@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import Cabecalho from "../components/Cabecalho.astro";
 ---
 
-<Layout titulo="Criar conta">
+<Layout title="Criar conta — Casa Loba">
   <Cabecalho solido />
   <main class="tela-acesso">
     <section class="painel-acesso" aria-labelledby="titulo-cadastro">
@@ -30,7 +30,7 @@ import Cabecalho from "../components/Cabecalho.astro";
         </label>
         <label class="form-acesso__termos">
           <input type="checkbox" name="termos" required />
-          <span>Li e aceito os termos de uso e a política de privacidade da demonstração.</span>
+          <span>Li e aceito os <a href="/termos-de-uso">termos de uso</a> e a <a href="/politica-de-privacidade">política de privacidade</a> da demonstração.</span>
         </label>
         <p class="form-acesso__mensagem" id="mensagem-cadastro" aria-live="assertive" tabindex="-1"></p>
         <button class="btn btn--vermelho btn--full" type="submit">Criar minha conta</button>
