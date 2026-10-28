@@ -1,0 +1,73 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Cabecalho from "../components/Cabecalho.astro";
+---
+
+<Layout title="Redefinir senha — Casa Loba">
+  <Cabecalho solido />
+  <main class="tela-acesso">
+    <section class="painel-acesso" aria-labelledby="titulo-redefinir">
+      <p class="tag tag--ameixa">um novo começo</p>
+      <h1 id="titulo-redefinir">Escolha uma nova senha.</h1>
+      <form class="form-acesso" id="form-redefinir" novalidate>
+        <label class="campo">
+          <span>Nova senha</span>
+          <input class="campo__entrada" type="password" name="senha" autocomplete="new-password" required minlength="8" />
+        </label>
+        <label class="campo">
+          <span>Confirme a nova senha</span>
+          <input class="campo__entrada" type="password" name="confirmacao" autocomplete="new-password" required minlength="8" />
+        </label>
+        <p class="form-acesso__mensagem" id="mensagem-redefinir" aria-live="assertive" tabindex="-1"></p>
+        <button class="btn btn--vermelho btn--full" type="submit">Salvar nova senha</button>
+      </form>
+      <p class="aviso-demo"><strong>Ambiente de demonstração:</strong> a redefinição é simulada e não altera credenciais.</p>
+    </section>
+  </main>
+</Layout>
+
+<script>
+  import { auth } from "../lib/auth";
+
+  const form = document.querySelector<HTMLFormElement>("#form-redefinir");
+  const mensagem = document.querySelector<HTMLElement>("#mensagem-redefinir");
+  form?.addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+    if (!form.reportValidity()) return;
+    const dados = new FormData(form);
+    if (String(dados.get("senha")) !== String(dados.get("confirmacao"))) {
+      if (mensagem) {
+        mensagem.textContent = "As senhas não conferem.";
+        mensagem.focus();
+      }
+      return;
+    }
+    const token = new URLSearchParams(window.location.search).get("token");
+    if (!token) {
+      if (mensagem) {
+        mensagem.textContent = "Este link não contém um token de demonstração. Solicite uma nova recuperação.";
+        mensagem.focus();
+      }
+      return;
+    }
+    const botao = form.querySelector<HTMLButtonElement>("button[type=submit]");
+    if (botao) {
+      botao.disabled = true;
+      botao.textContent = "Salvando…";
+    }
+    try {
+      await auth.redefinirSenha(token, String(dados.get("senha")));
+      window.location.assign("/entrar?redefinida=1");
+    } catch (erro) {
+      if (mensagem) {
+        mensagem.textContent = erro instanceof Error ? erro.message : "Não foi possível redefinir a senha.";
+        mensagem.focus();
+      }
+    } finally {
+      if (botao) {
+        botao.disabled = false;
+        botao.textContent = "Salvar nova senha";
+      }
+    }
+  });
+</script>

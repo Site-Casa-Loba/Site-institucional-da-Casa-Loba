@@ -1,0 +1,31 @@
+name: Build (pull request)
+
+# Valida o build em cada pull request. O deploy continua só na main.
+# O Astro apenas avisa quando duas páginas disputam a mesma rota, por isso
+# a checagem explícita de "Could not render" abaixo.
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build e checagem de rotas
+        run: |
+          set -o pipefail
+          npm run build 2>&1 | tee "$RUNNER_TEMP/build.log"
+          if grep -q "Could not render" "$RUNNER_TEMP/build.log"; then
+            echo "::error::Duas páginas disputam a mesma rota (Could not render)."
+            exit 1
+          fi

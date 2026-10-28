@@ -1,0 +1,71 @@
+/* Forumários: são compartilhado pelos modais de login e cadastro e pela página de perfil.*/
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.campo__entrada {
+  width: 100%;
+  font: inherit;
+  font-size: 1rem;
+  color: var(--ameixa);
+  background: transparent;
+  border: 1.5px solid var(--ameixa);
+  border-radius: var(--capsula);
+  padding: 12px 20px;
+  transition: border-color 0.2s;
+}
+
+.campo__entrada:focus {
+  outline: none;
+  border-color: var(--vermelho);
+}
+
+/* Lista de seleção: seta própria no lugar da seta do navegador.
+   A cor da seta é o --ameixa (#2B1C2E); variáveis não funcionam dentro de url(). */
+select.campo__entrada {
+  appearance: none;
+  padding-right: 48px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8' viewBox='0 0 14 8'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%232B1C2E' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 20px center;
+  cursor: pointer;
+}
+
+/* Link de texto, inclusive quando é um <button> */
+.link {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.link:hover {
+  opacity: 0.7;
+}
+
+/* PLACEHOLDER: caixa "Não sou um robô" apenas visual. Para virar funcional,
+   precisa ser trocada por um captcha real, integrado ao envio do formulário. */
+.robo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 24px;
+  background: var(--agua);
+  border-radius: var(--raio);
+  cursor: pointer;
+}
+
+.robo input {
+  width: 24px;
+  height: 24px;
+  accent-color: var(--vermelho);
+  cursor: pointer;
+}

@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Cabecalho from "../components/Cabecalho.astro";
 ---
 
 <Layout>
@@ -8,22 +9,7 @@ import Layout from "../layouts/Layout.astro";
   <!--hero-->
   <section class="hero" id="topo">
 
-    <!-- navegação flutuante -->
-    <nav class="nav-flutuante" id="navFlutuante">
-      <div class="container nav-flutuante__inner">
-        <a href="#topo" class="logo">
-          <span class="logo__texto">casa</span>
-          <img src="/assets/images/lobo_logo.svg" alt="Loba uivando" class="logo__icone" />
-          <span class="logo__texto">loba</span>
-        </a>
-        <div class="nav-links">
-          <a href="#secao-sobre">[LINK: sobre a casa]</a>
-          <a href="#secao-frentes">[LINK: frentes]</a>
-          <a href="#secao-planos">[LINK: planos]</a>
-          <a href="#secao-planos" class="btn btn--sm btn--vermelho">[BOTÃO: entrar / assinar]</a>
-        </div>
-      </div>
-    </nav>
+    <Cabecalho />
 
     <!-- Arcos decorativos do hero -->
     <div class="hero__arco hero__arco--topo" aria-hidden="true"></div>
@@ -31,19 +17,17 @@ import Layout from "../layouts/Layout.astro";
 
     <!-- Conteúdo do hero -->
     <div class="container hero__inner">
-      <p class="tag">[TAG: rede de apoio]</p>
+      <p class="tag">Rede de apoio</p>
       <h1 class="hero__titulo">
-        [TÍTULO PRINCIPAL:<br />
-        frase-manifesto da marca — ex: <span class="destaque">"rede de apoio é estrutura"</span>]
+        Quem cuida<br />
+        também precisa <span class="destaque">de uma rede.</span>
       </h1>
       <p class="hero__texto">
-        [SUBTÍTULO: 1-2 linhas explicando o que é a Casa Loba e pra quem é.
-        Ex: "Cuidadoteca em eventos e congressos para que o capital intelectual
-        das mães siga ativo."]
+        Uma comunidade para mulheres e mães que empreendem, compartilham saberes e constroem caminhos em rede.
       </p>
       <div class="hero__acoes">
-        <a href="#secao-planos" class="btn btn--vermelho">[BOTÃO: quero fazer parte]</a>
-        <a href="#secao-sobre" class="btn btn--ghost">[BOTÃO: conhecer a casa]</a>
+        <a href="#secao-planos" class="btn btn--vermelho">Quero fazer parte</a>
+        <a href="#secao-sobre" class="btn btn--ghost">Conhecer a Casa</a>
       </div>
     </div>
   </section>
@@ -56,14 +40,11 @@ import Layout from "../layouts/Layout.astro";
       </div>
 
       <h2 class="manifesto__titulo">
-        [TÍTULO: manifesto da Casa Loba — ex: "somos um ecossistema para mães
-        e mulheres empreendedoras"]
+        Seus projetos também precisam de espaço.
       </h2>
 
       <p class="manifesto__texto">
-        [TEXTO SOBRE A CASA: 2-3 linhas explicando o que é a Casa Loba,
-        o que ela oferece (cuidadoteca, coworking, eventos) e por que existe.
-        Ex: "Um lugar onde o cuidado e o trabalho caminham juntos..."]
+        A Casa Loba aproxima cuidado, trabalho e empreendedorismo. Em breve, Cuidadoteca, parcerias com coworkings e encontros para mulheres farão parte dessa rede.
       </p>
     </div>
   </section>
@@ -72,36 +53,33 @@ import Layout from "../layouts/Layout.astro";
   <section class="frentes" id="secao-frentes">
     <div class="container">
       <header class="section-head">
-        <p class="tag tag--ameixa">[TAG: nossas frentes]</p>
-        <h2 class="section-titulo">[TÍTULO: o que a gente faz]</h2>
+        <p class="tag tag--ameixa">Nossas frentes</p>
+        <h2 class="section-titulo">Cuidado, trabalho e conexão.</h2>
       </header>
 
       <div class="grid-3">
 
         <article class="card">
           <div class="card__arco card__arco--vermelho"></div>
-          <h3 class="card__titulo">[CARD 1: nome da frente — ex: Cuidadoteca]</h3>
+          <h3 class="card__titulo">Cuidadoteca</h3>
           <p class="card__texto">
-            [TEXTO: descrição curta da Cuidadoteca — o que é, o que oferece,
-            pra quem serve. 2-3 linhas.]
+            Em breve: cuidado infantil em eventos e encontros, para que mães também tenham espaço para participar, aprender e criar conexões.
           </p>
         </article>
 
         <article class="card">
           <div class="card__arco card__arco--azul"></div>
-          <h3 class="card__titulo">[CARD 2: nome da frente — ex: Coworking]</h3>
+          <h3 class="card__titulo">Coworking</h3>
           <p class="card__texto">
-            [TEXTO: descrição curta do Coworking — espaços parceiros,
-            o que oferece, como funciona. 2-3 linhas.]
+            Em breve: conexões com espaços parceiros para trabalhar, trocar experiências e aproximar mulheres que empreendem.
           </p>
         </article>
 
         <article class="card">
           <div class="card__arco card__arco--agua"></div>
-          <h3 class="card__titulo">[CARD 3: nome da frente — ex: Eventos]</h3>
+          <h3 class="card__titulo">Eventos</h3>
           <p class="card__texto">
-            [TEXTO: descrição curta dos Eventos — congressos, rodas,
-            encontros, o que rola. 2-3 linhas.]
+            Em breve: encontros para compartilhar saberes, fortalecer vínculos e abrir espaço para novas ideias e parcerias.
           </p>
         </article>
 
@@ -113,52 +91,51 @@ import Layout from "../layouts/Layout.astro";
   <section class="planos" id="secao-planos">
     <div class="container">
       <header class="section-head">
-        <p class="tag tag--ameixa">[TAG: assinatura]</p>
-        <h2 class="section-titulo">[TÍTULO: planos da casa]</h2>
+        <p class="tag tag--ameixa">Assinatura</p>
+        <h2 class="section-titulo">Encontre seu lugar na Casa.</h2>
         <p class="section-sub">
-          [SUBTÍTULO: 1 linha convidando a escolher um plano.
-          Ex: "Escolha o nível de acesso que faz sentido pro seu momento."]
+          Proposta de planos: nomes, valores e benefícios sujeitos à confirmação. Assinaturas em breve.
         </p>
       </header>
 
       <div class="grid-3">
 
         <article class="plano">
-          <span class="plano__selo plano__selo--rosa">[SELO: inicial]</span>
-          <h3 class="plano__nome">[PLANO 1: nome — ex: Loba]</h3>
-          <p class="plano__preco"><span>[R$ 00]</span>/mês</p>
+          <span class="plano__selo plano__selo--rosa">Para começar</span>
+          <h3 class="plano__nome">Loba</h3>
+          <p class="plano__preco"><span>A definir</span>/mês</p>
           <ul class="plano__lista">
-            <li>[BENEFÍCIO 1 do plano inicial]</li>
-            <li>[BENEFÍCIO 2 do plano inicial]</li>
-            <li>[BENEFÍCIO 3 do plano inicial]</li>
+            <li>Participação na comunidade</li>
+            <li>Trocas entre empreendedoras</li>
+            <li>Novidades da Casa Loba</li>
           </ul>
-          <a href="#" class="btn btn--rosa btn--full">[BOTÃO: assinar plano inicial]</a>
+          <a href="#" class="btn btn--rosa btn--full">Em breve</a>
         </article>
 
         <article class="plano plano--destaque">
-          <span class="plano__selo plano__selo--azul">[SELO: mais escolhido]</span>
-          <h3 class="plano__nome">[PLANO 2: nome — ex: Matilha]</h3>
-          <p class="plano__preco"><span>[R$ 00]</span>/mês</p>
+          <span class="plano__selo plano__selo--azul">Para se conectar</span>
+          <h3 class="plano__nome">Matilha</h3>
+          <p class="plano__preco"><span>A definir</span>/mês</p>
           <ul class="plano__lista">
-            <li>[BENEFÍCIO 1 do plano médio]</li>
-            <li>[BENEFÍCIO 2 do plano médio]</li>
-            <li>[BENEFÍCIO 3 do plano médio]</li>
-            <li>[BENEFÍCIO 4 do plano médio]</li>
+            <li>Tudo do plano Loba</li>
+            <li>Mural de conexões</li>
+            <li>Seleção de cursos gravados</li>
+            <li>Divulgação do seu negócio</li>
           </ul>
-          <a href="#" class="btn btn--azul btn--full">[BOTÃO: assinar plano médio]</a>
+          <a href="#" class="btn btn--azul btn--full">Em breve</a>
         </article>
 
         <article class="plano">
-          <span class="plano__selo plano__selo--vermelho">[SELO: maior]</span>
-          <h3 class="plano__nome">[PLANO 3: nome — ex: Alcateia]</h3>
-          <p class="plano__preco"><span>[R$ 00]</span>/mês</p>
+          <span class="plano__selo plano__selo--vermelho">Para ir além</span>
+          <h3 class="plano__nome">Alcateia</h3>
+          <p class="plano__preco"><span>A definir</span>/mês</p>
           <ul class="plano__lista">
-            <li>[BENEFÍCIO 1 do plano maior]</li>
-            <li>[BENEFÍCIO 2 do plano maior]</li>
-            <li>[BENEFÍCIO 3 do plano maior]</li>
-            <li>[BENEFÍCIO 4 do plano maior]</li>
+            <li>Tudo do plano Matilha</li>
+            <li>Mais cursos gravados</li>
+            <li>Encontros exclusivos</li>
+            <li>Condições com parceiros</li>
           </ul>
-          <a href="#" class="btn btn--vermelho btn--full">[BOTÃO: assinar plano maior]</a>
+          <a href="#" class="btn btn--vermelho btn--full">Em breve</a>
         </article>
 
       </div>
@@ -169,14 +146,12 @@ import Layout from "../layouts/Layout.astro";
   <section class="publico" id="secao-publico">
     <div class="container publico__inner">
       <div class="publico__texto">
-        <p class="tag tag--ameixa">[TAG: para quem é]</p>
-        <h2 class="section-titulo">[TÍTULO: feito por mães,<br />para mães]</h2>
+        <p class="tag tag--ameixa">Para quem é</p>
+        <h2 class="section-titulo">Para mulheres.<br />Para seus projetos.</h2>
         <p>
-          [TEXTO: 2-3 linhas descrevendo o público da Casa Loba —
-          mães, mulheres empreendedoras, quem sustenta uma rede de cuidado.
-          Fala direto com a pessoa que tá lendo.]
+          Para mães e mulheres que empreendem e buscam com quem contar. Um convite para compartilhar experiências, criar vínculos e dar espaço às suas ideias.
         </p>
-        <a href="#secao-planos" class="btn btn--ameixa">[BOTÃO: quero entrar]</a>
+        <a href="#secao-planos" class="btn btn--ameixa">Quero fazer parte</a>
       </div>
       <div class="publico__foto" aria-hidden="true">
         <div class="foto-arco"></div>
@@ -187,9 +162,9 @@ import Layout from "../layouts/Layout.astro";
   <!-- cta final -->
   <section class="cta-final">
     <div class="container cta-final__inner">
-      <h2>[TÍTULO: chamada final — ex: "a matilha tá esperando por você"]</h2>
-      <p>[TEXTO: 1 linha reforçando o convite. Ex: "Junte-se à rede de apoio que é estrutura."]</p>
-      <a href="#secao-planos" class="btn btn--vermelho">[BOTÃO: fazer parte agora]</a>
+      <h2>Seu próximo passo começa em rede.</h2>
+      <p>Conheça a Casa Loba e descubra novas formas de construir caminhos com outras mulheres.</p>
+      <a href="#secao-planos" class="btn btn--vermelho">Conhecer os planos</a>
     </div>
   </section>
 
@@ -197,19 +172,19 @@ import Layout from "../layouts/Layout.astro";
   <footer class="footer">
     <div class="container footer__inner">
       <div>
-        <p class="footer__logo">[LOGO: casa loba]</p>
-        <p class="footer__texto">[SLOGAN: rede de apoio é estrutura]</p>
+        <p class="footer__logo">[LOGO: Casa Loba]</p>
+        <p class="footer__texto">Quem cuida também precisa de uma rede.</p>
       </div>
       <div class="footer__links">
-        <a href="#secao-sobre">[LINK: sobre]</a>
-        <a href="#secao-frentes">[LINK: frentes]</a>
-        <a href="#secao-planos">[LINK: planos]</a>
-        <a href="#secao-publico">[LINK: para quem é]</a>
+        <a href="#secao-sobre">Sobre a Casa</a>
+        <a href="#secao-frentes">Nossas frentes</a>
+        <a href="#secao-planos">Planos</a>
+        <a href="#secao-publico">Para quem é</a>
+        <a href="/termos-de-uso">Termos de uso</a>
+        <a href="/politica-de-privacidade">Política de privacidade</a>
       </div>
-      <p class="footer__copy">[COPYRIGHT: © 2026 casa loba · feito com cuidado]</p>
+      <p class="footer__copy">© 2026 Casa Loba · feito com cuidado</p>
     </div>
   </footer>
 
-
-  <script is:inline src="/js/script.js"></script>
 </Layout>

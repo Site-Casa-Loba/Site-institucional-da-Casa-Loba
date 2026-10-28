@@ -1,0 +1,75 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Cabecalho from "../components/Cabecalho.astro";
+---
+
+<Layout title="Entrar — Casa Loba">
+  <Cabecalho solido />
+  <main class="tela-acesso">
+    <section class="painel-acesso" aria-labelledby="titulo-entrar">
+      <p class="tag tag--ameixa">sua casa, seu tempo</p>
+      <h1 id="titulo-entrar">Que bom ter você de volta.</h1>
+      <p class="painel-acesso__intro">Entre para continuar sua caminhada com a Casa Loba.</p>
+      <form class="form-acesso" id="form-entrar" novalidate>
+        <label class="campo">
+          <span>E-mail</span>
+          <input class="campo__entrada" type="email" name="email" autocomplete="email" required />
+        </label>
+        <label class="campo">
+          <span>Senha</span>
+          <input class="campo__entrada" type="password" name="senha" autocomplete="current-password" required />
+        </label>
+        <a href="/recuperar-senha">Esqueci minha senha</a>
+        <p class="form-acesso__mensagem" id="mensagem-entrar" aria-live="assertive" tabindex="-1"></p>
+        <button class="btn btn--vermelho btn--full" type="submit">Entrar</button>
+      </form>
+      <p class="acesso-links">Ainda não tem uma conta? <a href="/cadastro">Cadastre-se</a></p>
+      <p class="aviso-demo"><strong>Ambiente de demonstração:</strong> use a senha <code>casaloba123</code> com uma das contas de teste ou crie seu cadastro local.</p>
+    </section>
+  </main>
+</Layout>
+
+<script>
+  import { auth } from "../lib/auth";
+
+  const form = document.querySelector<HTMLFormElement>("#form-entrar");
+  const mensagem = document.querySelector<HTMLElement>("#mensagem-entrar");
+  const params = new URLSearchParams(window.location.search);
+  const redirect = params.get("redirect");
+  const destino = redirect?.startsWith("/") && !redirect.startsWith("//") ? redirect : "/membros";
+
+  try {
+    if (await auth.usuariaAtual()) window.location.replace("/membros");
+  } catch (erro) {
+    if (mensagem) {
+      mensagem.textContent = erro instanceof Error ? erro.message : "Não foi possível verificar sua sessão.";
+      mensagem.focus();
+    }
+  }
+
+  form?.addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+    if (!form.reportValidity()) return;
+    const botao = form.querySelector<HTMLButtonElement>("button[type=submit]");
+    const dados = new FormData(form);
+    if (botao) {
+      botao.disabled = true;
+      botao.textContent = "Entrando…";
+    }
+    if (mensagem) mensagem.textContent = "";
+    try {
+      await auth.entrar(String(dados.get("email")), String(dados.get("senha")));
+      window.location.assign(destino);
+    } catch (erro) {
+      if (mensagem) {
+        mensagem.textContent = erro instanceof Error ? erro.message : "Não foi possível entrar. Tente novamente.";
+        mensagem.focus();
+      }
+    } finally {
+      if (botao) {
+        botao.disabled = false;
+        botao.textContent = "Entrar";
+      }
+    }
+  });
+</script>

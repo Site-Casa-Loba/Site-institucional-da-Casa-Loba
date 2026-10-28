@@ -1,0 +1,15 @@
+---
+import LegalLayout from "../layouts/LegalLayout.astro";
+import { Content, getHeadings } from "../content/legal/termos-de-uso.md";
+
+const headings = getHeadings();
+---
+
+<LegalLayout
+  title="termos de uso"
+  intro="Conheça as condições de participação na Casa Loba, contratação de planos, pagamentos e cancelamentos."
+  current="termos"
+  headings={headings}
+>
+  <Content />
+</LegalLayout>

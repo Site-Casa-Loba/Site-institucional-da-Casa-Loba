@@ -1,0 +1,110 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Cabecalho from "../../components/Cabecalho.astro";
+import AreaProtegida from "../../components/AreaProtegida.astro";
+import { conteudosMembros } from "../../lib/membros";
+
+export function getStaticPaths() {
+  return conteudosMembros.map(({ slug }) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+const conteudoAtual = conteudosMembros.find((item) => item.slug === slug);
+---
+
+<Layout title={`${conteudoAtual?.titulo ?? "Conteúdo"} — Casa Loba`}>
+  <Cabecalho solido />
+  <AreaProtegida>
+    <main class="pagina-conteudo-membro" data-pagina-conteudo>
+      <div class="container">
+        <a class="membros-voltar" href="/membros">← Voltar à área de membros</a>
+        <div data-conteudo-dinamico aria-live="polite"></div>
+      </div>
+    </main>
+  </AreaProtegida>
+</Layout>
+
+<script>
+  import { auth } from "../../lib/auth";
+  import { conteudosMembros, obterPlanoMembro, temAcessoAoConteudo } from "../../lib/membros";
+
+  const destino = document.querySelector<HTMLElement>("[data-conteudo-dinamico]");
+  const usuaria = await auth.usuariaAtual();
+  const slug = window.location.pathname.split("/").filter(Boolean).at(-1);
+  const conteudo = conteudosMembros.find((item) => item.slug === slug);
+
+  if (!conteudo) {
+    window.location.replace("/404.html");
+  } else if (!usuaria) {
+    window.location.replace(`/entrar?redirect=${encodeURIComponent(window.location.pathname)}`);
+  } else if (destino) {
+    const categoria = document.createElement("p");
+    categoria.className = "tag tag--ameixa";
+    categoria.textContent = conteudo.categoria;
+    const titulo = document.createElement("h1");
+    titulo.textContent = conteudo.titulo;
+    const resumo = document.createElement("p");
+    resumo.className = "conteudo-artigo__resumo";
+    resumo.textContent = conteudo.resumo;
+    const liberado = temAcessoAoConteudo(usuaria.plano, conteudo.plano);
+
+    if (liberado) {
+      const artigo = document.createElement("article");
+      artigo.className = "conteudo-artigo";
+      const corpo = document.createElement("div");
+      corpo.className = "conteudo-artigo__corpo";
+      const texto = document.createElement("p");
+      texto.textContent = conteudo.conteudo;
+      const nota = document.createElement("p");
+      nota.textContent = "Este conteúdo é uma demonstração e poderá ser expandido com os materiais da Casa Loba.";
+      if ("video" in conteudo && conteudo.video) {
+        const videoWrapper = document.createElement("div");
+        videoWrapper.className = "video-wrapper";
+        const iframe = document.createElement("iframe");
+        iframe.src = conteudo.video;
+        iframe.title = `Vídeo: ${conteudo.titulo}`;
+        iframe.loading = "lazy";
+        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+        iframe.allowFullscreen = true;
+        videoWrapper.append(iframe);
+        corpo.append(videoWrapper);
+      }
+      corpo.append(texto, nota);
+      artigo.append(categoria, titulo, resumo, corpo);
+      destino.append(artigo);
+    } else {
+      const planoNecessario = obterPlanoMembro(conteudo.plano);
+      const planoAtual = obterPlanoMembro(usuaria.plano);
+      const bloqueio = document.createElement("section");
+      bloqueio.className = "conteudo-bloqueado";
+      bloqueio.setAttribute("aria-labelledby", "titulo-bloqueio");
+      const aviso = document.createElement("p");
+      aviso.className = "tag tag--ameixa";
+      aviso.textContent = "conteúdo exclusivo";
+      titulo.id = "titulo-bloqueio";
+      const descricao = document.createElement("p");
+      descricao.className = "conteudo-bloqueado__resumo";
+      descricao.textContent = `Este conteúdo está disponível a partir do plano ${planoNecessario?.nome ?? conteudo.plano}. Seu plano atual é ${planoAtual?.nome ?? "não identificado"}.`;
+      const lista = document.createElement("ul");
+      lista.className = "conteudo-bloqueado__beneficios";
+      for (const beneficio of planoNecessario?.beneficios ?? []) {
+        const item = document.createElement("li");
+        item.textContent = beneficio;
+        lista.append(item);
+      }
+      const acoes = document.createElement("div");
+      acoes.className = "perfil-acoes";
+      const conhecer = document.createElement("a");
+      conhecer.className = "btn btn--vermelho";
+      conhecer.href = "/#secao-planos";
+      conhecer.textContent = `Conhecer o plano ${planoNecessario?.nome ?? conteudo.plano}`;
+      const voltar = document.createElement("a");
+      voltar.className = "btn btn--ghost";
+      voltar.href = "/membros";
+      voltar.textContent = "Voltar aos conteúdos";
+      acoes.append(conhecer, voltar);
+      bloqueio.append(aviso, titulo, resumo, descricao, lista, acoes);
+      destino.append(bloqueio);
+    }
+  }
+</script>

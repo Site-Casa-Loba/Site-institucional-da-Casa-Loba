@@ -103,6 +103,9 @@ h1, h2, h3 {
   font-family: var(--font-titulo);
   font-weight: 700;
   font-size: 1rem;
+  /* <button> não herda estes dois por padrão; <a> já herda */
+  line-height: inherit;
+  text-align: inherit;
   padding: 14px 28px;
   border-radius: var(--capsula);
   border: 2px solid transparent;
@@ -162,7 +165,8 @@ h1, h2, h3 {
 /* Arco vermelho grande (canto inferior direito) */
 .hero__arco {
   position: absolute;
-  right: -120px;
+  /* Mantém o arco fora do bloco central de 720px, com 24px de respiro. */
+  right: min(-120px, calc((100vw - 720px) / 2 - 544px));
   bottom: -1px;
   width: 520px;
   height: 520px;
@@ -174,7 +178,7 @@ h1, h2, h3 {
 /* Arco vermelho invertido (canto superior esquerdo) */
 .hero__arco--topo {
   top: -200px;
-  left: -120px;
+  left: min(-120px, calc((100vw - 720px) / 2 - 424px));
   right: auto;
   bottom: auto;
   width: 400px;
@@ -207,74 +211,6 @@ h1, h2, h3 {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
-}
-
-/* menu*/
-.nav-flutuante {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 100;
-  padding: 20px 0;
-  transition: background 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
-}
-
-.nav-flutuante__inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-/* LOGO */
-.logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-titulo);
-  font-weight: 800;
-  font-size: 1.4rem;
-  letter-spacing: -0.03em;
-  color: var(--ameixa);
-  transition: opacity 0.2s;
-}
-
-.logo:hover {
-  opacity: 0.8;
-}
-
-.logo__texto {
-  line-height: 1;
-}
-
-.logo__icone {
-  width: auto;
-  height: 1.5em;
-  display: block;
-}
-
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  font-family: var(--font-titulo);
-  font-weight: 600;
-}
-
-.nav-links a {
-  font-size: 0.95rem;
-  transition: opacity 0.2s;
-}
-
-.nav-links a:hover {
-  opacity: 0.6;
-}
-
-/* Estado "rolado": barra sólida no topo */
-.nav-flutuante.is-scrolled {
-  background: var(--creme);
-  padding: 12px 0;
-  box-shadow: 0 1px 0 rgba(43, 28, 46, 0.08);
 }
 
 /* manifesto*/
@@ -437,7 +373,7 @@ h1, h2, h3 {
 }
 
 .plano__lista li::before {
-  content: "— ";
+  content: "– ";
   color: var(--vermelho);
   font-weight: 700;
 }
@@ -520,6 +456,8 @@ h1, h2, h3 {
 
 .footer__links {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 24px;
   font-family: var(--font-titulo);
   font-weight: 600;
@@ -539,16 +477,12 @@ h1, h2, h3 {
     gap: 40px;
   }
 
-  .nav-links {
-    gap: 16px;
-    font-size: 0.85rem;
-  }
-
   .hero {
-    padding: 120px 0 80px;
+    /* O arco fica abaixo do conteúdo sem deslocar o bloco para a esquerda. */
+    padding: 140px 0 340px;
   }
 
-  /* Arco inferior direito — tablet */
+  /* Arco inferior direito (tablet) */
   .hero__arco {
     width: 320px;
     height: 320px;
@@ -556,7 +490,7 @@ h1, h2, h3 {
     border-radius: 160px 160px 0 0;
   }
 
-  /* Arco superior esquerdo — tablet (proporcional ao desktop) */
+  /* Arco superior esquerdo (tablet, proporcional ao desktop) */
   .hero__arco--topo {
     top: -120px;
     left: -80px;
@@ -567,8 +501,9 @@ h1, h2, h3 {
 }
 
 @media (max-width: 560px) {
-  .nav-links a:not(.btn) {
-    display: none;
+  .hero {
+    /* No celular, a figura fica abaixo do conteúdo, sem estreitar o texto. */
+    padding-bottom: 240px;
   }
 
   .hero__acoes {
@@ -578,7 +513,7 @@ h1, h2, h3 {
 
   .btn { width: 100%; }
 
-  /* Arco inferior direito — mobile */
+  /* Arco inferior direito (mobile) */
   .hero__arco {
     width: 220px;
     height: 220px;
@@ -586,7 +521,7 @@ h1, h2, h3 {
     border-radius: 110px 110px 0 0;
   }
 
-  
+  /* Arco superior esquerdo (mobile) */
   .hero__arco--topo {
     display: none; 
   }

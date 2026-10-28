@@ -1,0 +1,78 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Cabecalho from "../../components/Cabecalho.astro";
+import AreaProtegida from "../../components/AreaProtegida.astro";
+---
+
+<Layout title="Área de membros — Casa Loba">
+  <Cabecalho solido />
+  <AreaProtegida>
+    <main class="pagina-membros">
+      <div class="container">
+        <a class="membros-voltar" href="/#secao-planos">← Conheça os planos</a>
+        <header class="membros-cabecalho">
+          <p class="tag">área de membros</p>
+          <h1 data-boas-vindas>Que bom ter você aqui.</h1>
+          <p>Um espaço para aprender, trocar e encontrar apoio no seu tempo.</p>
+          <p class="membros-plano"><span>Seu plano</span><strong data-plano-atual></strong></p>
+        </header>
+        <section class="membros-secao" aria-labelledby="titulo-liberados">
+          <h2 id="titulo-liberados">Conteúdos para você</h2>
+          <div class="membros-grade" data-conteudos-liberados></div>
+          <p data-sem-liberados hidden>Em breve, mais conteúdos para o seu plano.</p>
+        </section>
+        <section class="membros-secao" aria-labelledby="titulo-outros">
+          <h2 id="titulo-outros">Disponíveis em outros planos</h2>
+          <div class="membros-grade" data-conteudos-bloqueados></div>
+        </section>
+        <p class="aviso-demo"><strong>Ambiente de demonstração:</strong> plano e conteúdos são locais e não validam uma assinatura real.</p>
+      </div>
+    </main>
+  </AreaProtegida>
+</Layout>
+
+<script>
+  import { auth } from "../../lib/auth";
+  import { conteudosMembros, obterPlanoMembro, temAcessoAoConteudo } from "../../lib/membros";
+
+  const usuaria = await auth.usuariaAtual();
+  if (usuaria) {
+    const nome = document.querySelector<HTMLElement>("[data-boas-vindas]");
+    const planoTexto = document.querySelector<HTMLElement>("[data-plano-atual]");
+    const liberados = document.querySelector<HTMLElement>("[data-conteudos-liberados]");
+    const bloqueados = document.querySelector<HTMLElement>("[data-conteudos-bloqueados]");
+    const semLiberados = document.querySelector<HTMLElement>("[data-sem-liberados]");
+    const planoAtual = obterPlanoMembro(usuaria.plano);
+    if (nome) nome.textContent = `Que bom ter você aqui, ${usuaria.nome}.`;
+    if (planoTexto) planoTexto.textContent = planoAtual?.nome ?? "Não identificado";
+
+    for (const conteudo of conteudosMembros) {
+      const liberado = temAcessoAoConteudo(usuaria.plano, conteudo.plano);
+      const planoNecessario = obterPlanoMembro(conteudo.plano);
+      const card = document.createElement("article");
+      card.className = liberado ? "membros-card" : "membros-card membros-card--bloqueado";
+      const categoria = document.createElement("p");
+      categoria.className = "membros-card__categoria";
+      categoria.textContent = conteudo.categoria;
+      const titulo = document.createElement("h3");
+      titulo.textContent = conteudo.titulo;
+      const resumo = document.createElement("p");
+      resumo.className = "membros-card__resumo";
+      resumo.textContent = conteudo.resumo;
+      const rodape = document.createElement("div");
+      rodape.className = "membros-card__rodape";
+      const status = document.createElement("span");
+      status.textContent = liberado ? "Disponível" : `Bloqueado · Plano ${planoNecessario?.nome ?? conteudo.plano}`;
+      const link = document.createElement("a");
+      link.href = `/membros/${conteudo.slug}`;
+      link.textContent = liberado ? "Acessar →" : "Ver acesso →";
+      link.setAttribute("aria-label", `${liberado ? "Acessar" : "Ver conteúdo bloqueado"}: ${conteudo.titulo}`);
+      rodape.append(status, link);
+      card.append(categoria, titulo, resumo, rodape);
+      (liberado ? liberados : bloqueados)?.append(card);
+    }
+
+    if (semLiberados) semLiberados.hidden = conteudosMembros.some((conteudo) =>
+      temAcessoAoConteudo(usuaria.plano, conteudo.plano));
+  }
+</script>
