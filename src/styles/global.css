@@ -339,18 +339,18 @@ h1, h2, h3 {
   text-transform: lowercase;
 }
 
+/* A opacidade vai na cor, não no parágrafo: opacity no <p> também apagaria o valor */
 .plano__preco {
   font-family: var(--font-titulo);
   font-weight: 700;
   font-size: 1.1rem;
-  opacity: 0.7;
+  color: color-mix(in srgb, var(--ameixa) 70%, transparent);
 }
 
 .plano__preco span {
   font-size: 2.2rem;
   font-weight: 800;
   color: var(--ameixa);
-  opacity: 1;
 }
 
 .plano__lista {
