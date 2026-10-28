@@ -5,7 +5,7 @@ import Modal from "./Modal.astro";
 
 <Modal id="modalLogin" titulo="Entrar na Casa">
   <p class="modal__chamada">
-    Ainda não tem uma conta? <a class="link" href="/cadastro" data-cadastro-modal>Cadastre-se</a>
+    Ainda não tem uma conta? <a class="link" href="/cadastro.html" data-cadastro-modal>Cadastre-se</a>
   </p>
 
   <form class="modal__form" id="form-login-modal" novalidate>
@@ -19,7 +19,7 @@ import Modal from "./Modal.astro";
       <input class="campo__entrada" type="password" name="senha" autocomplete="current-password" required />
     </label>
 
-    <a href="/recuperar-senha" class="link modal-login__esqueci" data-recuperar-modal>Esqueci minha senha</a>
+    <a href="/recuperar-senha.html" class="link modal-login__esqueci" data-recuperar-modal>Esqueci minha senha</a>
     <p class="modal-login__mensagem" id="mensagem-login-modal" aria-live="assertive" tabindex="-1"></p>
     <button type="submit" class="btn btn--vermelho modal__enviar">Entrar</button>
   </form>
@@ -37,7 +37,7 @@ import Modal from "./Modal.astro";
   const mensagem = document.querySelector<HTMLElement>("#mensagem-login-modal");
   const modal = document.querySelector<HTMLDialogElement>("#modalLogin");
   const destinoSeguro = (valor: string | null): string =>
-    valor?.startsWith("/") && !valor.startsWith("//") ? valor : "/membros";
+    valor?.startsWith("/") && !valor.startsWith("//") ? valor : "/membros.html";
 
   form?.addEventListener("submit", async (evento) => {
     evento.preventDefault();
@@ -71,7 +71,7 @@ import Modal from "./Modal.astro";
   for (const link of modal?.querySelectorAll<HTMLAnchorElement>("[data-cadastro-modal], [data-recuperar-modal]") ?? []) {
     link.addEventListener("click", (evento) => {
       const redirect = new URLSearchParams(window.location.search).get("redirect");
-      if (redirect && destinoSeguro(redirect) !== "/membros") {
+      if (redirect && destinoSeguro(redirect) !== "/membros.html") {
         evento.preventDefault();
         const url = new URL(link.href);
         url.searchParams.set("redirect", destinoSeguro(redirect));

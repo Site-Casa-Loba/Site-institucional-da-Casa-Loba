@@ -26,7 +26,7 @@ const { solido = false } = Astro.props;
       <a href="/#secao-planos" class="nav-planos">Planos</a>
       <div class="nav-auth" data-nav-auth>
         <button class="btn btn--sm btn--vermelho" type="button" data-abrir-modal="modalLogin">Entrar</button>
-        <a class="nav-auth__cadastro" href="/cadastro">Cadastrar</a>
+        <a class="nav-auth__cadastro" href="/cadastro.html">Cadastrar</a>
       </div>
     </div>
   </div>
@@ -66,10 +66,10 @@ const { solido = false } = Astro.props;
         const opcoes = document.createElement("div");
         opcoes.className = "perfil-menu__opcoes";
         const areaMembros = document.createElement("a");
-        areaMembros.href = "/membros";
+        areaMembros.href = "/membros.html";
         areaMembros.textContent = "Área de membros";
         const perfil = document.createElement("a");
-        perfil.href = "/membros/perfil";
+        perfil.href = "/membros/perfil.html";
         perfil.textContent = "Perfil";
         const sair = document.createElement("button");
         sair.type = "button";
@@ -97,7 +97,7 @@ const { solido = false } = Astro.props;
         entrar.textContent = "Entrar";
         const cadastro = document.createElement("a");
         cadastro.className = "nav-auth__cadastro";
-        cadastro.href = "/cadastro";
+        cadastro.href = "/cadastro.html";
         cadastro.textContent = "Cadastrar";
         area.append(entrar, cadastro);
       }

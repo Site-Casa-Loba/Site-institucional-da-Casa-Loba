@@ -31,7 +31,7 @@ O site é a vitrine da marca e a porta de entrada da comunidade: apresenta a Cas
 
 ## Onde cada página vai
 
-Cada arquivo em `src/pages/` vira uma URL: `src/pages/login.astro` → `/login`. Pastas viram prefixos: `src/pages/membros/index.astro` → `/membros`.
+Cada arquivo em `src/pages/` vira uma página. No host do Wix Headless os arquivos são servidos literalmente como `.html`: `src/pages/membros/index.astro` → `/membros.html`, e `src/pages/membros/[slug].astro` → `/membros/boas-vindas.html`. Os links internos usam esse formato. Em um host com URLs limpas, os links podem voltar a ser `/membros`.
 
 ### Versão 1 (MVP)
 
@@ -41,7 +41,7 @@ Cada arquivo em `src/pages/` vira uma URL: `src/pages/login.astro` → `/login`.
 | Cadastro | `src/pages/cadastro.astro` | Cadastro local de demonstração |
 | Login | `src/pages/entrar.astro` | Página de login; o cabeçalho também abre em modal (`ModalLogin.astro`) |
 | Recuperar senha | `src/pages/recuperar-senha.astro` | Simulado; envio real de e-mail só na versão Wix |
-| Perfil da usuária | `src/pages/perfil.astro` | Redireciona para `/membros/perfil` |
+| Perfil da usuária | `src/pages/perfil.astro` | Redireciona para `/membros/perfil.html` |
 | Planos | `src/pages/planos.astro` | Comparação dos planos |
 | Pré-inscrição / lista de espera | `src/pages/pre-inscricao.astro` | Substitui o checkout enquanto a comunidade paga não for lançada |
 | Checkout | `src/pages/checkout.astro` | Pagamento por cartão dentro do site. Só entra se a cobrança for lançada |
@@ -52,7 +52,7 @@ Cada arquivo em `src/pages/` vira uma URL: `src/pages/login.astro` → `/login`.
 | Termos de uso | `src/pages/termos-de-uso.astro` | Minuta 0.2 com revisão jurídica pendente |
 | Política de privacidade | `src/pages/politica-de-privacidade.astro` | Minuta LGPD 0.2 com revisão jurídica pendente |
 
-> Login e cadastro são páginas (`/entrar` e `/cadastro`); o login também abre em modal pelo cabeçalho. A rota `/login` não existe. A autenticação atual é um mock local — veja `docs/INSTRUCOES-MOCKCUP.md`.
+> Login e cadastro são páginas (`/entrar.html` e `/cadastro.html`); o login também abre em modal pelo cabeçalho. A rota `/login` não existe. A autenticação atual é um mock local — veja `docs/INSTRUCOES-MOCKCUP.md`.
 
 ### Versão 2
 

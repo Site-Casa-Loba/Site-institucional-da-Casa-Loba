@@ -63,6 +63,14 @@ const results = [];
 
 for (const file of files) {
   const path = relative(DIST, file).split(sep).join("/");
+
+  // O Wix serve a própria página de 404 em /404.html, então o arquivo do
+  // build nunca chega ao ar. Ele é o único que não deve ser comparado.
+  if (path === "404.html") {
+    results.push({ path, status: "ignorado (404 do Wix)", ok: true });
+    continue;
+  }
+
   const expected = normalize(path, await readFile(file));
 
   let live = await fetchLive(path);

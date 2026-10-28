@@ -17,7 +17,7 @@ const conteudoAtual = conteudosMembros.find((item) => item.slug === slug);
   <AreaProtegida>
     <main class="pagina-conteudo-membro" data-pagina-conteudo>
       <div class="container">
-        <a class="membros-voltar" href="/membros">← Voltar à área de membros</a>
+        <a class="membros-voltar" href="/membros.html">← Voltar à área de membros</a>
         <div data-conteudo-dinamico aria-live="polite"></div>
       </div>
     </main>
@@ -30,13 +30,13 @@ const conteudoAtual = conteudosMembros.find((item) => item.slug === slug);
 
   const destino = document.querySelector<HTMLElement>("[data-conteudo-dinamico]");
   const usuaria = await auth.usuariaAtual();
-  const slug = window.location.pathname.split("/").filter(Boolean).at(-1);
+  const slug = (window.location.pathname.split("/").filter(Boolean).at(-1) ?? "").replace(/\.html$/, "");
   const conteudo = conteudosMembros.find((item) => item.slug === slug);
 
   if (!conteudo) {
     window.location.replace("/404.html");
   } else if (!usuaria) {
-    window.location.replace(`/entrar?redirect=${encodeURIComponent(window.location.pathname)}`);
+    window.location.replace(`/entrar.html?redirect=${encodeURIComponent(window.location.pathname)}`);
   } else if (destino) {
     const categoria = document.createElement("p");
     categoria.className = "tag tag--ameixa";
@@ -100,7 +100,7 @@ const conteudoAtual = conteudosMembros.find((item) => item.slug === slug);
       conhecer.textContent = `Conhecer o plano ${planoNecessario?.nome ?? conteudo.plano}`;
       const voltar = document.createElement("a");
       voltar.className = "btn btn--ghost";
-      voltar.href = "/membros";
+      voltar.href = "/membros.html";
       voltar.textContent = "Voltar aos conteúdos";
       acoes.append(conhecer, voltar);
       bloqueio.append(aviso, titulo, resumo, descricao, lista, acoes);
