@@ -1,5 +1,3 @@
-
-
 :root {
   /* Cores */
   --vermelho: #DA4D3F;
@@ -168,7 +166,8 @@ h1, h2, h3 {
 /* Arco vermelho grande (canto inferior direito) */
 .hero__arco {
   position: absolute;
-  right: -120px;
+  /* Mantém o arco fora do bloco central de 720px, com 24px de respiro. */
+  right: min(-120px, calc((100vw - 720px) / 2 - 544px));
   bottom: -1px;
   width: 520px;
   height: 520px;
@@ -180,7 +179,7 @@ h1, h2, h3 {
 /* Arco vermelho invertido (canto superior esquerdo) */
 .hero__arco--topo {
   top: -200px;
-  left: -120px;
+  left: min(-120px, calc((100vw - 720px) / 2 - 424px));
   right: auto;
   bottom: auto;
   width: 400px;
@@ -298,9 +297,22 @@ h1, h2, h3 {
 .card__titulo { font-size: 1.5rem; }
 .card__texto  { font-size: 1rem; opacity: 0.85; }
 
+/* seção de planos com fundo bordô */
 .planos {
   padding: 120px 0;
-  background: var(--agua);
+  background: var(--bordo);
+}
+
+
+.planos .section-titulo,
+.planos .section-sub {
+  color: var(--creme);
+}
+
+
+.planos .tag--ameixa {
+  color: var(--creme);
+  border-color: var(--creme);
 }
 
 .plano {
@@ -449,6 +461,8 @@ h1, h2, h3 {
 
 .footer__links {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 24px;
   font-family: var(--font-titulo);
   font-weight: 600;
@@ -458,6 +472,10 @@ h1, h2, h3 {
 .footer__links a:hover { color: var(--rosa); }
 
 .footer__copy { font-size: 0.85rem; opacity: 0.6; }
+
+/* =========================================================
+   RESPONSIVIDADE
+   ========================================================= */
 
 /* Páginas internas com fundo bordô (planos, pré-inscrição): texto em creme */
 .pagina-bordo {
@@ -471,7 +489,6 @@ h1, h2, h3 {
   color: var(--creme);
 }
 
-/* responsividade */
 @media (max-width: 860px) {
   .publico__inner {
     grid-template-columns: 1fr;
@@ -479,7 +496,8 @@ h1, h2, h3 {
   }
 
   .hero {
-    padding: 120px 0 80px;
+    /* O arco fica abaixo do conteúdo sem deslocar o bloco para a esquerda. */
+    padding: 140px 0 340px;
   }
 
   .pagina-bordo {
@@ -505,6 +523,11 @@ h1, h2, h3 {
 }
 
 @media (max-width: 560px) {
+  .hero {
+    /* No celular, a figura fica abaixo do conteúdo, sem estreitar o texto. */
+    padding-bottom: 240px;
+  }
+
   .hero__acoes {
     flex-direction: column;
     align-items: stretch;
@@ -522,10 +545,12 @@ h1, h2, h3 {
 
   /* Arco superior esquerdo (mobile) */
   .hero__arco--topo {
-    top: -80px;
-    left: -60px;
-    width: 160px;
-    height: 160px;
-    border-radius: 0 0 80px 80px;
+    display: none; 
+  }
+
+ 
+  .hero__acoes .btn--vermelho {
+    background: var(--ameixa);
+    color: var(--creme);
   }
 }

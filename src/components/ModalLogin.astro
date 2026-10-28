@@ -1,44 +1,103 @@
 ---
-// Modal de login. Login é só modal: não existe a rota /login.
-// Aberto pelo botão de entrar do cabeçalho.
+// Login rápido em popup; a rota /entrar continua disponível como página completa.
 import Modal from "./Modal.astro";
 ---
 
-<Modal id="modalLogin" titulo="login">
+<Modal id="modalLogin" titulo="Entrar na Casa">
   <p class="modal__chamada">
-    Ainda não tem uma conta? <button type="button" class="link" data-abrir-modal="modalCadastro">Cadastre-se</button>
+    Ainda não tem uma conta? <a class="link" href="/cadastro.html" data-cadastro-modal>Cadastre-se</a>
   </p>
 
-  <!-- PLACEHOLDER: o formulário não envia nada, só impede o recarregamento da página.
-       Para virar funcional, precisa da autenticação de membros do Wix Headless. -->
-  <form class="modal__form" data-form-placeholder>
+  <form class="modal__form" id="form-login-modal" novalidate>
     <label class="campo">
-      <span>Email</span>
-      <input class="campo__entrada" type="email" name="email" autocomplete="email" />
+      <span>E-mail</span>
+      <input class="campo__entrada" type="email" name="email" autocomplete="email" required />
     </label>
 
     <label class="campo">
       <span>Senha</span>
-      <input class="campo__entrada" type="password" name="senha" autocomplete="current-password" />
+      <input class="campo__entrada" type="password" name="senha" autocomplete="current-password" required />
     </label>
 
-    <!-- PLACEHOLDER: link sem destino até existir a recuperação de senha
-         (src/pages/recuperar-senha.astro, prevista no README). -->
-    <a href="#" class="link modal-login__esqueci" data-link-placeholder>Esqueci minha senha</a>
-
-    <!-- PLACEHOLDER: "Não sou um robô" apenas visual, ver .robo em src/styles/formulario.css. -->
-    <label class="robo">
-      <input type="checkbox" name="robo" />
-      <span>Não sou um robô</span>
-    </label>
-
-    <button type="submit" class="btn btn--vermelho modal__enviar">login</button>
+    <a href="/recuperar-senha.html" class="link modal-login__esqueci" data-recuperar-modal>Esqueci minha senha</a>
+    <p class="modal-login__mensagem" id="mensagem-login-modal" aria-live="assertive" tabindex="-1"></p>
+    <button type="submit" class="btn btn--vermelho modal__enviar">Entrar</button>
   </form>
+
+  <p class="modal-login__demo">
+    <strong>Ambiente de demonstração:</strong> use uma conta de teste e a senha
+    <code>casaloba123</code>.
+  </p>
 </Modal>
+
+<script>
+  import { auth } from "../lib/auth";
+
+  const form = document.querySelector<HTMLFormElement>("#form-login-modal");
+  const mensagem = document.querySelector<HTMLElement>("#mensagem-login-modal");
+  const modal = document.querySelector<HTMLDialogElement>("#modalLogin");
+  const destinoSeguro = (valor: string | null): string =>
+    valor?.startsWith("/") && !valor.startsWith("//") ? valor : "/membros.html";
+
+  form?.addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+    if (!form.reportValidity()) return;
+
+    const botao = form.querySelector<HTMLButtonElement>("button[type=submit]");
+    const dados = new FormData(form);
+    if (botao) {
+      botao.disabled = true;
+      botao.textContent = "Entrando…";
+    }
+    if (mensagem) mensagem.textContent = "";
+
+    try {
+      await auth.entrar(String(dados.get("email")), String(dados.get("senha")));
+      const redirect = new URLSearchParams(window.location.search).get("redirect");
+      window.location.assign(destinoSeguro(redirect));
+    } catch (erro) {
+      if (mensagem) {
+        mensagem.textContent = erro instanceof Error ? erro.message : "Não foi possível entrar. Tente novamente.";
+        mensagem.focus();
+      }
+    } finally {
+      if (botao) {
+        botao.disabled = false;
+        botao.textContent = "Entrar";
+      }
+    }
+  });
+
+  for (const link of modal?.querySelectorAll<HTMLAnchorElement>("[data-cadastro-modal], [data-recuperar-modal]") ?? []) {
+    link.addEventListener("click", (evento) => {
+      const redirect = new URLSearchParams(window.location.search).get("redirect");
+      if (redirect && destinoSeguro(redirect) !== "/membros.html") {
+        evento.preventDefault();
+        const url = new URL(link.href);
+        url.searchParams.set("redirect", destinoSeguro(redirect));
+        window.location.assign(url);
+      }
+    });
+  }
+</script>
 
 <style>
   .modal-login__esqueci {
     align-self: flex-start;
     margin-top: 8px;
+  }
+
+  .modal-login__mensagem {
+    min-height: 1.5em;
+    color: #a22b26;
+    font-weight: 700;
+  }
+
+  .modal-login__demo {
+    margin-top: 20px;
+    padding: 14px 18px;
+    border-radius: 18px;
+    background: var(--agua);
+    font-size: 0.9rem;
   }
 </style>

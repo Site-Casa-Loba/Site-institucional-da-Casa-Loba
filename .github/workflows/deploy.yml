@@ -1,0 +1,49 @@
+name: Deploy
+
+# Publica o site no Wix Headless a cada push na main.
+# Precisa do secret WIX_API_TOKEN (chave de API com acesso ao site Headless).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-wix
+  cancel-in-progress: true
+
+env:
+  WIX_SITE_ID: 5542fcdd-bc0a-4731-aa1b-6fa3c00f8082
+  WIX_SITE_URL: https://headless-urlsttluzfw-arthursoares1234-1410.wix-site-host.com
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      # O drop substitui o conjunto inteiro de arquivos: o dist/ é o site todo.
+      - name: Publicar build no Wix Headless
+        env:
+          WIX_API_TOKEN: ${{ secrets.WIX_API_TOKEN }}
+        run: |
+          cd dist
+          zip -qr "$RUNNER_TEMP/site.zip" *
+          cd "$GITHUB_WORKSPACE"
+          curl -sS --fail-with-body -X POST \
+            "https://www.wixapis.com/headless-business-setup/v1/headless-business/$WIX_SITE_ID/drop?campaign=ci&agent=github-actions" \
+            -H "Authorization: $WIX_API_TOKEN" \
+            -F "files=@$RUNNER_TEMP/site.zip" | tee "$RUNNER_TEMP/drop.json"
+          grep -q '"siteUrl"' "$RUNNER_TEMP/drop.json"
+
+      - name: Conferir se o ar está igual ao build
+        run: npm run wix:check

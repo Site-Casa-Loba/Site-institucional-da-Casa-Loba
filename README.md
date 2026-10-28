@@ -31,26 +31,28 @@ O site é a vitrine da marca e a porta de entrada da comunidade: apresenta a Cas
 
 ## Onde cada página vai
 
-Cada arquivo em `src/pages/` vira uma URL: `src/pages/login.astro` → `/login`. Pastas viram prefixos: `src/pages/membros/index.astro` → `/membros`.
+Cada arquivo em `src/pages/` vira uma página. No host do Wix Headless os arquivos são servidos literalmente como `.html`: `src/pages/membros/index.astro` → `/membros.html`, e `src/pages/membros/[slug].astro` → `/membros/boas-vindas.html`. Os links internos usam esse formato. As páginas de planos e pré-inscrição seguem o mesmo padrão: `/planos.html` e `/pre-inscricao.html`. Em um host com URLs limpas, os links podem voltar a ser `/membros`.
 
 ### Versão 1 (MVP)
 
 | Página | Arquivo | Observação |
 |---|---|---|
-| Landing (home) | `src/pages/index.astro` | Já implementada. Textos ainda provisórios |
-| Recuperar senha | `src/pages/recuperar-senha.astro` | Via recursos de membros do Wix |
-| Perfil da usuária | `src/pages/perfil.astro` | Ver e editar dados |
+| Landing (home) | `src/pages/index.astro` | Textos da versão atual; planos ainda sem preço definido |
+| Cadastro | `src/pages/cadastro.astro` | Cadastro local de demonstração |
+| Login | `src/pages/entrar.astro` | Página de login; o cabeçalho também abre em modal (`ModalLogin.astro`) |
+| Recuperar senha | `src/pages/recuperar-senha.astro` | Simulado; envio real de e-mail só na versão Wix |
+| Perfil da usuária | `src/pages/perfil.astro` | Redireciona para `/membros/perfil.html` |
 | Planos | `src/pages/planos.astro` | Já implementada. Comparação dos planos, com dados provisórios em `src/lib/planos.ts`. Por enquanto, "assinar" leva à pré-inscrição |
 | Pré-inscrição / lista de espera | `src/pages/pre-inscricao.astro` | Já implementada. Substitui o checkout enquanto a comunidade paga não for lançada. O formulário de e-mail ainda não envia nada |
 | Checkout | `src/pages/checkout.astro` | Pagamento por cartão dentro do site. Só entra se a cobrança for lançada |
 | Confirmação de pagamento | `src/pages/confirmacao.astro` | Só entra junto com o checkout |
-| Home da área de membros | `src/pages/membros/index.astro` | Mostra apenas o que o plano da pessoa libera |
-| Conteúdo de exemplo | `src/pages/membros/exemplo.astro` | Vídeo ou curso de teste para demonstrar o controle de acesso |
-| Conteúdo bloqueado | `src/pages/membros/bloqueado.astro` | Aviso "faça upgrade" para quem não tem o plano |
-| Termos de uso | `src/pages/termos-de-uso.astro` | Texto precisa de revisão jurídica antes de ser final |
-| Política de privacidade | `src/pages/politica-de-privacidade.astro` | LGPD. Mesma observação dos termos |
+| Home da área de membros | `src/pages/membros/index.astro` | Mostra apenas o que o plano da pessoa libera (mock local) |
+| Conteúdo de exemplo | `src/pages/membros/[slug].astro` | Inclui o vídeo de boas-vindas e os demais conteúdos de demonstração |
+| Conteúdo bloqueado | `src/pages/membros/[slug].astro` | Tela de upgrade quando o plano não libera o conteúdo |
+| Termos de uso | `src/pages/termos-de-uso.astro` | Minuta 0.2 com revisão jurídica pendente |
+| Política de privacidade | `src/pages/politica-de-privacidade.astro` | Minuta LGPD 0.2 com revisão jurídica pendente |
 
-> Login e cadastro não são páginas: são modais em `src/components/` (`ModalLogin.astro` e `ModalCadastro.astro`), que abrem por cima da página atual. Não existem as rotas `/login` nem `/cadastro`.
+> Login e cadastro são páginas (`/entrar.html` e `/cadastro.html`); o login também abre em modal pelo cabeçalho. A rota `/login` não existe. A autenticação atual é um mock local — veja `docs/INSTRUCOES-MOCKCUP.md`.
 
 ### Versão 2
 
@@ -91,10 +93,45 @@ Os planos ainda não foram definidos pelas sócias (quantidade, nomes, preços e
 
 Cores, fontes, formas, componentes, arcos, logo e tom de voz estão em [identidade-visual.md](identidade-visual.md).
 
+## Documentos legais
+
+Os textos de termos de uso e política de privacidade ficam em `src/content/legal/` e são renderizados por `src/layouts/LegalLayout.astro`. As páginas usam `noindex,nofollow` e exibem aviso de minuta; a publicação definitiva depende do preenchimento dos campos `PREENCHER_`, da conferência do que Wix e Ticto tratam de fato e da revisão jurídica.
+
 ## Rodando o projeto
 
 ```bash
 npm install     # instala as dependências
 npm run dev     # servidor local em http://localhost:4321
 npm run build   # gera a versão de produção
+npm run wix:check  # confere se o site no ar está igual ao dist/
+```
+
+## Deploy
+
+O site fica no Wix Headless em
+<https://headless-urlsttluzfw-arthursoares1234-1410.wix-site-host.com>
+(site `5542fcdd-bc0a-4731-aa1b-6fa3c00f8082`).
+
+O deploy é automático: cada push na `main` dispara o workflow
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), que roda
+`npm run build` e envia o `dist/` inteiro para o site. O envio substitui todo
+o conjunto de arquivos publicados — nada de upload incremental.
+
+Para o workflow funcionar, o repositório precisa do secret `WIX_API_TOKEN`: uma
+chave de API do Wix com acesso ao site Headless (gerada em
+`manage.wix.com/account/api-keys`). Sem ele o job falha na hora de publicar.
+
+O último passo do workflow roda `npm run wix:check`, que compara cada arquivo
+do `dist/` com o que está no ar e falha se algo não chegou. É o mesmo comando
+que dá pra rodar na mão depois de publicar.
+
+Publicar manualmente, sem passar pelo GitHub:
+
+```bash
+npm run build
+cd dist && zip -qr /tmp/site.zip . && cd ..
+curl -X POST \
+  "https://www.wixapis.com/headless-business-setup/v1/headless-business/$WIX_SITE_ID/drop" \
+  -H "Authorization: $(grep '^WIX_API_TOKEN=' .env | cut -d= -f2-)" \
+  -F "files=@/tmp/site.zip"
 ```

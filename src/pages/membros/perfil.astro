@@ -1,0 +1,113 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Cabecalho from "../../components/Cabecalho.astro";
+import AreaProtegida from "../../components/AreaProtegida.astro";
+---
+
+<Layout title="Meu perfil — Casa Loba">
+  <Cabecalho solido />
+  <AreaProtegida>
+    <main class="pagina-perfil-membro">
+      <section class="painel-perfil">
+        <a class="membros-voltar" href="/membros.html">← Voltar à área de membros</a>
+        <p class="tag tag--ameixa" style="margin-top: 24px">seu espaço</p>
+        <h1>Meu perfil</h1>
+        <p class="painel-perfil__intro">Mantenha seus dados como preferir.</p>
+        <form class="form-acesso" id="form-perfil" novalidate>
+          <label class="campo">
+            <span>Nome</span>
+            <input class="campo__entrada" type="text" name="nome" required minlength="2" />
+          </label>
+          <label class="campo">
+            <span>E-mail</span>
+            <input class="campo__entrada" type="email" name="email" readonly aria-describedby="email-ajuda" />
+            <small id="email-ajuda">O e-mail não pode ser alterado nesta demonstração.</small>
+          </label>
+          <label class="campo">
+            <span>Foto de perfil (URL opcional)</span>
+            <input class="campo__entrada" type="url" name="imagem" inputmode="url" placeholder="https://…" />
+          </label>
+          <p class="form-acesso__mensagem" id="mensagem-perfil" aria-live="polite" tabindex="-1"></p>
+          <button class="btn btn--vermelho" type="submit">Salvar alterações</button>
+        </form>
+        <section class="perfil-plano" aria-labelledby="titulo-plano">
+          <h2 id="titulo-plano">Seu plano: <span data-nome-plano></span></h2>
+          <ul data-beneficios-plano></ul>
+        </section>
+        <div class="perfil-acoes">
+          <a class="btn btn--ghost" href="/membros.html">Voltar aos conteúdos</a>
+          <button class="btn btn--ameixa" type="button" data-sair>Sair da conta</button>
+        </div>
+      </section>
+    </main>
+  </AreaProtegida>
+</Layout>
+
+<script>
+  import { auth } from "../../lib/auth";
+  import { obterPlanoMembro } from "../../lib/membros";
+
+  const usuaria = await auth.usuariaAtual();
+  const form = document.querySelector<HTMLFormElement>("#form-perfil");
+  const mensagem = document.querySelector<HTMLElement>("#mensagem-perfil");
+  if (usuaria && form) {
+    const nome = form.elements.namedItem("nome") as HTMLInputElement;
+    const email = form.elements.namedItem("email") as HTMLInputElement;
+    const imagem = form.elements.namedItem("imagem") as HTMLInputElement;
+    nome.value = usuaria.nome;
+    email.value = usuaria.email;
+    imagem.value = usuaria.imagem ?? "";
+    const plano = obterPlanoMembro(usuaria.plano);
+    const nomePlano = document.querySelector<HTMLElement>("[data-nome-plano]");
+    const beneficios = document.querySelector<HTMLElement>("[data-beneficios-plano]");
+    if (nomePlano) nomePlano.textContent = plano?.nome ?? "Não identificado";
+    for (const beneficio of plano?.beneficios ?? []) {
+      const item = document.createElement("li");
+      item.textContent = beneficio;
+      beneficios?.append(item);
+    }
+  }
+
+  form?.addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+    if (!form.reportValidity()) return;
+    const botao = form.querySelector<HTMLButtonElement>("button[type=submit]");
+    const dados = new FormData(form);
+    if (botao) {
+      botao.disabled = true;
+      botao.textContent = "Salvando…";
+    }
+    try {
+      await auth.atualizarPerfil({
+        nome: String(dados.get("nome")).trim(),
+        imagem: String(dados.get("imagem")).trim() || undefined,
+      });
+      if (mensagem) {
+        mensagem.dataset.tipo = "sucesso";
+        mensagem.textContent = "Perfil atualizado com carinho.";
+      }
+    } catch (erro) {
+      if (mensagem) {
+        mensagem.textContent = erro instanceof Error ? erro.message : "Não foi possível salvar seu perfil.";
+        mensagem.focus();
+      }
+    } finally {
+      if (botao) {
+        botao.disabled = false;
+        botao.textContent = "Salvar alterações";
+      }
+    }
+  });
+
+  document.querySelector<HTMLButtonElement>("[data-sair]")?.addEventListener("click", async () => {
+    try {
+      await auth.sair();
+      window.location.assign("/");
+    } catch (erro) {
+      if (mensagem) {
+        mensagem.textContent = erro instanceof Error ? erro.message : "Não foi possível sair da conta.";
+        mensagem.focus();
+      }
+    }
+  });
+</script>

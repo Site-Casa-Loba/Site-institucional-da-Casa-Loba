@@ -9,7 +9,7 @@ import { obterPlanos } from "../lib/planos";
 const planos = await obterPlanos();
 ---
 
-<Layout titulo="planos">
+<Layout title="Planos — Casa Loba">
   <Cabecalho solido />
 
   <main class="pagina-bordo">
@@ -21,7 +21,7 @@ const planos = await obterPlanos();
 
       <!-- PLACEHOLDER: enquanto a cobrança não existe, "assinar" leva à pré-inscrição -->
       <div class="grid-3">
-        {planos.map((plano) => <CartaoPlano plano={plano} href="/pre-inscricao" />)}
+        {planos.map((plano) => <CartaoPlano plano={plano} href="/pre-inscricao.html" />)}
       </div>
     </div>
   </main>

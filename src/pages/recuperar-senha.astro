@@ -1,0 +1,59 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Cabecalho from "../components/Cabecalho.astro";
+---
+
+<Layout title="Recuperar senha — Casa Loba">
+  <Cabecalho solido />
+  <main class="tela-acesso">
+    <section class="painel-acesso" aria-labelledby="titulo-recuperar">
+      <p class="tag tag--ameixa">estamos aqui</p>
+      <h1 id="titulo-recuperar">Vamos ajudar você a entrar.</h1>
+      <form class="form-acesso" id="form-recuperar" novalidate>
+        <label class="campo">
+          <span>E-mail</span>
+          <input class="campo__entrada" type="email" name="email" autocomplete="email" required />
+        </label>
+        <button class="btn btn--vermelho btn--full" type="submit">Enviar instruções</button>
+      </form>
+      <p class="form-acesso__mensagem" id="mensagem-recuperar" aria-live="polite"></p>
+      <p class="acesso-links"><a href="/entrar.html">Voltar para entrar</a></p>
+      <p class="aviso-demo"><strong>Ambiente de demonstração:</strong> nenhum e-mail será enviado.</p>
+    </section>
+  </main>
+</Layout>
+
+<script>
+  import { auth } from "../lib/auth";
+
+  const form = document.querySelector<HTMLFormElement>("#form-recuperar");
+  const mensagem = document.querySelector<HTMLElement>("#mensagem-recuperar");
+  form?.addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+    if (!form.reportValidity()) return;
+    const botao = form.querySelector<HTMLButtonElement>("button[type=submit]");
+    if (botao) {
+      botao.disabled = true;
+      botao.textContent = "Enviando…";
+    }
+    if (mensagem) mensagem.textContent = "";
+    try {
+      const email = String(new FormData(form).get("email"));
+      await auth.recuperarSenha(email);
+      form.hidden = true;
+      if (mensagem) {
+        mensagem.dataset.tipo = "sucesso";
+        mensagem.textContent = "Se o e-mail existir, enviamos um link para redefinir sua senha.";
+      }
+    } catch (erro) {
+      if (mensagem) {
+        mensagem.textContent = erro instanceof Error ? erro.message : "Não foi possível continuar.";
+      }
+    } finally {
+      if (botao) {
+        botao.disabled = false;
+        botao.textContent = "Enviar instruções";
+      }
+    }
+  });
+</script>

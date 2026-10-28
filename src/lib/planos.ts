@@ -6,8 +6,8 @@
  * dados (ex.: Pricing Plans do Wix), basta reescrever obterPlanos(): quem usa
  * o catálogo depende só do tipo Plano.
  *
- * Os ids repetem os de planosMembros (src/lib/membros.ts, na branch
- * login-cadastro). Ao juntar as branches, tipar um pelo outro.
+ * Os ids repetem os de planosMembros (src/lib/membros.ts). Ainda não há
+ * fonte única: os benefícios podem divergir até a definição das sócias.
  */
 
 export type PlanoId = "loba" | "matilha" | "alcateia";
