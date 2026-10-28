@@ -1,0 +1,16 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Cabecalho from "../components/Cabecalho.astro";
+---
+
+<Layout titulo="Página não encontrada">
+  <Cabecalho solido />
+  <main class="tela-acesso">
+    <section class="painel-acesso">
+      <p class="tag tag--ameixa">caminho não encontrado</p>
+      <h1>Esta página ficou fora da trilha.</h1>
+      <p class="painel-acesso__intro">O endereço pode ter mudado ou o conteúdo não existe.</p>
+      <a class="btn btn--vermelho" href="/membros">Voltar à área de membros</a>
+    </section>
+  </main>
+</Layout>

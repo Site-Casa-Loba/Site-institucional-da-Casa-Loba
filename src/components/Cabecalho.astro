@@ -1,17 +1,11 @@
 ---
-// Deixei p usar o cabeçalho em tudo -- att Lanna
-import type { Usuaria } from "../lib/usuaria-mock";
 import ModalLogin from "./ModalLogin.astro";
-import ModalCadastro from "./ModalCadastro.astro";
 
 interface Props {
-  // Dados da usuária logada. Sem eles, mostra o botão de entrar.
-  usuaria?: Usuaria;
-  // Páginas internas, sem hero: começa e fica sempre no estado sólido.
   solido?: boolean;
 }
 
-const { usuaria, solido = false } = Astro.props;
+const { solido = false } = Astro.props;
 ---
 
 <!-- navegação flutuante -->
@@ -29,29 +23,87 @@ const { usuaria, solido = false } = Astro.props;
     <div class="nav-links">
       <a href="/#secao-sobre">[LINK: sobre a casa]</a>
       <a href="/#secao-frentes">[LINK: frentes]</a>
-      <a href="/#secao-planos">[LINK: planos]</a>
-      {usuaria ? (
-        <a href="/perfil" class="perfil-link" aria-label={`Meu perfil (${usuaria.nome})`}>
-          <span class="perfil-link__avatar" aria-hidden="true">
-            {usuaria.imagem ? <img src={usuaria.imagem} alt="" /> : usuaria.nome.charAt(0).toUpperCase()}
-          </span>
-          <span class="perfil-link__nome">{usuaria.nome}</span>
-        </a>
-      ) : (
-        <button type="button" class="btn btn--sm btn--vermelho" data-abrir-modal="modalLogin">[BOTÃO: entrar / assinar]</button>
-      )}
+      <a href="/membros" class="nav-planos">planos</a>
+      <div class="nav-auth" data-nav-auth>
+        <button class="btn btn--sm btn--vermelho" type="button" data-abrir-modal="modalLogin">Entrar</button>
+        <a class="nav-auth__cadastro" href="/cadastro">Cadastrar</a>
+      </div>
     </div>
   </div>
 </nav>
 
-{!usuaria && (
-  <>
-    <ModalLogin />
-    <ModalCadastro />
-  </>
-)}
-
 <script src="../scripts/menu.js"></script>
+<script>
+  import { auth } from "../lib/auth";
+
+  const area = document.querySelector<HTMLElement>("[data-nav-auth]");
+  if (area) {
+    try {
+      const usuaria = await auth.usuariaAtual();
+      area.replaceChildren();
+      if (usuaria) {
+        const menu = document.createElement("details");
+        menu.className = "perfil-menu";
+        const resumo = document.createElement("summary");
+        resumo.className = "perfil-link";
+        resumo.setAttribute("aria-label", `Menu da conta de ${usuaria.nome}`);
+        const avatar = document.createElement("span");
+        avatar.className = "perfil-link__avatar";
+        avatar.setAttribute("aria-hidden", "true");
+        if (usuaria.imagem) {
+          const imagem = document.createElement("img");
+          imagem.src = usuaria.imagem;
+          imagem.alt = "";
+          avatar.append(imagem);
+        } else {
+          avatar.textContent = usuaria.nome.charAt(0).toUpperCase();
+        }
+        const nome = document.createElement("span");
+        nome.className = "perfil-link__nome";
+        nome.textContent = usuaria.nome;
+        resumo.append(avatar, nome);
+
+        const opcoes = document.createElement("div");
+        opcoes.className = "perfil-menu__opcoes";
+        const perfil = document.createElement("a");
+        perfil.href = "/membros/perfil";
+        perfil.textContent = "Perfil";
+        const sair = document.createElement("button");
+        sair.type = "button";
+        sair.className = "perfil-menu__sair";
+        sair.textContent = "Sair";
+        sair.addEventListener("click", async () => {
+          try {
+            await auth.sair();
+            window.location.assign("/");
+          } catch (erro) {
+            const aviso = document.createElement("span");
+            aviso.setAttribute("role", "alert");
+            aviso.textContent = erro instanceof Error ? erro.message : "Não foi possível sair da conta.";
+            area.append(aviso);
+          }
+        });
+        opcoes.append(perfil, sair);
+        menu.append(resumo, opcoes);
+        area.append(menu);
+      } else {
+        const entrar = document.createElement("button");
+        entrar.type = "button";
+        entrar.className = "btn btn--sm btn--vermelho";
+        entrar.dataset.abrirModal = "modalLogin";
+        entrar.textContent = "Entrar";
+        const cadastro = document.createElement("a");
+        cadastro.className = "nav-auth__cadastro";
+        cadastro.href = "/cadastro";
+        cadastro.textContent = "Cadastrar";
+        area.append(entrar, cadastro);
+      }
+    } catch (erro) {
+      console.error("Não foi possível carregar a sessão no cabeçalho.", erro);
+    }
+  }
+</script>
+<ModalLogin />
 
 <style>
   /* menu*/
@@ -106,10 +158,21 @@ const { usuaria, solido = false } = Astro.props;
     font-weight: 600;
   }
 
+  .nav-auth {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .nav-auth__cadastro,
   .nav-links a,
   .nav-links button {
     font-size: 0.95rem;
     transition: opacity 0.2s;
+  }
+
+  .nav-links button {
+    line-height: inherit;
   }
 
   .nav-links a:hover,
@@ -133,6 +196,45 @@ const { usuaria, solido = false } = Astro.props;
     border: 1.5px solid var(--ameixa);
     border-radius: var(--capsula);
     font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .perfil-link::-webkit-details-marker {
+    display: none;
+  }
+
+  .perfil-menu {
+    position: relative;
+  }
+
+  .perfil-menu__opcoes {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    display: grid;
+    min-width: 150px;
+    gap: 4px;
+    padding: 8px;
+    border: 1px solid rgba(43, 28, 46, 0.15);
+    border-radius: 16px;
+    background: var(--creme);
+    box-shadow: 0 8px 24px rgba(43, 28, 46, 0.16);
+  }
+
+  .perfil-menu__opcoes a,
+  .perfil-menu__sair {
+    padding: 8px 12px;
+    border-radius: 10px;
+    font: inherit;
+    text-align: left;
+  }
+
+  .perfil-menu__sair {
+    color: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
   }
 
   .perfil-link__avatar {
@@ -162,17 +264,24 @@ const { usuaria, solido = false } = Astro.props;
     }
   }
 
-  @media (max-width: 560px) {
-    .nav-links a:not(.btn, .perfil-link) {
+  @media (max-width: 700px) {
+    .nav-links a:not(.btn, .perfil-link, .nav-planos) {
       display: none;
     }
 
-    /* No celular, só o avatar */
     .perfil-link {
       padding: 4px;
     }
 
     .perfil-link__nome {
+      display: none;
+    }
+
+    .nav-auth {
+      gap: 8px;
+    }
+
+    .nav-auth__cadastro {
       display: none;
     }
   }

@@ -3,6 +3,13 @@
 // Shell HTML preservando exatamente o <head> original do index.html estático.
 import "../styles/global.css";
 import "../styles/formulario.css";
+import "../styles/membros.css";
+
+interface Props {
+  titulo?: string;
+}
+
+const { titulo = "Casa Loba" } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -10,7 +17,7 @@ import "../styles/formulario.css";
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Casa Loba | [TÍTULO DA PÁGINA]</title>
+    <title>Casa Loba | {titulo}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

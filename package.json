@@ -12,5 +12,9 @@
     "@wix/sdk": "^1.21.18",
     "@wix/stores": "^1.0.956",
     "astro": "^7.4.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "typescript": "^6.0.3"
   }
 }

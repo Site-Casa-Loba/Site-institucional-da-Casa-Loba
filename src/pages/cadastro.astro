@@ -1,0 +1,100 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Cabecalho from "../components/Cabecalho.astro";
+---
+
+<Layout titulo="Criar conta">
+  <Cabecalho solido />
+  <main class="tela-acesso">
+    <section class="painel-acesso" aria-labelledby="titulo-cadastro">
+      <p class="tag tag--ameixa">chegue mais perto</p>
+      <h1 id="titulo-cadastro">Seu lugar na Casa Loba.</h1>
+      <p class="painel-acesso__intro">Crie sua conta de demonstração para conhecer a área de membros.</p>
+      <form class="form-acesso" id="form-cadastro" novalidate>
+        <label class="campo">
+          <span>Nome</span>
+          <input class="campo__entrada" type="text" name="nome" autocomplete="name" required minlength="2" />
+        </label>
+        <label class="campo">
+          <span>E-mail</span>
+          <input class="campo__entrada" type="email" name="email" autocomplete="email" required />
+        </label>
+        <label class="campo">
+          <span>Senha</span>
+          <input class="campo__entrada" type="password" name="senha" autocomplete="new-password" required minlength="8" />
+          <small>Na demonstração, use a senha fixa <code>casaloba123</code>.</small>
+        </label>
+        <label class="campo">
+          <span>Confirme sua senha</span>
+          <input class="campo__entrada" type="password" name="confirmacao" autocomplete="new-password" required minlength="8" />
+        </label>
+        <label class="form-acesso__termos">
+          <input type="checkbox" name="termos" required />
+          <span>Li e aceito os termos de uso e a política de privacidade da demonstração.</span>
+        </label>
+        <p class="form-acesso__mensagem" id="mensagem-cadastro" aria-live="assertive" tabindex="-1"></p>
+        <button class="btn btn--vermelho btn--full" type="submit">Criar minha conta</button>
+      </form>
+      <p class="acesso-links">Já tem uma conta? <a href="/entrar">Entrar</a></p>
+      <p class="aviso-demo"><strong>Ambiente de demonstração:</strong> seus dados ficam somente neste navegador. Nenhuma senha é armazenada.</p>
+    </section>
+  </main>
+</Layout>
+
+<script>
+  import { auth } from "../lib/auth";
+
+  const form = document.querySelector<HTMLFormElement>("#form-cadastro");
+  const mensagem = document.querySelector<HTMLElement>("#mensagem-cadastro");
+
+  try {
+    if (await auth.usuariaAtual()) window.location.replace("/membros");
+  } catch (erro) {
+    if (mensagem) {
+      mensagem.textContent = erro instanceof Error ? erro.message : "Não foi possível verificar sua sessão.";
+      mensagem.focus();
+    }
+  }
+
+  form?.addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+    if (!form.reportValidity()) return;
+    const dados = new FormData(form);
+    const senha = String(dados.get("senha"));
+    if (senha !== String(dados.get("confirmacao"))) {
+      if (mensagem) {
+        mensagem.textContent = "As senhas não conferem.";
+        mensagem.focus();
+      }
+      return;
+    }
+    const botao = form.querySelector<HTMLButtonElement>("button[type=submit]");
+    if (botao) {
+      botao.disabled = true;
+      botao.textContent = "Criando sua conta…";
+    }
+    if (mensagem) mensagem.textContent = "";
+    try {
+      await auth.cadastrar({
+        nome: String(dados.get("nome")),
+        email: String(dados.get("email")),
+        senha,
+      });
+      if (mensagem) {
+        mensagem.dataset.tipo = "sucesso";
+        mensagem.textContent = "Conta criada! Vamos conhecer seu espaço.";
+      }
+      window.setTimeout(() => window.location.assign("/membros"), 500);
+    } catch (erro) {
+      if (mensagem) {
+        mensagem.textContent = erro instanceof Error ? erro.message : "Não foi possível criar sua conta.";
+        mensagem.focus();
+      }
+    } finally {
+      if (botao) {
+        botao.disabled = false;
+        botao.textContent = "Criar minha conta";
+      }
+    }
+  });
+</script>

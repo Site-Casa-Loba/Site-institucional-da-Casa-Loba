@@ -1,0 +1,64 @@
+<div class="area-protegida__carregando" role="status" data-guard-loading>
+  Conferindo seu acesso…
+</div>
+<div data-guard-content hidden>
+  <slot />
+</div>
+
+<script>
+  import { auth } from "../lib/auth";
+
+  const carregando = document.querySelector<HTMLElement>("[data-guard-loading]");
+  const conteudo = document.querySelector<HTMLElement>("[data-guard-content]");
+  const destino = `${window.location.pathname}${window.location.search}`;
+
+  try {
+    const usuaria = await auth.usuariaAtual();
+    if (!usuaria) {
+      window.location.replace(`/entrar?redirect=${encodeURIComponent(destino)}`);
+    } else if (carregando && conteudo) {
+      carregando.hidden = true;
+      conteudo.hidden = false;
+      document.dispatchEvent(new CustomEvent("casa-loba:usuaria", { detail: usuaria }));
+      if (import.meta.env.DEV) {
+        const seletor = document.createElement("label");
+        seletor.className = "seletor-plano-dev";
+        seletor.textContent = "Trocar plano (DEV)";
+        const select = document.createElement("select");
+        select.setAttribute("aria-label", "Trocar usuária de demonstração");
+        for (const [email, rotulo] of [
+          ["loba@teste.com", "Loba"],
+          ["matilha@teste.com", "Matilha"],
+          ["alcateia@teste.com", "Alcateia"],
+        ]) {
+          const opcao = document.createElement("option");
+          opcao.value = email;
+          opcao.textContent = rotulo;
+          opcao.selected = usuaria.email === email;
+          select.append(opcao);
+        }
+        select.addEventListener("change", async () => {
+          await auth.entrar(select.value, "casaloba123");
+          window.location.reload();
+        });
+        seletor.append(select);
+        document.body.append(seletor);
+      }
+    }
+  } catch (erro) {
+    if (carregando) {
+      carregando.textContent = erro instanceof Error ? erro.message : "Não foi possível conferir seu acesso.";
+      carregando.setAttribute("role", "alert");
+    }
+  }
+</script>
+
+<style>
+  .area-protegida__carregando {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 32px;
+    font-weight: 700;
+  }
+</style>
