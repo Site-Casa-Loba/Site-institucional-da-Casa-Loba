@@ -510,6 +510,8 @@ h1, h2, h3 {
 
 .footer__links {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 24px;
   font-family: var(--font-titulo);
   font-weight: 600;

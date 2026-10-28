@@ -1,0 +1,15 @@
+---
+import LegalLayout from "../layouts/LegalLayout.astro";
+import { Content, getHeadings } from "../content/legal/politica-de-privacidade.md";
+
+const headings = getHeadings();
+---
+
+<LegalLayout
+  title="política de privacidade"
+  intro="Entenda como seus dados são utilizados, com quem são compartilhados e como exercer seus direitos."
+  current="privacidade"
+  headings={headings}
+>
+  <Content />
+</LegalLayout>
