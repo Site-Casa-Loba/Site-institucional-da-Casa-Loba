@@ -12,6 +12,7 @@ Sistema de design da marca. Os tokens abaixo ficam em `src/styles/` e devem ser 
 | `--agua` | `#CAF5F7` | Fundo da seção de planos e detalhes |
 | `--azul` | `#2B4FE8` | Plano em destaque, botão azul |
 | `--ameixa` | `#2B1C2E` | Texto, seções escuras, rodapé |
+| `--bordo` | `#470E31` | Fundo escuro da página de Planos |
 | (branco) | `#FFFFFF` | Fundo de cards, texto sobre azul |
 
 Regras:
