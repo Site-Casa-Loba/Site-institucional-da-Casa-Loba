@@ -92,4 +92,4 @@ A futura Cuidadoteca exigirá avaliação própria, definição de dados estrita
 
 ## 12 Atualizações desta Política
 
-Manteremos a versão e a data de vigência disponíveis. Mudanças relevantes serão comunicadas de forma destacada. Novas finalidades que dependam de consentimento exigirão nova escolha antes do uso correspondente. Você poderá consultar os [Termos de Uso](/termos-de-uso) e esclarecer dúvidas pelo canal de privacidade.
+Manteremos a versão e a data de vigência disponíveis. Mudanças relevantes serão comunicadas de forma destacada. Novas finalidades que dependam de consentimento exigirão nova escolha antes do uso correspondente. Você poderá consultar os [Termos de Uso](/termos-de-uso.html) e esclarecer dúvidas pelo canal de privacidade.

@@ -14,13 +14,15 @@ O mock não guarda senhas. Sessão, cadastro e alterações de perfil ficam no `
 
 ## Rotas
 
-- `/cadastro` — cadastro local
-- `/entrar` — login e retorno ao destino solicitado por `?redirect=`
-- `/recuperar-senha` — confirmação genérica de recuperação
-- `/redefinir-senha?token=demo` — formulário demonstrativo de redefinição
-- `/membros` — conteúdos liberados e conteúdos de outros planos
-- `/membros/[slug]` — conteúdo ou tela de bloqueio conforme o plano
-- `/membros/perfil` — edição de nome e URL da foto, plano e saída
+No host do Wix Headless, as páginas são servidas como arquivos `.html`; use o sufixo nos links.
+
+- `/cadastro.html` — cadastro local
+- `/entrar.html` — login e retorno ao destino solicitado por `?redirect=`
+- `/recuperar-senha.html` — confirmação genérica de recuperação
+- `/redefinir-senha.html?token=demo` — formulário demonstrativo de redefinição
+- `/membros.html` — conteúdos liberados e conteúdos de outros planos
+- `/membros/[slug].html` — conteúdo ou tela de bloqueio conforme o plano
+- `/membros/perfil.html` — edição de nome e URL da foto, plano e saída
 
 ## Mock e próximos passos para produção
 

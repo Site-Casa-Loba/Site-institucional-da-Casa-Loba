@@ -57,7 +57,7 @@ import Cabecalho from "../components/Cabecalho.astro";
     }
     try {
       await auth.redefinirSenha(token, String(dados.get("senha")));
-      window.location.assign("/entrar?redefinida=1");
+      window.location.assign("/entrar.html?redefinida=1");
     } catch (erro) {
       if (mensagem) {
         mensagem.textContent = erro instanceof Error ? erro.message : "Não foi possível redefinir a senha.";

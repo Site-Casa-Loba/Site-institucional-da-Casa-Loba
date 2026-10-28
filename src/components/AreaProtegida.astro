@@ -15,7 +15,7 @@
   try {
     const usuaria = await auth.usuariaAtual();
     if (!usuaria) {
-      window.location.replace(`/entrar?redirect=${encodeURIComponent(destino)}`);
+      window.location.replace(`/entrar.html?redirect=${encodeURIComponent(destino)}`);
     } else if (carregando && conteudo) {
       carregando.hidden = true;
       conteudo.hidden = false;

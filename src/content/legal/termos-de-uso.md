@@ -72,7 +72,7 @@ Quando houver contratação separada com um parceiro, identificaremos quem ofere
 
 ## 11 Privacidade e alterações destes Termos
 
-O tratamento de dados é explicado na [Política de Privacidade](/politica-de-privacidade). A ciência dessa política não equivale a autorização genérica para qualquer uso de dados. Marketing e outras atividades que dependam de consentimento terão escolhas específicas.
+O tratamento de dados é explicado na [Política de Privacidade](/politica-de-privacidade.html). A ciência dessa política não equivale a autorização genérica para qualquer uso de dados. Marketing e outras atividades que dependam de consentimento terão escolhas específicas.
 
 Alterações relevantes destes Termos serão comunicadas com destaque, indicação da nova versão e data de vigência. Não serão aplicadas retroativamente para retirar direitos já adquiridos. Quando a mudança exigir novo aceite ou autorização, ele será solicitado antes de sua aplicação.
 
