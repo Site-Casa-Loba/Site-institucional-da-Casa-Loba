@@ -12,7 +12,7 @@ const planos = await obterPlanos();
 <Layout titulo="planos">
   <Cabecalho solido />
 
-  <main class="pagina-planos">
+  <main class="pagina-bordo">
     <div class="container">
       <header class="section-head">
         <h1 class="section-titulo">Encontre seu lugar na Casa Loba</h1>
@@ -28,26 +28,8 @@ const planos = await obterPlanos();
 </Layout>
 
 <style>
-  /* Seção escura: texto em creme */
-  .pagina-planos {
-    min-height: 100vh;
-    padding: 140px 0 120px;
-    background: var(--bordo);
-    color: var(--creme);
-  }
-
   /* Mais largo que o padrão para o título caber em uma linha, como no mockup */
-  .pagina-planos .section-head {
+  .section-head {
     max-width: 760px;
-  }
-
-  .pagina-planos .section-sub {
-    color: var(--creme);
-  }
-
-  @media (max-width: 860px) {
-    .pagina-planos {
-      padding: 120px 0 80px;
-    }
   }
 </style>

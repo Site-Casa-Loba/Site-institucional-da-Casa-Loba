@@ -455,6 +455,18 @@ h1, h2, h3 {
 
 .footer__copy { font-size: 0.85rem; opacity: 0.6; }
 
+/* Páginas internas com fundo bordô (planos, pré-inscrição): texto em creme */
+.pagina-bordo {
+  min-height: 100vh;
+  padding: 140px 0 120px;
+  background: var(--bordo);
+  color: var(--creme);
+}
+
+.pagina-bordo .section-sub {
+  color: var(--creme);
+}
+
 /* responsividade */
 @media (max-width: 860px) {
   .publico__inner {
@@ -463,6 +475,10 @@ h1, h2, h3 {
   }
 
   .hero {
+    padding: 120px 0 80px;
+  }
+
+  .pagina-bordo {
     padding: 120px 0 80px;
   }
 
