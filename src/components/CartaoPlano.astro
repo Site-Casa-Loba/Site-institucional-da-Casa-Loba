@@ -17,7 +17,7 @@ const { plano, href } = Astro.props;
   <h3 class="plano__nome">{plano.nome}</h3>
   <p class="plano__preco"><span>{plano.preco}</span>/mês</p>
   <ul class="plano__lista">
-    {plano.beneficios.map((beneficio) => <li>{beneficio}</li>)}
+    {plano.beneficios.map((beneficio: string) => <li>{beneficio}</li>)}
   </ul>
   <a href={href} class={`btn btn--${plano.cor} btn--full`}>assinar plano {plano.nome}</a>
 </article>

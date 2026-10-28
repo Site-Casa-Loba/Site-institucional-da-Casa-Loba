@@ -29,3 +29,6 @@ jobs:
             echo "::error::Duas páginas disputam a mesma rota (Could not render)."
             exit 1
           fi
+
+      - name: Checar tipos
+        run: npm run check

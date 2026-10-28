@@ -1,5 +1,6 @@
 ---
 import Layout from "./Layout.astro";
+import Rodape from "../components/Rodape.astro";
 
 interface Props {
   title: string;
@@ -8,7 +9,7 @@ interface Props {
   headings: { depth: number; slug: string; text: string }[];
 }
 
-const { title, intro, current, headings } = Astro.props;
+const { title, intro, current, headings } = Astro.props as Props;
 const sections = headings.filter((heading) => heading.depth === 2);
 ---
 
@@ -65,17 +66,7 @@ const sections = headings.filter((heading) => heading.depth === 2);
       </div>
     </main>
 
-    <footer class="footer">
-      <div class="container footer__inner">
-        <a href="/" class="footer__logo">casa loba</a>
-        <nav class="footer__links" aria-label="Navegação do rodapé">
-          <a href="/">início</a>
-          <a href="/termos-de-uso.html" aria-current={current === "termos" ? "page" : undefined}>Termos de uso</a>
-          <a href="/politica-de-privacidade.html" aria-current={current === "privacidade" ? "page" : undefined}>Política de privacidade</a>
-        </nav>
-        <p class="footer__copy">© {new Date().getFullYear()} Casa Loba</p>
-      </div>
-    </footer>
+    <Rodape variant="legal" current={current} />
   </div>
 </Layout>
 

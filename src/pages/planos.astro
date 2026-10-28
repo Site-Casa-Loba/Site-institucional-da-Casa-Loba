@@ -1,9 +1,9 @@
 ---
 // Página de planos. Os planos vêm do catálogo provisório em src/lib/planos.ts.
-// Sem rodapé por enquanto: o rodapé da landing ainda não é um componente.
 import Layout from "../layouts/Layout.astro";
 import Cabecalho from "../components/Cabecalho.astro";
 import CartaoPlano from "../components/CartaoPlano.astro";
+import Rodape from "../components/Rodape.astro";
 import { obterPlanos } from "../lib/planos";
 
 const planos = await obterPlanos();
@@ -25,6 +25,8 @@ const planos = await obterPlanos();
       </div>
     </div>
   </main>
+
+  <Rodape />
 </Layout>
 
 <style>

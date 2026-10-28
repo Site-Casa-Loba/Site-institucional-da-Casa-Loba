@@ -1,0 +1,43 @@
+---
+// Rodapé compartilhado entre a landing, as páginas de planos/pré-inscrição
+// e os documentos legais. O variante "legal" mantém os links curtos e o
+// estado da página atual; o variante "site" usa a navegação completa.
+interface Props {
+  variant?: "site" | "legal";
+  current?: "termos" | "privacidade";
+}
+
+const { variant = "site", current } = Astro.props;
+---
+
+<footer class="footer">
+  <div class="container footer__inner">
+    {variant === "site" ? (
+      <div>
+        <p class="footer__logo">[LOGO: Casa Loba]</p>
+        <p class="footer__texto">Quem cuida também precisa de uma rede.</p>
+      </div>
+    ) : (
+      <a href="/" class="footer__logo">casa loba</a>
+    )}
+
+    {variant === "site" ? (
+      <nav class="footer__links" aria-label="Navegação do rodapé">
+        <a href="/#secao-sobre">Sobre a Casa</a>
+        <a href="/#secao-frentes">Nossas frentes</a>
+        <a href="/planos.html">Planos</a>
+        <a href="/#secao-publico">Para quem é</a>
+        <a href="/termos-de-uso.html">Termos de uso</a>
+        <a href="/politica-de-privacidade.html">Política de privacidade</a>
+      </nav>
+    ) : (
+      <nav class="footer__links" aria-label="Navegação do rodapé">
+        <a href="/">início</a>
+        <a href="/termos-de-uso.html" aria-current={current === "termos" ? "page" : undefined}>Termos de uso</a>
+        <a href="/politica-de-privacidade.html" aria-current={current === "privacidade" ? "page" : undefined}>Política de privacidade</a>
+      </nav>
+    )}
+
+    <p class="footer__copy">© {new Date().getFullYear()} Casa Loba{variant === "site" ? " · feito com cuidado" : ""}</p>
+  </div>
+</footer>
