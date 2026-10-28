@@ -49,8 +49,8 @@ Cada arquivo em `src/pages/` vira uma URL: `src/pages/login.astro` → `/login`.
 | Home da área de membros | `src/pages/membros/index.astro` | Mostra apenas o que o plano da pessoa libera |
 | Conteúdo de exemplo | `src/pages/membros/exemplo.astro` | Vídeo ou curso de teste para demonstrar o controle de acesso |
 | Conteúdo bloqueado | `src/pages/membros/bloqueado.astro` | Aviso "faça upgrade" para quem não tem o plano |
-| Termos de uso | `src/pages/termos-de-uso.astro` | Texto precisa de revisão jurídica antes de ser final |
-| Política de privacidade | `src/pages/politica-de-privacidade.astro` | LGPD. Mesma observação dos termos |
+| Termos de uso | `src/pages/termos-de-uso.astro` | Implementada como minuta com campos em aberto e revisão jurídica pendente |
+| Política de privacidade | `src/pages/politica-de-privacidade.astro` | Implementada como minuta LGPD com Wix e Ticto e aprovação pendente |
 
 ### Versão 2
 
@@ -88,6 +88,10 @@ A Cuidadoteca, os eventos próprios e as parcerias com coworkings ainda são obj
 Os planos ainda não foram definidos pelas sócias (quantidade, nomes, preços e benefícios). Os nomes e valores que aparecem hoje são provisórios.
 
 ## Identidade visual
+
+As páginas legais usam `src/layouts/LegalLayout.astro`, os tokens e fontes do layout base e um índice de seções gerado dos títulos. Os textos editáveis da versão 0.2 ficam em `src/content/legal/`. Edite esses arquivos Markdown para atualizar o conteúdo, mantendo os campos `PREENCHER_` enquanto os dados não forem confirmados.
+
+Ambas as páginas exibem o aviso de minuta e têm `noindex,nofollow`. A publicação definitiva depende do preenchimento dos dados, da conferência dos tratamentos efetivos no Wix e na Ticto, da revisão jurídica e da aprovação das sócias. `noindex` não restringe o acesso à página. Os links foram incluídos no rodapé; o deploy continua configurado apenas para pushes na `main`.
 
 Cores, fontes, formas, componentes, arcos, logo e tom de voz estão em [identidade-visual.md](identidade-visual.md).
 
