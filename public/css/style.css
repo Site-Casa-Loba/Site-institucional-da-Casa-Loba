@@ -162,7 +162,8 @@ h1, h2, h3 {
 /* Arco vermelho grande (canto inferior direito) */
 .hero__arco {
   position: absolute;
-  right: -120px;
+  /* Mantém o arco fora do bloco central de 720px, com 24px de respiro. */
+  right: min(-120px, calc((100vw - 720px) / 2 - 544px));
   bottom: -1px;
   width: 520px;
   height: 520px;
@@ -174,7 +175,7 @@ h1, h2, h3 {
 /* Arco vermelho invertido (canto superior esquerdo) */
 .hero__arco--topo {
   top: -200px;
-  left: -120px;
+  left: min(-120px, calc((100vw - 720px) / 2 - 424px));
   right: auto;
   bottom: auto;
   width: 400px;
@@ -520,6 +521,8 @@ h1, h2, h3 {
 
 .footer__links {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 24px;
   font-family: var(--font-titulo);
   font-weight: 600;
@@ -545,7 +548,8 @@ h1, h2, h3 {
   }
 
   .hero {
-    padding: 120px 0 80px;
+    /* O arco fica abaixo do conteúdo sem deslocar o bloco para a esquerda. */
+    padding: 140px 0 340px;
   }
 
   /* Arco inferior direito — tablet */
@@ -569,6 +573,11 @@ h1, h2, h3 {
 @media (max-width: 560px) {
   .nav-links a:not(.btn) {
     display: none;
+  }
+
+  .hero {
+    /* No celular, a figura fica abaixo do conteúdo, sem estreitar o texto. */
+    padding-bottom: 240px;
   }
 
   .hero__acoes {

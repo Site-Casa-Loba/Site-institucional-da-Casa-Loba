@@ -1,6 +1,12 @@
 ---
 // Layout base do site institucional da Casa Loba.
-// Shell HTML preservando exatamente o <head> original do index.html estático.
+// Metadados e estrutura compartilhada das páginas.
+interface Props {
+  title?: string;
+  noindex?: boolean;
+}
+
+const { title = "Casa Loba — Rede de apoio para mulheres e mães", noindex = false } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -8,7 +14,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Casa Loba — [TÍTULO DA PÁGINA]</title>
+    <title>{title}</title>
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+    <meta name="description" content="Conheça a Casa Loba, uma comunidade para mulheres e mães que aproxima cuidado, empreendedorismo e conexões para desenvolver seus projetos." />
+    <meta property="og:title" content="Casa Loba — Quem cuida também precisa de uma rede" />
+    <meta property="og:description" content="Uma rede para mulheres e mães compartilharem experiências, criarem conexões e desenvolverem seus projetos. Conheça a Casa Loba." />
+    <meta property="og:site_name" content="Casa Loba" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Casa Loba — Quem cuida também precisa de uma rede" />
+    <meta name="twitter:description" content="Uma rede para mulheres e mães compartilharem experiências, criarem conexões e desenvolverem seus projetos. Conheça a Casa Loba." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
