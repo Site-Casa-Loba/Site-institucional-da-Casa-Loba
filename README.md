@@ -40,8 +40,8 @@ Cada arquivo em `src/pages/` vira uma URL: `src/pages/login.astro` → `/login`.
 | Landing (home) | `src/pages/index.astro` | Já implementada. Textos ainda provisórios |
 | Recuperar senha | `src/pages/recuperar-senha.astro` | Via recursos de membros do Wix |
 | Perfil da usuária | `src/pages/perfil.astro` | Ver e editar dados |
-| Planos | `src/pages/planos.astro` | Comparação dos planos |
-| Pré-inscrição / lista de espera | `src/pages/pre-inscricao.astro` | Substitui o checkout enquanto a comunidade paga não for lançada |
+| Planos | `src/pages/planos.astro` | Já implementada. Comparação dos planos, com dados provisórios em `src/lib/planos.ts`. Por enquanto, "assinar" leva à pré-inscrição |
+| Pré-inscrição / lista de espera | `src/pages/pre-inscricao.astro` | Já implementada. Substitui o checkout enquanto a comunidade paga não for lançada. O formulário de e-mail ainda não envia nada |
 | Checkout | `src/pages/checkout.astro` | Pagamento por cartão dentro do site. Só entra se a cobrança for lançada |
 | Confirmação de pagamento | `src/pages/confirmacao.astro` | Só entra junto com o checkout |
 | Home da área de membros | `src/pages/membros/index.astro` | Mostra apenas o que o plano da pessoa libera |
