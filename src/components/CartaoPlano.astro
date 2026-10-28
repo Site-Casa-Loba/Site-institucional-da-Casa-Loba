@@ -1,0 +1,40 @@
+---
+// Card de um plano, montado com as classes .plano* de src/styles/global.css.
+// Os dados vêm do catálogo em src/lib/planos.ts.
+import type { Plano } from "../lib/planos";
+
+interface Props {
+  plano: Plano;
+  // Destino do botão "assinar plano"
+  href: string;
+}
+
+const { plano, href } = Astro.props;
+---
+
+<article class:list={["plano", { "plano--destaque": plano.destaque }]}>
+  <span class={`plano__selo plano__selo--${plano.cor}`}>{plano.selo}</span>
+  <h3 class="plano__nome">{plano.nome}</h3>
+  <p class="plano__preco"><span>{plano.preco}</span>/mês</p>
+  <ul class="plano__lista">
+    {plano.beneficios.map((beneficio) => <li>{beneficio}</li>)}
+  </ul>
+  <a href={href} class={`btn btn--${plano.cor} btn--full`}>assinar plano {plano.nome}</a>
+</article>
+
+<style>
+  /* O card tem fundo próprio: mantém o texto ameixa mesmo em seção escura */
+  .plano {
+    color: var(--ameixa);
+  }
+
+  /* H3 de card no guia visual: Outfit 700 */
+  .plano__nome {
+    font-weight: 700;
+  }
+
+  /* Botões alinhados na base, mesmo com listas de tamanhos diferentes */
+  .btn {
+    margin-top: auto;
+  }
+</style>

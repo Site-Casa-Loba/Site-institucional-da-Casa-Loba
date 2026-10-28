@@ -6,6 +6,7 @@
   --agua:     #CAF5F7;
   --azul:     #2B4FE8;
   --ameixa:   #2B1C2E;
+  --bordo:    #470E31;
 
   /* Tipografia */
   --font-titulo: "Outfit", sans-serif;
@@ -296,10 +297,10 @@ h1, h2, h3 {
 .card__titulo { font-size: 1.5rem; }
 .card__texto  { font-size: 1rem; opacity: 0.85; }
 
-/* seção nova de planos com fundo bordo*/
+/* seção de planos com fundo bordô */
 .planos {
   padding: 120px 0;
-  background: #470E31; /* NOVO FUNDO */
+  background: var(--bordo);
 }
 
 
@@ -350,18 +351,18 @@ h1, h2, h3 {
   text-transform: lowercase;
 }
 
+/* A opacidade vai na cor, não no parágrafo: opacity no <p> também apagaria o valor */
 .plano__preco {
   font-family: var(--font-titulo);
   font-weight: 700;
   font-size: 1.1rem;
-  opacity: 0.7;
+  color: color-mix(in srgb, var(--ameixa) 70%, transparent);
 }
 
 .plano__preco span {
   font-size: 2.2rem;
   font-weight: 800;
   color: var(--ameixa);
-  opacity: 1;
 }
 
 .plano__lista {
@@ -405,6 +406,10 @@ h1, h2, h3 {
   background: var(--creme);
   border-radius: 180px 180px 0 0;
   background-image: linear-gradient(135deg, var(--creme), #f5e6dd);
+}
+
+.foto-arco--bordo {
+  background: var(--bordo);
 }
 
 /* Regra de proteção: em seções com fundo rosa, nunca usar botão vermelho */
@@ -471,6 +476,19 @@ h1, h2, h3 {
 /* =========================================================
    RESPONSIVIDADE
    ========================================================= */
+
+/* Páginas internas com fundo bordô (planos, pré-inscrição): texto em creme */
+.pagina-bordo {
+  min-height: 100vh;
+  padding: 140px 0 120px;
+  background: var(--bordo);
+  color: var(--creme);
+}
+
+.pagina-bordo .section-sub {
+  color: var(--creme);
+}
+
 @media (max-width: 860px) {
   .publico__inner {
     grid-template-columns: 1fr;
@@ -480,6 +498,10 @@ h1, h2, h3 {
   .hero {
     /* O arco fica abaixo do conteúdo sem deslocar o bloco para a esquerda. */
     padding: 140px 0 340px;
+  }
+
+  .pagina-bordo {
+    padding: 120px 0 80px;
   }
 
   /* Arco inferior direito (tablet) */

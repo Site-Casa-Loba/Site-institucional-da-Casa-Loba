@@ -1,0 +1,35 @@
+---
+// Página de planos. Os planos vêm do catálogo provisório em src/lib/planos.ts.
+// Sem rodapé por enquanto: o rodapé da landing ainda não é um componente.
+import Layout from "../layouts/Layout.astro";
+import Cabecalho from "../components/Cabecalho.astro";
+import CartaoPlano from "../components/CartaoPlano.astro";
+import { obterPlanos } from "../lib/planos";
+
+const planos = await obterPlanos();
+---
+
+<Layout title="Planos — Casa Loba">
+  <Cabecalho solido />
+
+  <main class="pagina-bordo">
+    <div class="container">
+      <header class="section-head">
+        <h1 class="section-titulo">Encontre seu lugar na Casa Loba</h1>
+        <p class="section-sub">Conheça as opções de participação e escolha a que combina com o seu momento.</p>
+      </header>
+
+      <!-- PLACEHOLDER: enquanto a cobrança não existe, "assinar" leva à pré-inscrição -->
+      <div class="grid-3">
+        {planos.map((plano) => <CartaoPlano plano={plano} href="/pre-inscricao.html" />)}
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  /* Mais largo que o padrão para o título caber em uma linha, como no mockup */
+  .section-head {
+    max-width: 760px;
+  }
+</style>

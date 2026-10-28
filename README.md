@@ -31,7 +31,7 @@ O site é a vitrine da marca e a porta de entrada da comunidade: apresenta a Cas
 
 ## Onde cada página vai
 
-Cada arquivo em `src/pages/` vira uma página. No host do Wix Headless os arquivos são servidos literalmente como `.html`: `src/pages/membros/index.astro` → `/membros.html`, e `src/pages/membros/[slug].astro` → `/membros/boas-vindas.html`. Os links internos usam esse formato. Em um host com URLs limpas, os links podem voltar a ser `/membros`.
+Cada arquivo em `src/pages/` vira uma página. No host do Wix Headless os arquivos são servidos literalmente como `.html`: `src/pages/membros/index.astro` → `/membros.html`, e `src/pages/membros/[slug].astro` → `/membros/boas-vindas.html`. Os links internos usam esse formato. As páginas de planos e pré-inscrição seguem o mesmo padrão: `/planos.html` e `/pre-inscricao.html`. Em um host com URLs limpas, os links podem voltar a ser `/membros`.
 
 ### Versão 1 (MVP)
 
@@ -42,8 +42,8 @@ Cada arquivo em `src/pages/` vira uma página. No host do Wix Headless os arquiv
 | Login | `src/pages/entrar.astro` | Página de login; o cabeçalho também abre em modal (`ModalLogin.astro`) |
 | Recuperar senha | `src/pages/recuperar-senha.astro` | Simulado; envio real de e-mail só na versão Wix |
 | Perfil da usuária | `src/pages/perfil.astro` | Redireciona para `/membros/perfil.html` |
-| Planos | `src/pages/planos.astro` | Comparação dos planos |
-| Pré-inscrição / lista de espera | `src/pages/pre-inscricao.astro` | Substitui o checkout enquanto a comunidade paga não for lançada |
+| Planos | `src/pages/planos.astro` | Já implementada. Comparação dos planos, com dados provisórios em `src/lib/planos.ts`. Por enquanto, "assinar" leva à pré-inscrição |
+| Pré-inscrição / lista de espera | `src/pages/pre-inscricao.astro` | Já implementada. Substitui o checkout enquanto a comunidade paga não for lançada. O formulário de e-mail ainda não envia nada |
 | Checkout | `src/pages/checkout.astro` | Pagamento por cartão dentro do site. Só entra se a cobrança for lançada |
 | Confirmação de pagamento | `src/pages/confirmacao.astro` | Só entra junto com o checkout |
 | Home da área de membros | `src/pages/membros/index.astro` | Mostra apenas o que o plano da pessoa libera (mock local) |
