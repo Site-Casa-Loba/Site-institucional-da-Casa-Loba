@@ -1,0 +1,171 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const temPlanoAtivo = true; 
+---
+
+<Layout title="Área de Membros - Casa Loba">
+
+
+  <!-- nav flutuante -->
+
+  <nav class="nav-flutuante" id="navFlutuante">
+    <div class="container nav-flutuante__inner">
+      <a href="/" class="logo">
+        <span class="logo__texto">casa</span>
+        <img src="/assets/images/lobo_logo.svg" alt="Loba uivando" class="logo__icone" />
+        <span class="logo__texto">loba</span>
+      </a>
+      <div class="nav-links">
+        <a href="/#secao-sobre">[LINK: sobre a casa]</a>
+        <a href="/#secao-frentes">[LINK: frentes]</a>
+        <a href="/#secao-planos">[LINK: planos]</a>
+        <a href="/#secao-planos" class="btn btn--sm btn--vermelho">[BOTÃO: entrar / assinar]</a>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- container principal -->
+  <main class="membros-container">
+    {temPlanoAtivo ? (
+      <div class="area-video">
+        <h1>Área de Membros</h1>
+        <p>Bem vindo ao conteúdo exclusivo!</p>
+
+        <div class="video-wrapper">
+          <iframe 
+            src="https://www.youtube.com/embed/HO0svGjVEP8" 
+            title="Vídeo de teste da área de membros"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+    ) : (
+      <div class="card-bloqueio">
+
+
+        <h1>ACESSO RESTRITO</h1>
+        <p class="texto-principal">Conteúdo exclusivo para alunos com um plano ativo</p>
+        <p class="subtexto">Gostaria de ter acesso? Assine um dos nossos planos para liberar o acesso!</p>
+
+        <a href="/#secao-planos" class="btn-planos">
+          Conhecer Planos
+        </a>
+      </div>
+    )}
+  </main>
+
+  <!-- rodape -->
+
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>
+        <p class="footer__logo">[LOGO: casa loba]</p>
+        <p class="footer__texto">[SLOGAN: rede de apoio é estrutura]</p>
+      </div>
+      <div class="footer__links">
+        <a href="/#secao-sobre">[LINK: sobre]</a>
+        <a href="/#secao-frentes">[LINK: frentes]</a>
+        <a href="/#secao-planos">[LINK: planos]</a>
+        <a href="/#secao-publico">[LINK: para quem é]</a>
+      </div>
+      <p class="footer__copy">[COPYRIGHT: © 2026 casa loba · feito com cuidado]</p>
+    </div>
+  </footer>
+
+  <script is:inline src="/js/script.js"></script>
+</Layout>
+
+
+
+
+
+/* CSS */
+
+<style>
+  /*container principal */
+  .membros-container {
+    max-width: 800px;
+    margin: 120px auto 60px auto;
+    padding: 20px;
+    text-align: center;
+  }
+
+
+
+
+
+  /* player video */
+  .area-video h1 {
+    margin-bottom: 10px;
+  }
+
+  .video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    margin-top: 20px;
+    border-radius: 8px;
+  }
+
+  .video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+
+
+
+
+  /* card bloqueio */
+  .card-bloqueio {
+    border: 2px dashed #cf2e2e;
+    padding: 40px;
+    border-radius: 8px;
+    background-color: #fdf2f2;
+  }
+
+  .card-bloqueio h1 {
+    color: #cf2e2e;
+    margin-bottom: 10px;
+  }
+
+  .texto-principal {
+    color: #000000;
+  }
+
+  .subtexto {
+    color: #313131;
+    font-size: 0.9rem;
+  }
+
+
+
+
+
+  /* botao planos */
+  .btn-planos {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #cf2e2e;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+  }
+
+  .btn-planos:hover {
+    background-color: #b02424;
+  }
+
+  
+</style>
