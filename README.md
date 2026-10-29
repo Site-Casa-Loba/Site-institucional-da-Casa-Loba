@@ -100,7 +100,8 @@ Os textos de termos de uso e política de privacidade ficam em `src/content/lega
 ## Rodando o projeto
 
 ```bash
-npm install     # instala as dependências
+nvm use
+npm ci
 npm run dev     # servidor local em http://localhost:4321
 npm run build   # gera a versão de produção
 npm run wix:check  # confere se o site no ar está igual ao dist/
