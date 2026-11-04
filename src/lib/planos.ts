@@ -10,6 +10,8 @@
  * fonte única: os benefícios podem divergir até a definição das sócias.
  */
 
+import { obterPlanosCms } from "./cms";
+
 export type PlanoId = "loba" | "matilha" | "alcateia";
 
 // Cor do selo e do botão do plano: vira .plano__selo--<cor> e .btn--<cor>
@@ -27,7 +29,7 @@ export interface Plano {
   destaque?: boolean;
 }
 
-const planos: Plano[] = [
+const planosLocais: Plano[] = [
   {
     id: "loba",
     nome: "loba",
@@ -71,5 +73,43 @@ const planos: Plano[] = [
 
 // Assíncrona para que a troca por uma fonte remota não mude quem chama
 export async function obterPlanos(): Promise<Plano[]> {
-  return planos;
+  try {
+    const resultado = await obterPlanosCms();
+
+    // Se o CMS falhar ou não retornar registros, usa os dados locais.
+    if (!resultado.ok || resultado.dados.length === 0) {
+      console.warn("[planos] Usando catálogo local como fallback.");
+      return planosLocais;
+    }
+
+    // Mantém somente os planos ativos e ordena pela posição definida no CMS.
+    const planosAtivos = resultado.dados
+      .filter((plano) => plano.ativo)
+      .sort((a, b) => a.ordem - b.ordem);
+
+    // Converte os dados do Wix para a interface Plano.
+    const planosConvertidos: Plano[] = planosAtivos
+      .filter((plano) =>
+        ["loba", "matilha", "alcateia"].includes(plano.slug)
+      )
+      .map((plano) => ({
+        id: plano.slug as PlanoId,
+        nome: plano.nome,
+        selo: plano.selo,
+        cor: plano.cor as CorPlano,
+        preco: plano.preco_texto,
+        beneficios: plano.beneficios
+          .split(/\r?\n/)
+          .map((beneficio) => beneficio.trim())
+          .filter((beneficio) => beneficio.length > 0),
+        destaque: plano.destaque,
+      }));
+
+    return planosConvertidos;
+
+  } catch (erro) {
+    console.error("[planos] Erro ao consultar CMS:", erro);
+
+    return planosLocais;
+  }
 }
