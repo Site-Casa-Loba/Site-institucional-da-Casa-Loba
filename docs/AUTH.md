@@ -12,12 +12,14 @@ testado como opção futura — ver "Opção SSR" abaixo.
    o botão principal leva à página de login hospedada do Wix (OAuth +
    PKCE). `src/lib/auth/iniciarLoginWix.ts` gera PKCE + `state`, guarda em
    `sessionStorage` (`casaloba_oauth`) e redireciona.
-2. **Callback** — `public/api/auth/callback` (arquivo **sem extensão**,
-   copiado para `dist/client/api/auth/callback`). É a URL exata
-   cadastrada no app OAuth do site. Valida o `state`, troca o `code` por
-   tokens (`POST /oauth2/token`, `authorization_code` + `codeVerifier`) e
-   salva a sessão em `localStorage` (`casaloba_session`). Redireciona de
-   volta para o destino original (`?redirect=`).
+2. **Callback** — `public/auth/callback.html` (copiado para
+   `dist/client/auth/callback.html`). O host estático do Wix **reserva
+   `/api/*`** (tudo ali responde 404, mesmo arquivos subidos), por isso
+   esta URL exata precisa estar cadastrada no app OAuth. Valida o
+   `state`, troca o `code` por tokens (`POST /oauth2/token`,
+   `authorization_code` + `codeVerifier`) e salva a sessão em
+   `localStorage` (`casaloba_session`). Em `npm run dev` (localhost) o
+   mesmo fluxo usa `/api/auth/callback` (já permitido).
 3. **Sessão nos componentes** — `auth.usuariaAtual()`
    (`src/lib/auth/index.ts`) devolve o membro real via
    `members.getCurrentMember` (SDK) quando há sessão válida; o access
@@ -41,6 +43,13 @@ testado como opção futura — ver "Opção SSR" abaixo.
 - As **redirect URIs já estão cadastradas** no app:
   `http://localhost:4321/api/auth/callback` e
   `https://headless-urlsttluzfw-arthursoares1234-1410.wix-site-host.com/api/auth/callback`
+  — **mas o host estático reserva `/api/*` (404)**, então a URI
+  necessária em produção é
+  `https://headless-urlsttluzfw-arthursoares1234-1410.wix-site-host.com/auth/callback.html`,
+  que **ainda precisa ser adicionada** no painel (Headless Settings →
+  Clientes headless → CompanionApp → Redirect URIs). A API não permite
+  editar a lista (testado: o campo é ignorado).
+- Sem essa URI, o login redireciona e a Wix recusa o retorno.
   (mais as variantes `logout-callback` e preview). Nada a fazer no
   dashboard para o login funcionar.
 - OAuth do Wix Headless **não usa secret**.
@@ -50,7 +59,7 @@ testado como opção futura — ver "Opção SSR" abaixo.
 - `POST /oauth2/token` com o client ID de produção → `200`.
 - `generateOAuthData` + `getAuthUrl` (mesmo código do site) → URL de
   autorização válida (host do Wix, PKCE, `responseMode=query`).
-- Build inclui `dist/client/api/auth/callback` e os botões **Entrar**
+- Build inclui `dist/client/auth/callback.html` e os botões **Entrar**
   nas duas portas. `npm run check` limpo; build estático e SSR passam.
 
 **Ainda não verificado (depende do seu teste no ar):** o caminho completo
@@ -78,7 +87,7 @@ Node. O código está pronto e testado localmente:
 ## Arquivos
 
 - Client-side: `src/lib/auth/{iniciarLoginWix,wixSession,wixAuth,index}.ts`,
-  `src/lib/membrosCms.ts`, `public/api/auth/callback`,
+  `src/lib/membrosCms.ts`, `public/auth/callback.html`,
   `src/pages/entrar.astro`, `src/components/ModalLogin.astro`
 - SSR (não ativo): `src/pages/api/auth/*`, `src/lib/session.ts`,
   `src/middleware.ts`, `src/env.d.ts`

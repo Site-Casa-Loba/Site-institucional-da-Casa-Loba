@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Entrando… — Casa Loba</title>
+<style>
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center;
+         background: #fdf6f0; color: #3b2b3b; font-family: "Nunito", system-ui, sans-serif; }
+  main { text-align: center; padding: 2rem; max-width: 32rem; }
+  p { font-size: 1.125rem; }
+  a { color: #a0405c; }
+</style>
+</head>
+<body>
+<main>
+  <p id="status" role="status">Entrando na Casa Loba…</p>
+  <noscript><p>Ative o JavaScript para concluir o login.</p></noscript>
+</main>
+<script>
+  /*
+   * Callback do login Wix (OAuth + PKCE, fluxo client-side — sem servidor).
+   *
+   * Este arquivo vai para o deploy estático como /auth/callback.html —
+   * o host do Wix reserva /api/* (tudo ali responde 404), então a URL
+   * exata cadastrada no app OAuth é esta. O PUBLIC_WIX_CLIENT_ID é
+   * público por design e deve ficar igual ao do .env.
+   */
+  var CLIENT_ID = "177d2fe1-7c67-4af7-a2e0-482dc527d3aa";
+  var statusEl = document.getElementById("status");
+
+  function falhar(mensagem) {
+    statusEl.textContent = mensagem;
+    var link = document.createElement("a");
+    link.href = "/entrar.html";
+    link.textContent = "Voltar para a página de entrar";
+    link.style.display = "inline-block";
+    link.style.marginTop = "1rem";
+    statusEl.after(link);
+  }
+
+  function sessaoExpirada(iniciadoEm) {
+    return Date.now() - (iniciadoEm || 0) > 10 * 60 * 1000;
+  }
+
+  async function concluir() {
+    var params = new URLSearchParams(window.location.search);
+    var erroOauth = params.get("error");
+    if (erroOauth) {
+      falhar("O login foi cancelado ou recusado: " + (params.get("error_description") || erroOauth));
+      return;
+    }
+    var code = params.get("code");
+    var state = params.get("state");
+    var bruto = sessionStorage.getItem("casaloba_oauth");
+    if (!code || !state || !bruto) {
+      falhar("Não encontramos o início do login. Tente entrar novamente.");
+      return;
+    }
+    var salvo;
+    try { salvo = JSON.parse(bruto); } catch (e) {
+      falhar("Sessão de login inválida. Tente entrar novamente.");
+      return;
+    }
+    if (sessaoExpirada(salvo.iniciadoEm)) {
+      sessionStorage.removeItem("casaloba_oauth");
+      falhar("O login expirou. Tente entrar novamente.");
+      return;
+    }
+    if (!salvo.oauthData || salvo.oauthData.state !== state) {
+      sessionStorage.removeItem("casaloba_oauth");
+      falhar("O retorno do login não confere (state inválido). Tente novamente.");
+      return;
+    }
+    var resposta;
+    try {
+      resposta = await fetch("https://www.wixapis.com/oauth2/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          clientId: CLIENT_ID,
+          grantType: "authorization_code",
+          redirectUri: window.location.origin + "/auth/callback.html",
+          code: code,
+          codeVerifier: salvo.oauthData.codeVerifier,
+        }),
+      });
+    } catch (e) {
+      falhar("Não foi possível falar com o Wix para concluir o login. Verifique sua conexão.");
+      return;
+    }
+    if (!resposta.ok) {
+      falhar("O Wix recusou o login (HTTP " + resposta.status + "). Tente entrar novamente.");
+      return;
+    }
+    var dados = await resposta.json();
+    var sessao = {
+      accessToken: {
+        value: dados.access_token,
+        expiresAt: Math.floor(Date.now() / 1000) + (dados.expires_in || 14400),
+      },
+      refreshToken: { value: dados.refresh_token, role: "member" },
+    };
+    try {
+      localStorage.setItem("casaloba_session", JSON.stringify(sessao));
+    } catch (e) {
+      falhar("Não foi possível salvar a sessão neste navegador.");
+      return;
+    }
+    sessionStorage.removeItem("casaloba_oauth");
+    var retorno = salvo.retorno;
+    var destino = retorno && retorno.charAt(0) === "/" && retorno.charAt(1) !== "/" ? retorno : "/membros.html";
+    window.location.replace(destino);
+  }
+
+  concluir().catch(function () {
+    falhar("Algo deu errado ao entrar. Tente novamente.");
+  });
+</script>
+</body>
+</html>

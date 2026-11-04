@@ -17,7 +17,15 @@ export async function iniciarLoginWix(retorno = "/membros.html"): Promise<void> 
   if (!clientId) throw new Error("PUBLIC_WIX_CLIENT_ID não configurado.");
   const destino =
     retorno.startsWith("/") && !retorno.startsWith("//") ? retorno : "/membros.html";
-  const redirectUri = `${window.location.origin}/api/auth/callback`;
+  // O host estático do Wix reserva /api/* (nada ali responde), então em
+  // produção o callback é /auth/callback.html — precisa estar na lista de
+  // redirect URIs do app OAuth (Headless Settings). Em localhost, o
+  // Astro serve /api/auth/callback (allowlist existente).
+  const callbackPath =
+    window.location.hostname === "localhost"
+      ? "/api/auth/callback"
+      : "/auth/callback.html";
+  const redirectUri = `${window.location.origin}${callbackPath}`;
 
   const client = createClient({ auth: OAuthStrategy({ clientId }) });
   const oauthData = client.auth.generateOAuthData(redirectUri, destino);
