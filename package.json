@@ -12,6 +12,7 @@
   "dependencies": {
     "@wix/data": "^1.0.541",
     "@wix/members": "^1.0.541",
+    "@wix/pricing-plans": "^1.0.439",
     "@wix/sdk": "^1.21.18",
     "@wix/stores": "^1.0.956",
     "astro": "^7.4.0"

@@ -3,13 +3,13 @@
  *
  * Regras atuais:
  * - `usuariaWix` devolve o membro logado pelo Wix, ou null.
- * - O plano vem de Wix Pricing Plans — ainda não configurado (tarefa
- *   "Configurar planos de assinatura no Wix" / verificação de plano).
- *   Até lá, membro real entra como plano "loba" (acesso mínimo, seguro).
+ * - O plano vem de `src/lib/planoAssinatura.ts` (Pricing Plans, com
+ *   fallback "loba" enquanto os planos não forem configurados no Wix).
  * - Edição de perfil do membro Wix fica para depois (perfil usa mock).
  */
 import { createClient, OAuthStrategy } from "@wix/sdk";
 import { members } from "@wix/members";
+import { planoDoMembro } from "../planoAssinatura";
 import {
   sessaoValida,
   salvarSessaoLocal,
@@ -62,7 +62,7 @@ export async function usuariaWix(): Promise<Usuaria | null> {
       nome: perfil.nickname ?? contato.firstName ?? perfil.slug ?? "Membro Casa Loba",
       email: membro?.loginEmail ?? "",
       imagem: perfil.photo?.url,
-      plano: "loba",
+      plano: await planoDoMembro(),
     };
   } catch (erro) {
     // Erro lendo o perfil (rede instável, 5xx, CORS…): NÃO apaga a sessão.
