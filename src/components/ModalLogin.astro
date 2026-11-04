@@ -4,11 +4,17 @@ import Modal from "./Modal.astro";
 ---
 
 <Modal id="modalLogin" titulo="Entrar na Casa">
+  <button class="btn btn--azul btn--full" type="button" id="botao-wix-modal">
+    Entrar
+  </button>
   <p class="modal__chamada">
     Ainda não tem uma conta? <a class="link" href="/cadastro.html" data-cadastro-modal>Cadastre-se</a>
   </p>
 
-  <form class="modal__form" id="form-login-modal" novalidate>
+  {import.meta.env.DEV && (
+    <>
+      <p class="modal-login__divisor">ou, somente para demonstração:</p>
+      <form class="modal__form" id="form-login-modal" novalidate>
     <label class="campo">
       <span>E-mail</span>
       <input class="campo__entrada" type="email" name="email" autocomplete="email" required />
@@ -22,18 +28,22 @@ import Modal from "./Modal.astro";
     <a href="/recuperar-senha.html" class="link modal-login__esqueci" data-recuperar-modal>Esqueci minha senha</a>
     <p class="modal-login__mensagem" id="mensagem-login-modal" aria-live="assertive" tabindex="-1"></p>
     <button type="submit" class="btn btn--vermelho modal__enviar">Entrar</button>
-  </form>
+      </form>
 
-  <p class="modal-login__demo">
-    <strong>Ambiente de demonstração:</strong> use uma conta de teste e a senha
-    <code>casaloba123</code>.
-  </p>
+      <p class="modal-login__demo">
+        <strong>Ambiente de demonstração:</strong> use uma conta de teste e a senha
+        <code>casaloba123</code>.
+      </p>
+    </>
+  )}
 </Modal>
 
 <script>
   import { auth } from "../lib/auth";
+  import { iniciarLoginWix } from "../lib/auth/iniciarLoginWix";
 
   const form = document.querySelector<HTMLFormElement>("#form-login-modal");
+  const botaoWix = document.querySelector<HTMLButtonElement>("#botao-wix-modal");
   const mensagem = document.querySelector<HTMLElement>("#mensagem-login-modal");
   const modal = document.querySelector<HTMLDialogElement>("#modalLogin");
   const destinoSeguro = (valor: string | null): string =>
@@ -68,6 +78,21 @@ import Modal from "./Modal.astro";
     }
   });
 
+  botaoWix?.addEventListener("click", () => {
+    botaoWix.disabled = true;
+    botaoWix.textContent = "Redirecionando…";
+    const redirect = new URLSearchParams(window.location.search).get("redirect");
+    iniciarLoginWix(destinoSeguro(redirect)).catch((erro) => {
+      console.error("[auth] não foi possível iniciar o login Wix:", erro);
+      botaoWix.disabled = false;
+      botaoWix.textContent = "Entrar";
+      if (mensagem) {
+        mensagem.textContent = "Não foi possível iniciar o login com o Wix. Tente novamente.";
+        mensagem.focus();
+      }
+    });
+  });
+
   for (const link of modal?.querySelectorAll<HTMLAnchorElement>("[data-cadastro-modal], [data-recuperar-modal]") ?? []) {
     link.addEventListener("click", (evento) => {
       const redirect = new URLSearchParams(window.location.search).get("redirect");
@@ -85,6 +110,13 @@ import Modal from "./Modal.astro";
   .modal-login__esqueci {
     align-self: flex-start;
     margin-top: 8px;
+  }
+
+  .modal-login__divisor {
+    margin: 14px 0 4px;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #7a6a7a;
   }
 
   .modal-login__mensagem {

@@ -1,3 +1,5 @@
+> **Nota (04/11/2026):** este documento descreve o mock local, que funciona só em `npm run dev`. No build de produção o login é o real do site — veja `docs/AUTH.md` e `docs/CMS.md`. As contas `*@teste.com` não entram no ar.
+
 # Mock da área de membros
 
 ## Usuárias de teste

@@ -10,33 +10,55 @@ import Cabecalho from "../components/Cabecalho.astro";
       <p class="tag tag--ameixa">sua casa, seu tempo</p>
       <h1 id="titulo-entrar">Que bom ter você de volta.</h1>
       <p class="painel-acesso__intro">Entre para continuar sua caminhada com a Casa Loba.</p>
-      <form class="form-acesso" id="form-entrar" novalidate>
-        <label class="campo">
-          <span>E-mail</span>
-          <input class="campo__entrada" type="email" name="email" autocomplete="email" required />
-        </label>
-        <label class="campo">
-          <span>Senha</span>
-          <input class="campo__entrada" type="password" name="senha" autocomplete="current-password" required />
-        </label>
-        <a href="/recuperar-senha.html">Esqueci minha senha</a>
-        <p class="form-acesso__mensagem" id="mensagem-entrar" aria-live="assertive" tabindex="-1"></p>
-        <button class="btn btn--vermelho btn--full" type="submit">Entrar</button>
-      </form>
+      <button class="btn btn--vermelho btn--full" type="button" id="botao-entrar-wix">Entrar</button>
+      {import.meta.env.DEV && (
+        <>
+          <p class="painel-acesso__divisor">ou, somente para demonstração:</p>
+          <form class="form-acesso" id="form-entrar" novalidate>
+            <label class="campo">
+              <span>E-mail</span>
+              <input class="campo__entrada" type="email" name="email" autocomplete="email" required />
+            </label>
+            <label class="campo">
+              <span>Senha</span>
+              <input class="campo__entrada" type="password" name="senha" autocomplete="current-password" required />
+            </label>
+            <a href="/recuperar-senha.html">Esqueci minha senha</a>
+            <p class="form-acesso__mensagem" id="mensagem-entrar" aria-live="assertive" tabindex="-1"></p>
+            <button class="btn btn--vermelho btn--full" type="submit">Entrar</button>
+          </form>
+          <p class="aviso-demo"><strong>Ambiente de demonstração:</strong> use a senha <code>casaloba123</code> com uma das contas de teste ou crie seu cadastro local.</p>
+        </>
+      )}
       <p class="acesso-links">Ainda não tem uma conta? <a href="/cadastro.html">Cadastre-se</a></p>
-      <p class="aviso-demo"><strong>Ambiente de demonstração:</strong> use a senha <code>casaloba123</code> com uma das contas de teste ou crie seu cadastro local.</p>
     </section>
   </main>
 </Layout>
 
 <script>
   import { auth } from "../lib/auth";
+  import { iniciarLoginWix } from "../lib/auth/iniciarLoginWix";
 
   const form = document.querySelector<HTMLFormElement>("#form-entrar");
   const mensagem = document.querySelector<HTMLElement>("#mensagem-entrar");
+  const botaoWix = document.querySelector<HTMLButtonElement>("#botao-entrar-wix");
   const params = new URLSearchParams(window.location.search);
   const redirect = params.get("redirect");
   const destino = redirect?.startsWith("/") && !redirect.startsWith("//") ? redirect : "/membros.html";
+
+  botaoWix?.addEventListener("click", () => {
+    botaoWix.disabled = true;
+    botaoWix.textContent = "Entrando…";
+    iniciarLoginWix(destino).catch((erro) => {
+      console.error("[auth] não foi possível iniciar o login:", erro);
+      botaoWix.disabled = false;
+      botaoWix.textContent = "Entrar";
+      if (mensagem) {
+        mensagem.textContent = "Não foi possível entrar. Tente novamente.";
+        mensagem.focus();
+      }
+    });
+  });
 
   try {
     if (await auth.usuariaAtual()) window.location.replace("/membros.html");
@@ -73,3 +95,12 @@ import Cabecalho from "../components/Cabecalho.astro";
     }
   });
 </script>
+
+<style>
+  .painel-acesso__divisor {
+    margin: 1.25rem 0 0.5rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #7a6a7a;
+  }
+</style>

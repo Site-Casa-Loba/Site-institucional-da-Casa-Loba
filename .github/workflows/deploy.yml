@@ -15,6 +15,8 @@ concurrency:
 env:
   WIX_SITE_ID: 5542fcdd-bc0a-4731-aa1b-6fa3c00f8082
   WIX_SITE_URL: https://headless-urlsttluzfw-arthursoares1234-1410.wix-site-host.com
+  # ID público do cliente headless (não é secret) — permite ao build ler o CMS.
+  PUBLIC_WIX_CLIENT_ID: 177d2fe1-7c67-4af7-a2e0-482dc527d3aa
 
 jobs:
   deploy:
@@ -31,12 +33,13 @@ jobs:
 
       - run: npm run build
 
-      # O drop substitui o conjunto inteiro de arquivos: o dist/ é o site todo.
+      # O drop substitui o conjunto inteiro de arquivos: dist/client/ (as páginas
+      # estáticas) é o site todo. dist/server/ fica de fora — só roda em SSR.
       - name: Publicar build no Wix Headless
         env:
           WIX_API_TOKEN: ${{ secrets.WIX_API_TOKEN }}
         run: |
-          cd dist
+          cd dist/client
           zip -qr "$RUNNER_TEMP/site.zip" *
           cd "$GITHUB_WORKSPACE"
           curl -sS --fail-with-body -X POST \

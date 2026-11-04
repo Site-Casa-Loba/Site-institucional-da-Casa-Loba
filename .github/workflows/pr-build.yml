@@ -8,6 +8,10 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  # ID público do cliente headless (não é secret) — permite ao build ler o CMS.
+  PUBLIC_WIX_CLIENT_ID: 177d2fe1-7c67-4af7-a2e0-482dc527d3aa
+
 jobs:
   build:
     runs-on: ubuntu-latest

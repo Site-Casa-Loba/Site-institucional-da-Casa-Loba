@@ -1,7 +1,7 @@
 /**
  * Confere se o site publicado está igual ao build local.
  *
- * Compara, arquivo por arquivo, o `dist/` com o que está no ar no site Wix
+ * Compara, arquivo por arquivo, o `dist/client/` com o que está no ar no site Wix
  * Headless (o mesmo endereço que recebe o deploy do GitHub Actions).
  * Rode `npm run build` antes.
  *
@@ -21,7 +21,7 @@ const SITE_URL = (
   "https://headless-urlsttluzfw-arthursoares1234-1410.wix-site-host.com"
 ).replace(/\/+$/, "");
 
-const DIST = fileURLToPath(new URL("../dist/", import.meta.url));
+const DIST = fileURLToPath(new URL("../dist/client/", import.meta.url));
 const RETRIES = Number(process.env.CHECK_RETRIES ?? 5);
 
 // O Wix injeta este script em todo HTML servido; ele não faz parte do build.
@@ -55,7 +55,7 @@ async function fetchLive(path) {
 const files = await listFiles(DIST);
 
 if (files.length === 0) {
-  console.error("dist/ está vazio. Rode `npm run build` antes.");
+  console.error("dist/client/ está vazio. Rode `npm run build` antes.");
   process.exit(1);
 }
 

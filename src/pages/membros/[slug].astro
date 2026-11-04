@@ -2,17 +2,21 @@
 import Layout from "../../layouts/Layout.astro";
 import Cabecalho from "../../components/Cabecalho.astro";
 import AreaProtegida from "../../components/AreaProtegida.astro";
-import { conteudosMembros } from "../../lib/membros";
+import { SLUGS_CONTEUDOS } from "../../lib/membrosCms";
+
+// Em build estático o /membros/[slug] é pré-renderizado (usa getStaticPaths).
+// Em SSR, vira rota dinâmica e passa pelo middleware de sessão.
+export const prerender = import.meta.env.ASTRO_OUTPUT !== "server";
 
 export function getStaticPaths() {
-  return conteudosMembros.map(({ slug }) => ({ params: { slug } }));
+  return SLUGS_CONTEUDOS.map((slug) => ({ params: { slug } }));
 }
 
-const { slug } = Astro.params;
-const conteudoAtual = conteudosMembros.find((item) => item.slug === slug);
+// O título real vem do CMS no navegador (conteúdo não faz parte do bundle).
+export const titulo = "Membro — Casa Loba";
 ---
 
-<Layout title={`${conteudoAtual?.titulo ?? "Conteúdo"} — Casa Loba`}>
+<Layout title={titulo}>
   <Cabecalho solido />
   <AreaProtegida>
     <main class="pagina-conteudo-membro" data-pagina-conteudo>
@@ -26,17 +30,22 @@ const conteudoAtual = conteudosMembros.find((item) => item.slug === slug);
 
 <script>
   import { auth } from "../../lib/auth";
-  import { conteudosMembros, obterPlanoMembro, temAcessoAoConteudo } from "../../lib/membros";
+  import { obterPlanoMembro, temAcessoAoConteudo } from "../../lib/membros";
+  import { obterConteudoMembro } from "../../lib/membrosCms";
 
   const destino = document.querySelector<HTMLElement>("[data-conteudo-dinamico]");
   const usuaria = await auth.usuariaAtual();
   const slug = (window.location.pathname.split("/").filter(Boolean).at(-1) ?? "").replace(/\.html$/, "");
-  const conteudo = conteudosMembros.find((item) => item.slug === slug);
+  const conteudo = usuaria ? await obterConteudoMembro(slug) : null;
 
-  if (!conteudo) {
-    window.location.replace("/404.html");
-  } else if (!usuaria) {
+  if (!usuaria) {
     window.location.replace(`/entrar.html?redirect=${encodeURIComponent(window.location.pathname)}`);
+  } else if (!conteudo) {
+    if (destino) {
+      destino.innerHTML =
+        '<p role="alert">Não foi possível carregar este conteúdo agora. ' +
+        '<a href="/membros.html">Voltar à área de membros</a></p>';
+    }
   } else if (destino) {
     const categoria = document.createElement("p");
     categoria.className = "tag tag--ameixa";
@@ -57,11 +66,11 @@ const conteudoAtual = conteudosMembros.find((item) => item.slug === slug);
       texto.textContent = conteudo.conteudo;
       const nota = document.createElement("p");
       nota.textContent = "Este conteúdo é uma demonstração e poderá ser expandido com os materiais da Casa Loba.";
-      if ("video" in conteudo && conteudo.video) {
+      if (conteudo.video_url) {
         const videoWrapper = document.createElement("div");
         videoWrapper.className = "video-wrapper";
         const iframe = document.createElement("iframe");
-        iframe.src = conteudo.video;
+        iframe.src = conteudo.video_url;
         iframe.title = `Vídeo: ${conteudo.titulo}`;
         iframe.loading = "lazy";
         iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";

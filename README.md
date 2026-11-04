@@ -52,7 +52,7 @@ Cada arquivo em `src/pages/` vira uma página. No host do Wix Headless os arquiv
 | Termos de uso | `src/pages/termos-de-uso.astro` | Minuta 0.2 com revisão jurídica pendente |
 | Política de privacidade | `src/pages/politica-de-privacidade.astro` | Minuta LGPD 0.2 com revisão jurídica pendente |
 
-> Login e cadastro são páginas (`/entrar.html` e `/cadastro.html`); o login também abre em modal pelo cabeçalho. A rota `/login` não existe. A autenticação atual é um mock local — veja `docs/INSTRUCOES-MOCKCUP.md`.
+> Login e cadastro são páginas (`/entrar.html` e `/cadastro.html`); o login também abre em modal pelo cabeçalho. A rota `/login` não existe. O login em produção é o real do site; contas de demonstração existem apenas em `npm run dev` — veja `docs/AUTH.md`.
 
 ### Versão 2
 
@@ -103,8 +103,8 @@ Os textos de termos de uso e política de privacidade ficam em `src/content/lega
 nvm use
 npm ci
 npm run dev     # servidor local em http://localhost:4321
-npm run build   # gera a versão de produção
-npm run wix:check  # confere se o site no ar está igual ao dist/
+npm run build   # gera a versão de produção (dist/client + dist/server)
+npm run wix:check  # confere se o site no ar está igual ao dist/client/
 ```
 
 ## Deploy
@@ -115,22 +115,23 @@ O site fica no Wix Headless em
 
 O deploy é automático: cada push na `main` dispara o workflow
 [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), que roda
-`npm run build` e envia o `dist/` inteiro para o site. O envio substitui todo
-o conjunto de arquivos publicados — nada de upload incremental.
+`npm run build` e envia o `dist/client/` (as páginas estáticas; `dist/server/`
+fica de fora — só roda em SSR) para o site. O envio substitui todo o conjunto
+de arquivos publicados — nada de upload incremental.
 
 Para o workflow funcionar, o repositório precisa do secret `WIX_API_TOKEN`: uma
 chave de API do Wix com acesso ao site Headless (gerada em
 `manage.wix.com/account/api-keys`). Sem ele o job falha na hora de publicar.
 
 O último passo do workflow roda `npm run wix:check`, que compara cada arquivo
-do `dist/` com o que está no ar e falha se algo não chegou. É o mesmo comando
+do `dist/client/` com o que está no ar e falha se algo não chegou. É o mesmo comando
 que dá pra rodar na mão depois de publicar.
 
 Publicar manualmente, sem passar pelo GitHub:
 
 ```bash
 npm run build
-cd dist && zip -qr /tmp/site.zip . && cd ..
+cd dist/client && zip -qr /tmp/site.zip . && cd ..
 curl -X POST \
   "https://www.wixapis.com/headless-business-setup/v1/headless-business/$WIX_SITE_ID/drop" \
   -H "Authorization: $(grep '^WIX_API_TOKEN=' .env | cut -d= -f2-)" \

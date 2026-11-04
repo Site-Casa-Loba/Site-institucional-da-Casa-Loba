@@ -20,6 +20,7 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
           <h2 id="titulo-liberados">Conteúdos para você</h2>
           <div class="membros-grade" data-conteudos-liberados></div>
           <p data-sem-liberados hidden>Em breve, mais conteúdos para o seu plano.</p>
+          <p role="alert" hidden data-mensagem-erro>Não foi possível carregar os conteúdos. Recarregue a página ou entre novamente.</p>
         </section>
         <section class="membros-secao" aria-labelledby="titulo-outros">
           <h2 id="titulo-outros">Disponíveis em outros planos</h2>
@@ -33,10 +34,14 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
 
 <script>
   import { auth } from "../../lib/auth";
-  import { conteudosMembros, obterPlanoMembro, temAcessoAoConteudo } from "../../lib/membros";
+  import { obterPlanoMembro, temAcessoAoConteudo } from "../../lib/membros";
+  import { obterConteudosMembro } from "../../lib/membrosCms";
 
   const usuaria = await auth.usuariaAtual();
+  const conteudos = usuaria ? await obterConteudosMembro() : [];
+  const erro = document.querySelector<HTMLElement>("[data-mensagem-erro]");
   if (usuaria) {
+    if (conteudos.length === 0 && erro) erro.hidden = false;
     const nome = document.querySelector<HTMLElement>("[data-boas-vindas]");
     const planoTexto = document.querySelector<HTMLElement>("[data-plano-atual]");
     const liberados = document.querySelector<HTMLElement>("[data-conteudos-liberados]");
@@ -46,7 +51,7 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
     if (nome) nome.textContent = `Que bom ter você aqui, ${usuaria.nome}.`;
     if (planoTexto) planoTexto.textContent = planoAtual?.nome ?? "Não identificado";
 
-    for (const conteudo of conteudosMembros) {
+    for (const conteudo of conteudos) {
       const liberado = temAcessoAoConteudo(usuaria.plano, conteudo.plano);
       const planoNecessario = obterPlanoMembro(conteudo.plano);
       const card = document.createElement("article");
@@ -72,7 +77,7 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
       (liberado ? liberados : bloqueados)?.append(card);
     }
 
-    if (semLiberados) semLiberados.hidden = conteudosMembros.some((conteudo) =>
+    if (semLiberados) semLiberados.hidden = conteudos.some((conteudo) =>
       temAcessoAoConteudo(usuaria.plano, conteudo.plano));
   }
 </script>
