@@ -13,7 +13,6 @@ import { members } from "@wix/members";
 import {
   sessaoValida,
   salvarSessaoLocal,
-  limparSessaoLocal,
   type TokensWix,
 } from "./wixSession";
 import type { Usuaria } from "../usuaria-mock";
@@ -66,8 +65,9 @@ export async function usuariaWix(): Promise<Usuaria | null> {
       plano: "loba",
     };
   } catch (erro) {
-    console.error("[auth] membro Wix inválido, sessão apagada:", erro);
-    limparSessaoLocal();
+    // Erro lendo o perfil (rede instável, 5xx, CORS…): NÃO apaga a sessão.
+    // A pessoa continua “logada”; verá a área de membros na próxima tentativa.
+    console.error("[auth] não foi possível ler o membro Wix:", erro);
     return null;
   }
 }

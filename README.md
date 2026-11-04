@@ -103,8 +103,8 @@ Os textos de termos de uso e política de privacidade ficam em `src/content/lega
 nvm use
 npm ci
 npm run dev     # servidor local em http://localhost:4321
-npm run build   # gera a versão de produção (dist/client + dist/server)
-npm run wix:check  # confere se o site no ar está igual ao dist/client/
+npm run build   # gera a versão de produção (dist + dist/server)
+npm run wix:check  # confere se o site no ar está igual ao dist/
 ```
 
 ## Deploy
@@ -115,8 +115,7 @@ O site fica no Wix Headless em
 
 O deploy é automático: cada push na `main` dispara o workflow
 [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), que roda
-`npm run build` e envia o `dist/client/` (as páginas estáticas; `dist/server/`
-fica de fora — só roda em SSR) para o site. O envio substitui todo o conjunto
+`npm run build` e envia o `dist/` (site 100% estático) para o site. O envio substitui todo o conjunto
 de arquivos publicados — nada de upload incremental.
 
 Para o workflow funcionar, o repositório precisa do secret `WIX_API_TOKEN`: uma
@@ -124,14 +123,14 @@ chave de API do Wix com acesso ao site Headless (gerada em
 `manage.wix.com/account/api-keys`). Sem ele o job falha na hora de publicar.
 
 O último passo do workflow roda `npm run wix:check`, que compara cada arquivo
-do `dist/client/` com o que está no ar e falha se algo não chegou. É o mesmo comando
+do `dist/` com o que está no ar e falha se algo não chegou. É o mesmo comando
 que dá pra rodar na mão depois de publicar.
 
 Publicar manualmente, sem passar pelo GitHub:
 
 ```bash
 npm run build
-cd dist/client && zip -qr /tmp/site.zip . && cd ..
+cd dist && zip -qr /tmp/site.zip . && cd ..
 curl -X POST \
   "https://www.wixapis.com/headless-business-setup/v1/headless-business/$WIX_SITE_ID/drop" \
   -H "Authorization: $(grep '^WIX_API_TOKEN=' .env | cut -d= -f2-)" \

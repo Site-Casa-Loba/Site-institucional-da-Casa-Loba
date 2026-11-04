@@ -1,9 +1,5 @@
 /**
  * SESSÃO WIX NO NAVEGADOR (client-side).
- *
- * Mantida em localStorage com a mesma forma do cookie de sessão do
- * servidor (src/lib/session.ts), para um dia convergirem quando o site
- * rodar SSR. NUNCA logar valores de token.
  */
 
 export interface TokensWix {
@@ -68,7 +64,14 @@ export async function sessaoValida(): Promise<TokensWix | null> {
         refreshToken: tokens.refreshToken.value,
       }),
     });
-    if (!resposta.ok) return null;
+    if (!resposta.ok) {
+      // 4xx = refresh token inválido/revogado → sessão morta; demais
+      // erros (rede, 5xx) podem ser transitórios → mantém a sessão.
+      if (resposta.status >= 400 && resposta.status < 500) {
+        limparSessaoLocal();
+      }
+      return null;
+    }
     const dados = (await resposta.json()) as {
       access_token?: string;
       expires_in?: number;

@@ -97,7 +97,7 @@ pessoais). Nomes e preços continuam provisórios até as sócias definirem.
   lê com o **token de membro** da sessão Wix. O Wix recusa anônimos
   (`WDE0027`), então o conteúdo nunca chega ao bundle estático
   (`dist/`) e anônimos recebem HTTP 4xx do Wix. Verificado: as strings
-  dos conteúdos e o ID do vídeo não aparecem em `dist/client`.
+  dos conteúdos e o ID do vídeo não aparecem em `dist`.
 
 ## Decisões de segurança (04/11/2026)
 

@@ -33,13 +33,12 @@ jobs:
 
       - run: npm run build
 
-      # O drop substitui o conjunto inteiro de arquivos: dist/client/ (as páginas
-      # estáticas) é o site todo. dist/server/ fica de fora — só roda em SSR.
+      # O drop substitui o conjunto inteiro de arquivos: dist/ é o site.
       - name: Publicar build no Wix Headless
         env:
           WIX_API_TOKEN: ${{ secrets.WIX_API_TOKEN }}
         run: |
-          cd dist/client
+          cd dist
           zip -qr "$RUNNER_TEMP/site.zip" *
           cd "$GITHUB_WORKSPACE"
           curl -sS --fail-with-body -X POST \

@@ -4,9 +4,9 @@ import Cabecalho from "../../components/Cabecalho.astro";
 import AreaProtegida from "../../components/AreaProtegida.astro";
 import { SLUGS_CONTEUDOS } from "../../lib/membrosCms";
 
-// Em build estático o /membros/[slug] é pré-renderizado (usa getStaticPaths).
-// Em SSR, vira rota dinâmica e passa pelo middleware de sessão.
-export const prerender = import.meta.env.ASTRO_OUTPUT !== "server";
+// Site 100% estático: prerenderiza todos os slugs (o título real e o
+// conteúdo vêm do CMS no navegador, após o login).
+export const prerender = true;
 
 export function getStaticPaths() {
   return SLUGS_CONTEUDOS.map((slug) => ({ params: { slug } }));

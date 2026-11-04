@@ -1,10 +1,19 @@
 # Autenticação — como funciona hoje
 
-Hoje o site publica arquivos estáticos (GitHub Actions → `dist/client/` →
+Hoje o site publica arquivos estáticos (GitHub Actions → `dist/` →
 drop no Wix Headless). Por isso o login real acontece **no navegador**,
 sem servidor pelo meio, e as áreas seguem protegidas no cliente (como o
-mock sempre foi). O SSR (middleware + `/api/auth/*`) está implementado e
-testado como opção futura — ver "Opção SSR" abaixo.
+mock sempre foi).
+
+> **Middleware SSR removido do repo (04/11/2026):** o middleware de sessão
+> (`src/middleware.ts`) + rotas SSR `/api/auth/*` + `src/lib/session.ts`
+> vivem agora em `../middleware-ssr` (fora deste repositório), para uso
+> futuro quando o deploy virar SSR. Motivo: no build estático o Astro
+> executava o middleware no prerender, sem sessão, e o build emitia as
+> páginas de membros como página de redirect — era a causa do "loop"
+> de login (`/membros.html` ↔ `/entrar.html`). Sem ele, o build estático
+> é 100% páginas reais, e a proteção no ar é a client-side + o Wix
+> recusando a leitura de `conteudos` para anônimos (`WDE0027`).
 
 ## Fluxo de login (ativo)
 
@@ -13,13 +22,14 @@ testado como opção futura — ver "Opção SSR" abaixo.
    PKCE). `src/lib/auth/iniciarLoginWix.ts` gera PKCE + `state`, guarda em
    `sessionStorage` (`casaloba_oauth`) e redireciona.
 2. **Callback** — `public/auth/callback.html` (copiado para
-   `dist/client/auth/callback.html`). O host estático do Wix **reserva
-   `/api/*`** (tudo ali responde 404, mesmo arquivos subidos), por isso
-   esta URL exata precisa estar cadastrada no app OAuth. Valida o
-   `state`, troca o `code` por tokens (`POST /oauth2/token`,
+   `dist/auth/callback.html`; servido também pelo `astro dev`). O host
+   estático do Wix **reserva `/api/*`** (tudo ali responde 404, mesmo
+   arquivos subidos), por isso o callback é `/auth/callback.html` e a
+   URL exata precisa estar cadastrada no app OAuth. Valida o `state`,
+   troca o `code` por tokens (`POST /oauth2/token`,
    `authorization_code` + `codeVerifier`) e salva a sessão em
-   `localStorage` (`casaloba_session`). Em `npm run dev` (localhost) o
-   mesmo fluxo usa `/api/auth/callback` (já permitido).
+   `localStorage` (`casaloba_session`). Redireciona de volta para o
+   destino original (`?redirect=`).
 3. **Sessão nos componentes** — `auth.usuariaAtual()`
    (`src/lib/auth/index.ts`) devolve o membro real via
    `members.getCurrentMember` (SDK) quando há sessão válida; o access
@@ -29,7 +39,9 @@ testado como opção futura — ver "Opção SSR" abaixo.
    produção o mock é eliminado da interface.
    A área de membros lê os conteúdos do CMS com o **token de membro**
    (`src/lib/membrosCms.ts`); o Wix recusa anônimos (`WDE0027`), e o
-   conteúdo nunca entra no bundle publicado.
+   conteúdo nunca entra no bundle publicado. Erro transitório ao ler o
+   perfil/token **não** apaga a sessão (só 4xx do Wix desloga);
+   ver `src/lib/auth/wixAuth.ts` e `wixSession.ts`.
 4. **Plano do membro** — o plano real virá do Wix Pricing Plans (tarefa
    separada). Até lá, membro real entra como **loba** (acesso mínimo);
    as contas demo mantêm os três níveis.
@@ -40,55 +52,40 @@ testado como opção futura — ver "Opção SSR" abaixo.
 - O site **Casa Loba | Headless** tem o cliente headless (tela *Headless
   Settings → Clientes headless* do dashboard) — é o `PUBLIC_WIX_CLIENT_ID`
   do `.env` (e está no CI, pois client ID é público).
-- As **redirect URIs já estão cadastradas** no app:
-  `http://localhost:4321/api/auth/callback` e
-  `https://headless-urlsttluzfw-arthursoares1234-1410.wix-site-host.com/api/auth/callback`
-  — **mas o host estático reserva `/api/*` (404)**, então a URI
-  necessária em produção é
-  `https://headless-urlsttluzfw-arthursoares1234-1410.wix-site-host.com/auth/callback.html`,
-  que **ainda precisa ser adicionada** no painel (Headless Settings →
-  Clientes headless → CompanionApp → Redirect URIs). A API não permite
-  editar a lista (testado: o campo é ignorado).
-- Sem essa URI, o login redireciona e a Wix recusa o retorno.
-  (mais as variantes `logout-callback` e preview). Nada a fazer no
-  dashboard para o login funcionar.
+- **Redirect URIs necessárias** (correspondência exata):
+  - Produção: `https://headless-urlsttluzfw-arthursoares1234-1410.wix-site-host.com/auth/callback.html`
+  - Local: `http://localhost:4321/auth/callback.html`
+- **O host estático reserva `/api/*` (404)**, então as URIs antigas
+  `/api/auth/callback` não servem em produção; a do item acima é a
+  correta.
+- **A API não permite editar a lista** de redirect URIs (testado em
+  04/11/2026: o campo é ignorado). A edição é manual no painel
+  (Headless Settings → Clientes headless → CompanionApp → Redirect URIs).
+- "Invalid redirect URI" no login = URI não salva na lista.
 - OAuth do Wix Headless **não usa secret**.
 
 ## Verificado
 
-- `POST /oauth2/token` com o client ID de produção → `200`.
+- `POST /oauth2/token` com o client ID de produção → `200` (também do
+  navegador, via fetch: status 200).
 - `generateOAuthData` + `getAuthUrl` (mesmo código do site) → URL de
   autorização válida (host do Wix, PKCE, `responseMode=query`).
-- Build inclui `dist/client/auth/callback.html` e os botões **Entrar**
-  nas duas portas. `npm run check` limpo; build estático e SSR passam.
+- Build inclui `dist/auth/callback.html` (200/text-html no ar) e os
+  botões **Entrar** nas duas portas. Sem o middleware no repo, o build
+  estático emite páginas reais de membros (sem interstício de redirect).
+- `npm run check` limpo; build estático passa.
 
-**Ainda não verificado (depende do seu teste no ar):** o caminho completo
-em produção — o callback só existe após o push para `main` (deploy).
-**Risco conhecido:** o host estático pode servir o arquivo sem extensão
-com Content-Type inadequado (o navegador baixa em vez de renderizar). Se
-acontecer, o retorno do login quebra — aí vale o SSR (abaixo) ou esconder
-o botão até lá.
-
-## Opção SSR (implementado e testado, não ativo)
-
-Para que a proteção `/membros*` aconteça **no servidor** (e o botão de
-login nem precise de PKCE manual), o site precisa rodar num servidor
-Node. O código está pronto e testado localmente:
-
-- Rotas `/api/auth/{login,callback,logout}` (`src/pages/api/auth/`),
-  cookies HttpOnly, `src/lib/session.ts`.
-- Middleware (`src/middleware.ts`): fora de `/membros*` e `/admin*` passa
-  direto; sem sessão → `302 /entrar.html?redirect=…`; token expirado →
-  renova via refresh token; falhou → apaga cookies e redireciona.
-- Ativar com `ASTRO_OUTPUT=server npm run build` e servir
-  `dist/server/entry.mjs`. Evidências locais em 04/11/2026: todos os
-  redirecionamentos e a renovação de sessão responderam como esperado.
+**Ainda não verificado ponta a ponta:** o login completo no ar,
+dependendo do teste real com uma conta de membro (deploy + URI acima
+cadastrada). Se o login cair no `state` ou no callback em produção, o
+fallback é o SSR (em `../middleware-ssr`).
 
 ## Arquivos
 
 - Client-side: `src/lib/auth/{iniciarLoginWix,wixSession,wixAuth,index}.ts`,
   `src/lib/membrosCms.ts`, `public/auth/callback.html`,
   `src/pages/entrar.astro`, `src/components/ModalLogin.astro`
-- SSR (não ativo): `src/pages/api/auth/*`, `src/lib/session.ts`,
-  `src/middleware.ts`, `src/env.d.ts`
-- `src/lib/cms.ts` — leitura do CMS (ver `docs/CMS.md`)
+- Leitura pública do CMS: `src/lib/cms.ts` (ver `docs/CMS.md`)
+- Fora do repo (uso futuro): `../middleware-ssr` (middleware de sessão,
+  rotas SSR `/api/auth/*`, `src/lib/session.ts`, `src/env.d.ts`, snippet
+  do adapter — ver o README lá)
