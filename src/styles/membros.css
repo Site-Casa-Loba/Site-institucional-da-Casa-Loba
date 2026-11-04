@@ -1,7 +1,8 @@
 .tela-acesso,
 .pagina-membros,
 .pagina-perfil-membro,
-.pagina-conteudo-membro {
+.pagina-conteudo-membro,
+.pagina-membros-interna {
   min-height: 100vh;
   padding: 120px 0 80px;
   background: var(--creme);
@@ -10,7 +11,8 @@
 .painel-acesso,
 .painel-perfil,
 .conteudo-artigo,
-.conteudo-bloqueado {
+.conteudo-bloqueado,
+.painel-membro {
   width: min(100% - 32px, 680px);
   margin: 0 auto;
   padding: clamp(28px, 7vw, 56px);
@@ -21,7 +23,8 @@
 .painel-acesso h1,
 .painel-perfil h1,
 .conteudo-artigo h1,
-.conteudo-bloqueado h1 {
+.conteudo-bloqueado h1,
+.painel-membro h1 {
   margin-bottom: 16px;
   font-size: clamp(2rem, 5vw, 3.2rem);
 }
@@ -286,7 +289,8 @@
   .tela-acesso,
   .pagina-membros,
   .pagina-perfil-membro,
-  .pagina-conteudo-membro {
+  .pagina-conteudo-membro,
+  .pagina-membros-interna {
     padding-top: 100px;
   }
 
@@ -299,4 +303,154 @@
   .perfil-acoes .btn {
     width: 100%;
   }
+}
+
+/* =========================================================
+   TELAS V2: assinatura, mural, comunidade, eventos, admin
+   Reusam as classes acima (.pagina-membros-interna, .painel-membro,
+   .membros-cabecalho, .membros-secao, .membros-grade, .membros-card).
+   ========================================================= */
+
+/* Painéis largos (mural e admin) */
+.painel-membro--largo {
+  width: min(100% - 32px, 880px);
+}
+
+/* Subtítulo de seção dentro de um painel */
+.painel-membro h2 {
+  margin-bottom: 12px;
+  font-size: 1.4rem;
+}
+
+.painel-membro p + p {
+  margin-top: 12px;
+}
+
+/* Lista com marcador no traço da marca (como .plano__lista) */
+.lista-marca {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.lista-marca li::before {
+  content: "– ";
+  color: var(--vermelho);
+  font-weight: 700;
+}
+
+/* Linha "rótulo → valor" (assinatura, eventos) */
+.linha-dado {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(43, 28, 46, 0.15);
+  font-weight: 700;
+}
+
+.linha-dado dt {
+  font-family: var(--font-titulo);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.linha-dado dd {
+  text-transform: capitalize;
+}
+
+/* Card de evento dentro da grade de membros */
+.membros-card__quando {
+  margin-bottom: 4px;
+  font-family: var(--font-titulo);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+/* Publicação do mural */
+.publicacao {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.publicacao__cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-titulo);
+  font-weight: 700;
+}
+
+.publicacao__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--capsula);
+  background: var(--rosa);
+  color: var(--ameixa);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.publicacao__quando {
+  font-family: var(--font-corpo);
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0.75;
+}
+
+.publicacao__texto {
+  opacity: 0.9;
+}
+
+.publicacao__rodape {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.publicacao__curtir {
+  padding: 6px 16px;
+  border: 1.5px solid var(--ameixa);
+  border-radius: var(--capsula);
+  background: transparent;
+  color: var(--ameixa);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.publicacao__curtir:hover {
+  transform: translateY(-2px);
+  background: var(--agua);
+}
+
+.publicacao__curtir[aria-pressed="true"] {
+  background: var(--agua);
+}
+
+/* Cartão do WhatsApp na tela de comunidade */
+.destaque-comunidade {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 20px;
+  background: var(--agua);
+  font-family: var(--font-titulo);
+  font-weight: 700;
+}
+
+.destaque-comunidade strong {
+  font-size: 1.6rem;
+  text-transform: lowercase;
 }

@@ -1,0 +1,84 @@
+---
+// Comunidade de WhatsApp (V2): acesso ao grupo principal da Casa Loba.
+// PLACEHOLDER: o link de convite real ainda não existe; a entrada definitiva
+// virá com a assinatura (Wix) e será enviada por e-mail após a confirmação.
+import Layout from "../../layouts/Layout.astro";
+import Cabecalho from "../../components/Cabecalho.astro";
+import AreaProtegida from "../../components/AreaProtegida.astro";
+---
+
+<Layout title="Comunidade no WhatsApp — Casa Loba" noindex>
+  <Cabecalho solido />
+  <AreaProtegida>
+    <main class="pagina-membros-interna">
+      <div class="container">
+        <a class="membros-voltar" href="/membros.html">← Voltar à área de membros</a>
+        <header class="membros-cabecalho">
+          <p class="tag">comunidade</p>
+          <h1>nossa casa no WhatsApp</h1>
+          <p>O dia a dia da matilha acontece por lá: avisos, trocas e apoio na rotina.</p>
+        </header>
+
+        <section class="membros-secao" aria-labelledby="titulo-acesso">
+          <h2 id="titulo-acesso">Como entrar</h2>
+          <div class="painel-membro">
+            <div class="destaque-comunidade" aria-hidden="true">
+              <span>grupo principal</span>
+              <strong>casa loba · matilha</strong>
+            </div>
+            <p style="margin-top: 18px">
+              A conversa de todo dia acontece em um grupo de WhatsApp exclusivo para membras.
+              O acesso é liberado para quem tem uma assinatura ativa.
+            </p>
+            <div class="perfil-acoes">
+              <!-- PLACEHOLDER: trocar por "https://chat.whatsapp.com/<convite real>"
+                   quando o grupo for criado. O link definitivo será enviado por e-mail
+                   após a confirmação da assinatura. -->
+              <a class="btn btn--vermelho" href="/contato.html">Quero entrar na comunidade</a>
+              <a class="btn btn--ghost" href="/membros/assinatura.html">Ver minha assinatura</a>
+            </div>
+            <p class="aviso-demo">
+              <strong>Demonstração:</strong> os planos ainda não são cobrados. O convite direto
+              no WhatsApp chega junto com a cobrança; até lá, os pedidos de entrada passam
+              pela página de contato.
+            </p>
+          </div>
+        </section>
+
+        <section class="membros-secao" aria-labelledby="titulo-combinados">
+          <h2 id="titulo-combinados">Combinados da casa</h2>
+          <div class="painel-membro">
+            <ul class="lista-marca">
+              <li>Acolhimento em primeiro lugar: ninguém é interrompida, ninguém é julgada.</li>
+              <li>Nada de spam ou correntes; autopromoção em dia marcado ou no mural de networking.</li>
+              <li>Sigilo: o que a matilha compartilha aqui, fica aqui.</li>
+              <li>Pedidos de indicação são bem-vindos — diga sempre o que você precisa.</li>
+              <li>Divergências se resolvem de boa-fé, com a moderação da Casa quando preciso.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="membros-secao" aria-labelledby="titulo-niveis">
+          <h2 id="titulo-niveis">Onde você participa</h2>
+          <div class="membros-grade">
+            <article class="card">
+              <div class="card__arco card__arco--vermelho"></div>
+              <h3 class="card__titulo">loba</h3>
+              <p class="card__texto">Grupo principal da comunidade: avisos da Casa e trocas do dia a dia.</p>
+            </article>
+            <article class="card">
+              <div class="card__arco card__arco--azul"></div>
+              <h3 class="card__titulo">matilha</h3>
+              <p class="card__texto">Tudo do loba, mais o grupo de networking para conexões profissionais.</p>
+            </article>
+            <article class="card">
+              <div class="card__arco card__arco--agua"></div>
+              <h3 class="card__titulo">alcateia</h3>
+              <p class="card__texto">Tudo do matilha, mais um grupo próximo com as mentorias e encontros exclusivos.</p>
+            </article>
+          </div>
+        </section>
+      </div>
+    </main>
+  </AreaProtegida>
+</Layout>

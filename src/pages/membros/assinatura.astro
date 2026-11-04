@@ -1,0 +1,122 @@
+---
+// Minha assinatura (V2): plano atual, benefícios e ações de gerenciamento.
+// PLACEHOLDER: sem cobrança ativa, troca/cancelamento são demonstração.
+import Layout from "../../layouts/Layout.astro";
+import Cabecalho from "../../components/Cabecalho.astro";
+import AreaProtegida from "../../components/AreaProtegida.astro";
+---
+
+<Layout title="Minha assinatura — Casa Loba" noindex>
+  <Cabecalho solido />
+  <AreaProtegida>
+    <main class="pagina-membros-interna">
+      <div class="container">
+        <a class="membros-voltar" href="/membros.html">← Voltar à área de membros</a>
+        <header class="membros-cabecalho">
+          <p class="tag">minha assinatura</p>
+          <h1>Assinatura</h1>
+          <p>Acompanhe seu plano e os benefícios liberados para você.</p>
+          <p class="membros-plano"><span>Seu plano</span><strong data-plano-atual></strong></p>
+        </header>
+
+        <section class="membros-secao" aria-labelledby="titulo-detalhes">
+          <h2 id="titulo-detalhes">Detalhes da assinatura</h2>
+          <div class="painel-membro">
+            <p class="painel-membro__intro" data-intro-assinatura>
+              Carregando os dados da sua assinatura…
+            </p>
+            <dl data-detalhes-assinatura hidden>
+              <div class="linha-dado">
+                <dt>plano</dt>
+                <dd data-valor-plano></dd>
+              </div>
+              <div class="linha-dado">
+                <dt>status</dt>
+                <dd>ativa · demonstração</dd>
+              </div>
+              <div class="linha-dado">
+                <dt>cobrança</dt>
+                <dd>não iniciada</dd>
+              </div>
+              <div class="linha-dado">
+                <dt>próxima renovação</dt>
+                <dd>—</dd>
+              </div>
+            </dl>
+            <div class="perfil-acoes">
+              <a class="btn btn--vermelho" href="/planos.html">Conhecer outros planos</a>
+              <button class="btn btn--ghost" type="button" data-cancelar disabled
+                title="Disponível quando a cobrança for lançada no Wix.">
+                Cancelar assinatura
+              </button>
+            </div>
+            <p class="painel-membro__nota">
+              A troca e o cancelamento de planos reais serão ativados junto com a cobrança
+              (Wix Pricing Plans). Nada é cobrado nesta demonstração.
+            </p>
+          </div>
+        </section>
+
+        <section class="membros-secao" aria-labelledby="titulo-beneficios">
+          <h2 id="titulo-beneficios">Benefícios do seu plano</h2>
+          <div class="painel-membro">
+            <ul class="lista-marca" data-beneficios></ul>
+            <p class="aviso-demo">
+              <strong>Ambiente de demonstração:</strong> plano e benefícios são locais e não
+              representam uma assinatura paga.
+            </p>
+          </div>
+        </section>
+      </div>
+    </main>
+  </AreaProtegida>
+</Layout>
+
+<style>
+  .painel-membro__intro {
+    margin-bottom: 20px;
+  }
+
+  .painel-membro__nota {
+    margin-top: 18px;
+    font-size: 0.95rem;
+    opacity: 0.8;
+  }
+</style>
+
+<script>
+  import { auth } from "../../lib/auth";
+  import { obterPlanoMembro } from "../../lib/membros";
+
+  const usuaria = await auth.usuariaAtual();
+  const intro = document.querySelector<HTMLElement>("[data-intro-assinatura]");
+  const detalhes = document.querySelector<HTMLElement>("[data-detalhes-assinatura]");
+  const planoAtual = document.querySelector<HTMLElement>("[data-plano-atual]");
+  const valorPlano = document.querySelector<HTMLElement>("[data-valor-plano]");
+  const beneficios = document.querySelector<HTMLElement>("[data-beneficios]");
+
+  if (usuaria && detalhes) {
+    const plano = obterPlanoMembro(usuaria.plano);
+    const nomePlano = plano?.nome ?? "Não identificado";
+    if (planoAtual) planoAtual.textContent = nomePlano;
+    if (valorPlano) valorPlano.textContent = nomePlano;
+    if (intro) {
+      intro.textContent = `Você participa da Casa Loba com o plano ${nomePlano.toLowerCase()}. Abaixo, o que ele libera para você.`;
+    }
+    detalhes.hidden = false;
+    if (beneficios) {
+      beneficios.replaceChildren();
+      for (const beneficio of plano?.beneficios ?? []) {
+        const item = document.createElement("li");
+        item.textContent = beneficio;
+        beneficios.append(item);
+      }
+    }
+  } else if (intro) {
+    intro.textContent = "Sua sessão não foi encontrada. Volte à área de membros para entrar novamente.";
+  }
+
+  document.querySelector<HTMLButtonElement>("[data-cancelar]")?.addEventListener("click", () => {
+    // PLACEHOLDER: cancelamento real depende do Pricing Plans do Wix (task 17/28).
+  });
+</script>
