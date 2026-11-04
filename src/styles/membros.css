@@ -3,9 +3,10 @@
 .pagina-perfil-membro,
 .pagina-conteudo-membro,
 .pagina-membros-interna {
-  min-height: 100vh;
+   min-height: 100vh;
   padding: 120px 0 80px;
-  background: var(--creme);
+  background: #470e31;
+  color: var(--creme);
 }
 
 .painel-acesso,
@@ -13,11 +14,12 @@
 .conteudo-artigo,
 .conteudo-bloqueado,
 .painel-membro {
-  width: min(100% - 32px, 680px);
+    width: min(100% - 32px, 680px);
   margin: 0 auto;
   padding: clamp(28px, 7vw, 56px);
   border-radius: var(--raio);
   background: #fff;
+  color: #470e31;
 }
 
 .painel-acesso h1,
@@ -75,7 +77,7 @@
   margin-top: 24px;
   padding: 16px 20px;
   border-radius: 18px;
-  background: var(--agua);
+  background: #DA4D3F;
   font-size: 0.95rem;
 }
 
@@ -121,7 +123,7 @@
   margin: 24px auto 48px;
   padding: clamp(32px, 7vw, 64px);
   border-radius: var(--raio);
-  background: var(--ameixa);
+  background: #DA4D3F;
   color: var(--creme);
 }
 
@@ -291,8 +293,10 @@
   .pagina-perfil-membro,
   .pagina-conteudo-membro,
   .pagina-membros-interna {
-    padding-top: 100px;
-  }
+  min-height: 100vh;
+  padding: 120px 0 80px;
+  background: #DA4D3F;
+}
 
   .perfil-acoes,
   .acesso-links {
