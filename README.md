@@ -103,7 +103,7 @@ Os textos de termos de uso e política de privacidade ficam em `src/content/lega
 nvm use
 npm ci
 npm run dev     # servidor local em http://localhost:4321
-npm run build   # gera a versão de produção (dist + dist/server)
+npm run build   # gera a versão de produção (dist/)
 npm run wix:check  # confere se o site no ar está igual ao dist/
 ```
 

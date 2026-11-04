@@ -28,9 +28,20 @@ No host do Wix Headless, as páginas são servidas como arquivos `.html`; use o 
 
 ## Mock e próximos passos para produção
 
-`src/lib/auth/index.ts` é o ponto único para trocar o serviço de autenticação. Hoje a sessão, contas de teste, perfil e recuperação são simulados no navegador; o seletor de plano aparece apenas em desenvolvimento. A lista de planos e os conteúdos vêm de `src/lib/membros.ts`.
+`src/lib/auth/index.ts` já combina o login real do Wix com o mock local
+(só em `npm run dev`): a sessão real tem precedência, o mock cai em
+segundo lugar; o seletor de plano aparece apenas em desenvolvimento.
+A lista de planos vem de `src/lib/membros.ts`; os conteúdos vêm do CMS
+(`src/lib/membrosCms.ts`).
 
-Antes de produção, integrar Wix Members e Pricing Plans, enviar e-mails reais de recuperação, implementar upload de foto e servir conteúdo somente pelo servidor depois de validar o plano. A guarda atual é client-side porque o mock usa `localStorage`; a proteção de rotas e conteúdo também precisa ser server-side/middleware na versão Wix. Não use dados locais ou a senha de demonstração como autenticação real.
+Antes de produção (estado atual): o login real do Wix está no ar (ver
+`docs/AUTH.md`); o mock só existe em `npm run dev`. Restam como
+pendências: planos de assinatura publicados no Wix (Pricing Plans, com
+o helper `src/lib/planoAssinatura.ts` já pronto), e-mails reais de
+recuperação, upload de foto e — se um dia houver conteúdo pago de
+verdade — servir conteúdo só pelo servidor (`../middleware-ssr`). A
+guarda atual é client-side porque o deploy é estático; não usar a
+senha de demonstração como autenticação em produção.
 
 ## Para futura implementação: Videos de referencia que eu usei:
 

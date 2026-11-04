@@ -75,10 +75,11 @@ mock sempre foi).
   estático emite páginas reais de membros (sem interstício de redirect).
 - `npm run check` limpo; build estático passa.
 
-**Ainda não verificado ponta a ponta:** o login completo no ar,
-dependendo do teste real com uma conta de membro (deploy + URI acima
-cadastrada). Se o login cair no `state` ou no callback em produção, o
-fallback é o SSR (em `../middleware-ssr`).
+**Verificado em produção (04/11/2026):** login real completado no ar —
+a usuária caiu na área de membros sem loop, logout e redirect de
+`/membros.html` sem sessão funcionando (`/entrar.html?redirect=…`).
+Se o retorno do Wix quebrar de novo, o fallback é o SSR
+(em `../middleware-ssr`).
 
 ## Arquivos
 

@@ -9,9 +9,11 @@ Dados de membro (cadastro, login, perfil privado) são responsabilidade do app
 **Wix Members**, que mantém as coleções de sistema (`Members/PrivateMembersData`,
 `Members/PublicData`, `Members/FullData`, `Members/Badges`) e a autenticação
 OAuth. Criar uma coleção própria duplicaria essa fonte e criaria dois "donos"
-dos mesmos dados (LGPD). O plano de assinatura de cada pessoa vem do **Wix
-Pricing Plans** (ainda não configurado — ver `tasks.md`). A área logada usa
-essas fontes quando a integração estiver completa.
+dos mesmos dados (LGPD). O plano de assinatura de cada pessoa vem do **Wix Pricing Plans**
+(ainda não há planos publicados). O helper `src/lib/planoAssinatura.ts`
+já lê as assinaturas com o token de membro e cai no plano mínimo `loba`;
+a área logada usa essa função (`wixAuth` → `auth.usuariaAtual()`).
+Ver `docs/AUTH.md`.
 
 ## Coleções
 
@@ -24,10 +26,10 @@ essas fontes quando a integração estiver completa.
 
 > `conteudos.read = SITE_MEMBER` de propósito: os dados trazem URLs de vídeo da
 > área paga. Não devem ser legíveis por visitantes anônimos. A liberação por
-> **plano** (e não apenas "está logada") é verificada pela aplicação
-> (`src/lib/membros.ts` hoje; verificação real de assinatura entra com o Pricing
-> Plans — ver card "Implementar verificação de plano no Astro"). Quem ainda não
-> deve ver o conteúdo simplesmente não deve saber as URLs — por isso a leitura
+> **plano** (e não apenas "está logada") é verificada pela aplicação:
+> `src/lib/planoAssinatura.ts` (assinatura ativa, fallback `loba`) +
+> `temAcessoAoConteudo` (`src/lib/membros.ts`). Quem ainda não deve ver o
+> conteúdo simplesmente não deve saber as URLs — por isso a leitura
 > exige login e as páginas de conteúdo bloqueado não expõem o `video_url`.
 
 ### `planos`
@@ -81,9 +83,11 @@ essas fontes quando a integração estiver completa.
 
 ## Dados de exemplo
 
-`planos` e `conteudos` foram semeados com os mesmos dados provisórios que já
-estão no código (`src/lib/planos.ts` e `src/lib/membros.ts`) — nenhum dado novo
-foi inventado. `depoimentos` e `inscricoes` estão **vazias** de propósito
+`planos` e `conteudos` foram semeados com os dados provisórios que já
+estavam no código (`src/lib/planos.ts` para planos) — nenhum dado novo
+foi inventado. Os **textos/vídeos dos conteúdos vivem só no CMS**
+(removidos do código em 04/11/2026); `src/lib/membros.ts` guarda só os
+níveis dos três planos. `depoimentos` e `inscricoes` estão **vazias** de propósito
 (depoimentos reais virão de autorização da comunidade; inscrições são dados
 pessoais). Nomes e preços continuam provisórios até as sócias definirem.
 
@@ -110,8 +114,13 @@ pessoais). Nomes e preços continuam provisórios até as sócias definirem.
 
 ## Pendências
 
-- Substituir `src/lib/planos.ts`/`src/lib/membros.ts` pelo CMS quando os planos
-  reais forem definidos (a página `/planos` ainda usa o catálogo local).
-- `conteudos.video_url` expõe a URL a qualquer membro logado; restringir por
-  plano exige verificação de assinatura no servidor (Pricing Plans).
-- Documentar o app OAuth e as URIs de redirect (ver `docs/AUTH.md`).
+- **Planos públicos**: a página `/planos` ainda usa o catálogo local
+  provisório de `src/lib/planos.ts`. Quando os planos reais forem
+  definidos, trocar a fonte para a coleção `planos` (leitura pública já
+  validada em `/cms-teste.html`).
+- **Plano do membro**: helper pronto (`src/lib/planoAssinatura.ts`), mas
+  ainda sem planos publicados no Wix — todo membro real entra como
+  `loba` até lá (task "Configurar planos de assinatura no Wix").
+- **Restrição de `video_url` por plano no servidor**: entrará junto com
+  o deploy SSR (`../middleware-ssr`) ou com gate de URL no backend.
+- OAuth e redirect URIs: prontos — ver `docs/AUTH.md`.
