@@ -6,31 +6,15 @@ import Cabecalho from "../components/Cabecalho.astro";
 <Layout title="Entrar — Casa Loba">
   <Cabecalho solido />
   <main class="tela-acesso">
-    <section class="painel-acesso" aria-labelledby="titulo-entrar">
+    <section class="painel-acesso painel-entrar" aria-labelledby="titulo-entrar">
       <p class="tag tag--ameixa">sua casa, seu tempo</p>
-      <h1 id="titulo-entrar">Que bom ter você de volta.</h1>
-      <p class="painel-acesso__intro">Entre para continuar sua caminhada com a Casa Loba.</p>
+      <h1 id="titulo-entrar">Entrar na Casa</h1>
+      <p class="painel-entrar__chamada">
+        Ainda não tem uma conta? <button class="painel-entrar__link" type="button" id="botao-cadastrar-wix">Cadastre-se</button>
+      </p>
       <button class="btn btn--vermelho btn--full" type="button" id="botao-entrar-wix">Entrar</button>
-      {import.meta.env.DEV && (
-        <>
-          <p class="painel-acesso__divisor">ou, somente para demonstração:</p>
-          <form class="form-acesso" id="form-entrar" novalidate>
-            <label class="campo">
-              <span>E-mail</span>
-              <input class="campo__entrada" type="email" name="email" autocomplete="email" required />
-            </label>
-            <label class="campo">
-              <span>Senha</span>
-              <input class="campo__entrada" type="password" name="senha" autocomplete="current-password" required />
-            </label>
-            <a href="/recuperar-senha.html">Esqueci minha senha</a>
-            <p class="form-acesso__mensagem" id="mensagem-entrar" aria-live="assertive" tabindex="-1"></p>
-            <button class="btn btn--vermelho btn--full" type="submit">Entrar</button>
-          </form>
-          <p class="aviso-demo"><strong>Ambiente de demonstração:</strong> use a senha <code>casaloba123</code> com uma das contas de teste ou crie seu cadastro local.</p>
-        </>
-      )}
-      <p class="acesso-links">Ainda não tem uma conta? <a href="/cadastro.html">Cadastre-se</a></p>
+      <p class="form-acesso__mensagem painel-entrar__mensagem" id="mensagem-entrar" aria-live="assertive" tabindex="-1"></p>
+      <a class="painel-entrar__esqueci" href="/recuperar-senha.html">Esqueci minha senha</a>
     </section>
   </main>
 </Layout>
@@ -39,7 +23,6 @@ import Cabecalho from "../components/Cabecalho.astro";
   import { auth } from "../lib/auth";
   import { iniciarLoginWix } from "../lib/auth/iniciarLoginWix";
 
-  const form = document.querySelector<HTMLFormElement>("#form-entrar");
   const mensagem = document.querySelector<HTMLElement>("#mensagem-entrar");
   const botaoWix = document.querySelector<HTMLButtonElement>("#botao-entrar-wix");
   const params = new URLSearchParams(window.location.search);
@@ -60,6 +43,21 @@ import Cabecalho from "../components/Cabecalho.astro";
     });
   });
 
+  const botaoCadastrar = document.querySelector<HTMLButtonElement>("#botao-cadastrar-wix");
+  botaoCadastrar?.addEventListener("click", () => {
+    botaoCadastrar.disabled = true;
+    botaoCadastrar.textContent = "Abrindo cadastro…";
+    iniciarLoginWix(destino, "signup").catch((erro) => {
+      console.error("[auth] não foi possível iniciar o cadastro:", erro);
+      botaoCadastrar.disabled = false;
+      botaoCadastrar.textContent = "Cadastre-se";
+      if (mensagem) {
+        mensagem.textContent = "Não foi possível abrir o cadastro. Tente novamente.";
+        mensagem.focus();
+      }
+    });
+  });
+
   try {
     if (await auth.usuariaAtual()) window.location.replace("/membros.html");
   } catch (erro) {
@@ -69,38 +67,58 @@ import Cabecalho from "../components/Cabecalho.astro";
     }
   }
 
-  form?.addEventListener("submit", async (evento) => {
-    evento.preventDefault();
-    if (!form.reportValidity()) return;
-    const botao = form.querySelector<HTMLButtonElement>("button[type=submit]");
-    const dados = new FormData(form);
-    if (botao) {
-      botao.disabled = true;
-      botao.textContent = "Entrando…";
-    }
-    if (mensagem) mensagem.textContent = "";
-    try {
-      await auth.entrar(String(dados.get("email")), String(dados.get("senha")));
-      window.location.assign(destino);
-    } catch (erro) {
-      if (mensagem) {
-        mensagem.textContent = erro instanceof Error ? erro.message : "Não foi possível entrar. Tente novamente.";
-        mensagem.focus();
-      }
-    } finally {
-      if (botao) {
-        botao.disabled = false;
-        botao.textContent = "Entrar";
-      }
-    }
-  });
 </script>
 
 <style>
-  .painel-acesso__divisor {
-    margin: 1.25rem 0 0.5rem;
+  /* Tela de login no visual da identidade (commit 7727f12):
+     painel estreito e centralizado, título e chamada centralizados. */
+  .painel-entrar {
+    width: min(100% - 32px, 520px);
     text-align: center;
-    font-size: 0.85rem;
-    color: #7a6a7a;
+  }
+
+  .painel-entrar h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+
+  .painel-entrar__chamada {
+    margin-top: 12px;
+    font-size: 1.25rem;
+  }
+
+  .painel-entrar__chamada a,
+  .painel-entrar__link {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .painel-entrar__link {
+    color: inherit;
+    background: none;
+    border: none;
+    font: inherit;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .painel-entrar > .btn--full {
+    margin-top: 28px;
+  }
+
+  .painel-entrar__mensagem {
+    margin-top: 12px;
+  }
+
+  .painel-entrar__esqueci {
+    display: inline-block;
+    margin-top: 8px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  @media (max-width: 560px) {
+    .painel-entrar__chamada {
+      font-size: 1.1rem;
+    }
   }
 </style>

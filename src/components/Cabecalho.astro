@@ -1,6 +1,4 @@
 ---
-import ModalLogin from "./ModalLogin.astro";
-
 interface Props {
   solido?: boolean;
 }
@@ -25,8 +23,8 @@ const { solido = false } = Astro.props;
       <a href="/#secao-frentes">Nossas frentes</a>
       <a href="/planos.html" class="nav-planos">Planos</a>
       <div class="nav-auth" data-nav-auth>
-        <button class="btn btn--sm btn--vermelho" type="button" data-abrir-modal="modalLogin">Entrar</button>
-        <a class="nav-auth__cadastro" href="/cadastro.html">Cadastrar</a>
+        <button class="btn btn--sm btn--vermelho" type="button" data-entrar-wix>Entrar</button>
+        <button class="nav-auth__cadastro" type="button" data-cadastrar-wix>Cadastrar</button>
       </div>
     </div>
   </div>
@@ -35,6 +33,35 @@ const { solido = false } = Astro.props;
 <script src="../scripts/menu.js"></script>
 <script>
   import { auth } from "../lib/auth";
+  import { iniciarLoginWix } from "../lib/auth/iniciarLoginWix";
+
+  // Entrar/Cadastrar vão direto ao Wix (sem modal, sem página intermediária).
+  const destino = (() => {
+    const redirect = new URLSearchParams(window.location.search).get("redirect");
+    return redirect?.startsWith("/") && !redirect.startsWith("//") ? redirect : "/membros.html";
+  })();
+
+  const irAoWix = async (botao: HTMLButtonElement, modo: "login" | "signup") => {
+    const rotulo = botao.textContent;
+    botao.disabled = true;
+    botao.textContent = modo === "signup" ? "Abrindo cadastro…" : "Entrando…";
+    try {
+      await iniciarLoginWix(destino, modo);
+    } catch (erro) {
+      console.error("[auth] não foi possível iniciar o fluxo Wix:", erro);
+      botao.disabled = false;
+      botao.textContent = rotulo;
+    }
+  };
+
+  document.addEventListener("click", (evento) => {
+    const alvo = evento.target;
+    if (!(alvo instanceof Element)) return;
+    const entrar = alvo.closest<HTMLButtonElement>("[data-entrar-wix]");
+    if (entrar) void irAoWix(entrar, "login");
+    const cadastrar = alvo.closest<HTMLButtonElement>("[data-cadastrar-wix]");
+    if (cadastrar) void irAoWix(cadastrar, "signup");
+  });
 
   const area = document.querySelector<HTMLElement>("[data-nav-auth]");
   if (area) {
@@ -93,11 +120,12 @@ const { solido = false } = Astro.props;
         const entrar = document.createElement("button");
         entrar.type = "button";
         entrar.className = "btn btn--sm btn--vermelho";
-        entrar.dataset.abrirModal = "modalLogin";
+        entrar.dataset.entrarWix = "";
         entrar.textContent = "Entrar";
-        const cadastro = document.createElement("a");
+        const cadastro = document.createElement("button");
+        cadastro.type = "button";
         cadastro.className = "nav-auth__cadastro";
-        cadastro.href = "/cadastro.html";
+        cadastro.dataset.cadastrarWix = "";
         cadastro.textContent = "Cadastrar";
         area.append(entrar, cadastro);
       }
@@ -106,7 +134,6 @@ const { solido = false } = Astro.props;
     }
   }
 </script>
-<ModalLogin />
 
 <style>
   /* menu*/
@@ -172,6 +199,14 @@ const { solido = false } = Astro.props;
   .nav-links button {
     font-size: 0.95rem;
     transition: opacity 0.2s;
+  }
+
+  button.nav-auth__cadastro {
+    color: inherit;
+    background: none;
+    border: none;
+    font: inherit;
+    cursor: pointer;
   }
 
   .nav-links button {
