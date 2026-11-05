@@ -56,32 +56,63 @@ import Rodape from "../components/Rodape.astro";
       <header class="section-head">
         <p class="tag tag--ameixa">Nossas frentes</p>
         <h2 class="section-titulo">Cuidado, trabalho e conexão.</h2>
+
+        <!-- legenda das cores -->
+        <ul class="frentes__legenda" aria-label="Legenda das cores dos cards">
+          <li class="legenda--empresas">para empresas</li>
+          <li class="legenda--maes">para mães</li>
+        </ul>
       </header>
 
-      <div class="grid-3">
+      <div class="frentes__grid">
 
-        <article class="card">
-          <div class="card__arco card__arco--vermelho"></div>
-          <h3 class="card__titulo">Cuidadoteca</h3>
-          <p class="card__texto">
-            Em breve: cuidado infantil em eventos e encontros, para que mães também tenham espaço para participar, aprender e criar conexões.
-          </p>
+        <article class="frente frente--empresas">
+          <div class="frente__topo">
+            <!-- placeholder do ícone: trocar por <img> ou <svg> quando existir -->
+            <span class="frente__icone" aria-hidden="true"></span>
+            <h3 class="frente__titulo">cuidadoteca em evento</h3>
+          </div>
+          <p class="frente__texto">cuidadoteca no evento ou congresso, dimensionada pelo número e idade das crianças.</p>
         </article>
 
-        <article class="card">
-          <div class="card__arco card__arco--azul"></div>
-          <h3 class="card__titulo">Coworking</h3>
-          <p class="card__texto">
-            Em breve: conexões com espaços parceiros para trabalhar, trocar experiências e aproximar mulheres que empreendem.
-          </p>
+        <article class="frente frente--empresas">
+          <div class="frente__topo">
+            <span class="frente__icone" aria-hidden="true"></span>
+            <h3 class="frente__titulo">cuidadoteca de temporada</h3>
+          </div>
+          <p class="frente__texto">férias escolares e recessos, quando a rotina da família sai do eixo.</p>
         </article>
 
-        <article class="card">
-          <div class="card__arco card__arco--agua"></div>
-          <h3 class="card__titulo">Eventos</h3>
-          <p class="card__texto">
-            Em breve: encontros para compartilhar saberes, fortalecer vínculos e abrir espaço para novas ideias e parcerias.
-          </p>
+        <article class="frente frente--maes">
+          <div class="frente__topo">
+            <span class="frente__icone" aria-hidden="true"></span>
+            <h3 class="frente__titulo">encontros: “Sábado Loba”</h3>
+          </div>
+          <p class="frente__texto">encontro de bem-estar para mães, com a cuidadoteca na sala ao lado.</p>
+        </article>
+
+        <article class="frente frente--empresas">
+          <div class="frente__topo">
+            <span class="frente__icone" aria-hidden="true"></span>
+            <h3 class="frente__titulo">cuidadoteca fixa</h3>
+          </div>
+          <p class="frente__texto">estrutura permanente na empresa ou em coworking parceiro, em contrato mensal.</p>
+        </article>
+
+        <article class="frente frente--empresas">
+          <div class="frente__topo">
+            <span class="frente__icone" aria-hidden="true"></span>
+            <h3 class="frente__titulo">1 dia de bem estar “Sexta Loba”</h3>
+          </div>
+          <p class="frente__texto">um dia por mês de cuidadoteca e bem-estar dentro da empresa.</p>
+        </article>
+
+        <article class="frente frente--maes">
+          <div class="frente__topo">
+            <span class="frente__icone" aria-hidden="true"></span>
+            <h3 class="frente__titulo">comunidade</h3>
+          </div>
+          <p class="frente__texto">por assinatura: conteúdo, encontros e rede entre mães que trabalham.</p>
         </article>
 
       </div>
