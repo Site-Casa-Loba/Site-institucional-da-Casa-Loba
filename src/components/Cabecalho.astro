@@ -194,14 +194,14 @@ const { solido = false } = Astro.props;
     gap: 12px;
   }
 
-  .nav-auth__cadastro,
+  :global(.nav-auth__cadastro),
   .nav-links a,
   .nav-links button {
     font-size: 0.95rem;
     transition: opacity 0.2s;
   }
 
-  button.nav-auth__cadastro {
+  :global(button.nav-auth__cadastro) {
     color: inherit;
     background: none;
     border: none;
@@ -228,7 +228,7 @@ const { solido = false } = Astro.props;
   }
 
   /* Estado logado: cápsula com contorno ameixa, avatar e nome */
-  .perfil-link {
+  :global(.perfil-link) {
     display: inline-flex;
     align-items: center;
     gap: 10px;
@@ -240,15 +240,15 @@ const { solido = false } = Astro.props;
     list-style: none;
   }
 
-  .perfil-link::-webkit-details-marker {
+  :global(.perfil-link::-webkit-details-marker) {
     display: none;
   }
 
-  .perfil-menu {
+  :global(.perfil-menu) {
     position: relative;
   }
 
-  .perfil-menu__opcoes {
+  :global(.perfil-menu__opcoes) {
     position: absolute;
     top: calc(100% + 10px);
     right: 0;
@@ -262,22 +262,22 @@ const { solido = false } = Astro.props;
     box-shadow: 0 8px 24px rgba(43, 28, 46, 0.16);
   }
 
-  .perfil-menu__opcoes a,
-  .perfil-menu__sair {
+  :global(.perfil-menu__opcoes a),
+  :global(.perfil-menu__sair) {
     padding: 8px 12px;
     border-radius: 10px;
     font: inherit;
     text-align: left;
   }
 
-  .perfil-menu__sair {
+  :global(.perfil-menu__sair) {
     color: inherit;
     background: none;
     border: 0;
     cursor: pointer;
   }
 
-  .perfil-link__avatar {
+  :global(.perfil-link__avatar) {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -291,7 +291,7 @@ const { solido = false } = Astro.props;
     line-height: 1;
   }
 
-  .perfil-link__avatar img {
+  :global(.perfil-link__avatar img) {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -309,11 +309,11 @@ const { solido = false } = Astro.props;
       display: none;
     }
 
-    .perfil-link {
+    :global(.perfil-link) {
       padding: 4px;
     }
 
-    .perfil-link__nome {
+    :global(.perfil-link__nome) {
       display: none;
     }
 
@@ -321,7 +321,7 @@ const { solido = false } = Astro.props;
       gap: 8px;
     }
 
-    .nav-auth__cadastro {
+    :global(.nav-auth__cadastro) {
       display: none;
     }
   }
