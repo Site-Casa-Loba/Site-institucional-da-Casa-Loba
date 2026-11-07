@@ -43,7 +43,8 @@ mock sempre foi).
    perfil/token **não** apaga a sessão (só 4xx do Wix desloga);
    ver `src/lib/auth/wixAuth.ts` e `wixSession.ts`.
 4. **Plano do membro** — o plano real virá do Wix Pricing Plans (tarefa
-   separada). Até lá, membro real entra como **loba** (acesso mínimo);
+   separada). Até lá, membro real entra como `PLANO_MINIMO`
+   (`src/lib/planos.ts`, hoje Loba Essencial);
    as contas demo mantêm os três níveis.
 5. **Sair** — `auth.sair()` limpa a sessão local (Wix e mock).
 
@@ -85,7 +86,7 @@ Se o retorno do Wix quebrar de novo, o fallback é o SSR
 
 - Client-side: `src/lib/auth/{iniciarLoginWix,wixSession,wixAuth,index}.ts`,
   `src/lib/membrosCms.ts`, `public/auth/callback.html`,
-  `src/pages/entrar.astro`, `src/components/ModalLogin.astro`
+  `src/pages/entrar.astro`, `src/components/Cabecalho.astro`
 - Leitura pública do CMS: `src/lib/cms.ts` (ver `docs/CMS.md`)
 - Fora do repo (uso futuro): `../middleware-ssr` (middleware de sessão,
   rotas SSR `/api/auth/*`, `src/lib/session.ts`, `src/env.d.ts`, snippet

@@ -31,7 +31,7 @@ No host do Wix Headless, as páginas são servidas como arquivos `.html`; use o 
 `src/lib/auth/index.ts` já combina o login real do Wix com o mock local
 (só em `npm run dev`): a sessão real tem precedência, o mock cai em
 segundo lugar; o seletor de plano aparece apenas em desenvolvimento.
-A lista de planos vem de `src/lib/membros.ts`; os conteúdos vêm do CMS
+A lista de planos vem de `src/lib/planos.ts`; os conteúdos vêm do CMS
 (`src/lib/membrosCms.ts`).
 
 Antes de produção (estado atual): o login real do Wix está no ar (ver
