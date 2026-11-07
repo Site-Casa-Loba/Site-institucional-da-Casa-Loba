@@ -1,62 +1,31 @@
 ---
-// Rodapé compartilhado entre a landing, as páginas de planos/pré-inscrição
-// e os documentos legais. O variante "legal" mantém os links curtos e o
-// estado da página atual; o variante "site" usa a navegação completa.
-interface Props {
-  variant?: "site" | "legal";
-  current?: "termos" | "privacidade";
-}
+import Logo from "./Logo.astro";
 
-const { variant = "site", current } = Astro.props;
+// Rodapé único do site: mesma navegação, mesma tagline e mesmo copyright em
+// todas as páginas (landing, planos, pré-inscrição e documentos legais).
 ---
 
 <footer class="footer">
   <div class="container footer__inner">
-    {variant === "site" ? (
-      <div>
-        <p class="footer__logo footer__logo--site">
-          <span class="footer__logo__palavra">casa</span>
-          <img src="/assets/images/lobo_logo.svg" alt="" class="footer__logo__icone" />
-          <span class="footer__logo__palavra">loba</span>
-        </p>
-        <p class="footer__texto">Quem cuida também precisa de uma rede.</p>
-      </div>
-    ) : (
-      <a href="/" class="footer__logo">casa loba</a>
-    )}
+    <div>
+      <Logo href="/" tamanho="1.2em" cor="var(--creme)" class="footer__logo" />
+      <p class="footer__texto">Quem cuida também precisa de uma rede.</p>
+    </div>
 
-    {variant === "site" ? (
-      <nav class="footer__links" aria-label="Navegação do rodapé">
-        <a href="/#secao-sobre">Sobre a Casa Loba</a>
-        <a href="/#secao-frentes">Nossas frentes</a>
-        <a href="/#secao-planos">Planos</a>
-        <a href="/#secao-publico">Para quem é</a>
-        <a href="/termos-de-uso.html">Termos de uso</a>
-        <a href="/politica-de-privacidade.html">Política de privacidade</a>
-      </nav>
-    ) : (
-      <nav class="footer__links" aria-label="Navegação do rodapé">
-        <a href="/">início</a>
-        <a href="/termos-de-uso.html" aria-current={current === "termos" ? "page" : undefined}>Termos de uso</a>
-        <a href="/politica-de-privacidade.html" aria-current={current === "privacidade" ? "page" : undefined}>Política de privacidade</a>
-      </nav>
-    )}
+    <nav class="footer__links" aria-label="Navegação do rodapé">
+      <a href="/#secao-sobre">Sobre a Casa Loba</a>
+      <a href="/#secao-frentes">Nossas frentes</a>
+      <a href="/#secao-planos">Planos</a>
+      <a href="/#secao-publico">Para quem é</a>
+      <a href="/termos-de-uso.html">Termos de uso</a>
+      <a href="/politica-de-privacidade.html">Política de privacidade</a>
+    </nav>
 
-    <p class="footer__copy">© {new Date().getFullYear()} Casa Loba{variant === "site" ? " · feito com cuidado" : ""}</p>
+    <p class="footer__copy">© {new Date().getFullYear()} Casa Loba · feito com cuidado</p>
   </div>
 </footer>
 
 <style>
-  /* Logo montada como no cabeçalho: "casa" + loba uivando + "loba".
-     O ícone é o mesmo SVG do menu (vermelho da marca, legível no fundo ameixa). */
-  .footer__logo--site {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .footer__logo__icone {
-    height: 1.2em;
-    display: block;
-  }
+  /* O logo vem do componente Logo (mesma fonte do cabeçalho), em creme para
+     contrastar com o fundo ameixa. */
 </style>

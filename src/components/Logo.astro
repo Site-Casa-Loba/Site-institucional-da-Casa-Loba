@@ -14,17 +14,24 @@ interface Props {
   href?: string;
   /** Altura do ícone, em qualquer unidade CSS. */
   tamanho?: string;
+  /** Cor do texto; o padrão é o ameixa da marca. */
+  cor?: string;
   class?: string;
 }
 
 const {
   href = "/",
   tamanho = "1.5em",
+  cor = "var(--ameixa)",
   class: className,
 } = Astro.props;
 ---
 
-<a href={href} class:list={["logo", className]} style={`--logo-tamanho: ${tamanho}`}>
+<a
+  href={href}
+  class:list={["logo", className]}
+  style={`--logo-tamanho: ${tamanho}; --logo-cor: ${cor}`}
+>
   <span class="logo__texto">casa</span>
   <img src="/assets/images/lobo_logo.svg" alt="" class="logo__icone" />
   <span class="logo__texto">loba</span>
@@ -39,7 +46,7 @@ const {
     font-weight: 800;
     font-size: 1.4rem;
     letter-spacing: -0.03em;
-    color: var(--ameixa);
+    color: var(--logo-cor, var(--ameixa));
     transition: opacity 0.2s;
   }
 
