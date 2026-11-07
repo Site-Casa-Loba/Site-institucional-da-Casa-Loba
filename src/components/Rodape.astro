@@ -14,7 +14,11 @@ const { variant = "site", current } = Astro.props;
   <div class="container footer__inner">
     {variant === "site" ? (
       <div>
-        <p class="footer__logo">[LOGO: Casa Loba]</p>
+        <p class="footer__logo footer__logo--site">
+          <span class="footer__logo__palavra">casa</span>
+          <img src="/assets/images/lobo_logo.svg" alt="" class="footer__logo__icone" />
+          <span class="footer__logo__palavra">loba</span>
+        </p>
         <p class="footer__texto">Quem cuida também precisa de uma rede.</p>
       </div>
     ) : (
@@ -41,3 +45,18 @@ const { variant = "site", current } = Astro.props;
     <p class="footer__copy">© {new Date().getFullYear()} Casa Loba{variant === "site" ? " · feito com cuidado" : ""}</p>
   </div>
 </footer>
+
+<style>
+  /* Logo montada como no cabeçalho: "casa" + loba uivando + "loba".
+     O ícone é o mesmo SVG do menu (vermelho da marca, legível no fundo ameixa). */
+  .footer__logo--site {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .footer__logo__icone {
+    height: 1.2em;
+    display: block;
+  }
+</style>
