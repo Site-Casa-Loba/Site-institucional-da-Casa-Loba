@@ -1,28 +1,22 @@
 ---
-// Página de planos. Os planos vêm do catálogo provisório em src/lib/planos.ts.
+// Página de planos. Os cards vêm de GradePlanos.astro, o mesmo componente da página inicial.
 import Layout from "../layouts/Layout.astro";
 import Cabecalho from "../components/Cabecalho.astro";
-import CartaoPlano from "../components/CartaoPlano.astro";
+import GradePlanos from "../components/GradePlanos.astro";
 import Rodape from "../components/Rodape.astro";
-import { obterPlanos } from "../lib/planos";
-
-const planos = await obterPlanos();
 ---
 
 <Layout title="Planos — Casa Loba">
   <Cabecalho solido />
 
   <main class="pagina-bordo">
-    <div class="container">
+    <div class="container container--largo">
       <header class="section-head">
         <h1 class="section-titulo">Encontre seu lugar na Casa Loba</h1>
         <p class="section-sub">Conheça as opções de participação e escolha a que combina com o seu momento.</p>
       </header>
 
-      <!-- PLACEHOLDER: enquanto a cobrança não existe, "assinar" leva à pré-inscrição -->
-      <div class="grid-3">
-        {planos.map((plano) => <CartaoPlano plano={plano} href="/pre-inscricao.html" />)}
-      </div>
+      <GradePlanos />
     </div>
   </main>
 

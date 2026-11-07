@@ -1,12 +1,13 @@
 ---
 // Card de um plano, montado com as classes .plano* de src/styles/global.css.
-// Os dados vêm do catálogo em src/lib/planos.ts.
+// Os dados vêm do catálogo em src/lib/planos.ts (ou do card livre, em GradePlanos.astro).
 import type { Plano } from "../lib/planos";
 
 interface Props {
-  plano: Plano;
-  // Destino do botão "assinar plano"
-  href: string;
+  // O card livre não tem id nem uma cor do catálogo, por isso esses dois campos são soltos
+  plano: Omit<Plano, "id" | "cor"> & { cor: string };
+  // Destino do botão "assinar plano". Sem href, o card aparece sem botão.
+  href?: string;
 }
 
 const { plano, href } = Astro.props;
@@ -19,7 +20,9 @@ const { plano, href } = Astro.props;
   <ul class="plano__lista">
     {plano.beneficios.map((beneficio: string) => <li>{beneficio}</li>)}
   </ul>
-  <a href={href} class={`btn btn--${plano.cor} btn--full`}>assinar plano {plano.nome}</a>
+  {href && (
+    <a href={href} class={`btn btn--${plano.cor} btn--full`}><span>assinar plano</span> <span>{plano.nome}</span></a>
+  )}
 </article>
 
 <style>
@@ -33,8 +36,12 @@ const { plano, href } = Astro.props;
     font-weight: 700;
   }
 
-  /* Botões alinhados na base, mesmo com listas de tamanhos diferentes */
+  /* Botões alinhados na base e com a mesma altura em todos os cards */
   .btn {
     margin-top: auto;
+    flex-direction: column;
+    text-align: center;
+    line-height: 1.25;
+    padding: 12px 16px;
   }
 </style>

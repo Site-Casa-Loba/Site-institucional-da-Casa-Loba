@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import Cabecalho from "../components/Cabecalho.astro";
 import Rodape from "../components/Rodape.astro";
+import GradePlanos from "../components/GradePlanos.astro";
 ---
 
 <Layout>
@@ -127,7 +128,7 @@ import Rodape from "../components/Rodape.astro";
 
   <!-- planos -->
   <section class="planos" id="secao-planos">
-    <div class="container">
+    <div class="container container--largo">
       <header class="section-head">
         <p class="tag tag--ameixa">Assinatura</p>
         <h2 class="section-titulo">Encontre seu lugar na Casa.</h2>
@@ -136,47 +137,7 @@ import Rodape from "../components/Rodape.astro";
         </p>
       </header>
 
-      <div class="grid-3">
-
-        <article class="plano">
-          <span class="plano__selo plano__selo--rosa">Para começar</span>
-          <h3 class="plano__nome">Loba</h3>
-          <p class="plano__preco"><span>A definir</span>/mês</p>
-          <ul class="plano__lista">
-            <li>Participação na comunidade</li>
-            <li>Trocas entre empreendedoras</li>
-            <li>Novidades da Casa Loba</li>
-          </ul>
-          <a href="/planos.html" class="btn btn--rosa btn--full">Ver planos</a>
-        </article>
-
-        <article class="plano plano--destaque">
-          <span class="plano__selo plano__selo--azul">Para se conectar</span>
-          <h3 class="plano__nome">Matilha</h3>
-          <p class="plano__preco"><span>A definir</span>/mês</p>
-          <ul class="plano__lista">
-            <li>Tudo do plano Loba</li>
-            <li>Mural de conexões</li>
-            <li>Seleção de cursos gravados</li>
-            <li>Divulgação do seu negócio</li>
-          </ul>
-          <a href="/planos.html" class="btn btn--azul btn--full">Ver planos</a>
-        </article>
-
-        <article class="plano">
-          <span class="plano__selo plano__selo--vermelho">Para ir além</span>
-          <h3 class="plano__nome">Alcateia</h3>
-          <p class="plano__preco"><span>A definir</span>/mês</p>
-          <ul class="plano__lista">
-            <li>Tudo do plano Matilha</li>
-            <li>Mais cursos gravados</li>
-            <li>Encontros exclusivos</li>
-            <li>Condições com parceiros</li>
-          </ul>
-          <a href="/planos.html" class="btn btn--vermelho btn--full">Ver planos</a>
-        </article>
-
-      </div>
+      <GradePlanos />
     </div>
   </section>
 
