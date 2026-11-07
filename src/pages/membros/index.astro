@@ -34,7 +34,7 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
 
 <script>
   import { auth } from "../../lib/auth";
-  import { obterPlanoMembro, temAcessoAoConteudo } from "../../lib/membros";
+  import { obterPlano, temAcessoAoConteudo } from "../../lib/planos";
   import { obterConteudosMembro } from "../../lib/membrosCms";
 
   const usuaria = await auth.usuariaAtual();
@@ -47,13 +47,13 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
     const liberados = document.querySelector<HTMLElement>("[data-conteudos-liberados]");
     const bloqueados = document.querySelector<HTMLElement>("[data-conteudos-bloqueados]");
     const semLiberados = document.querySelector<HTMLElement>("[data-sem-liberados]");
-    const planoAtual = obterPlanoMembro(usuaria.plano);
+    const planoAtual = obterPlano(usuaria.plano);
     if (nome) nome.textContent = `Que bom ter você aqui, ${usuaria.nome}.`;
     if (planoTexto) planoTexto.textContent = planoAtual?.nome ?? "Não identificado";
 
     for (const conteudo of conteudos) {
       const liberado = temAcessoAoConteudo(usuaria.plano, conteudo.plano);
-      const planoNecessario = obterPlanoMembro(conteudo.plano);
+      const planoNecessario = obterPlano(conteudo.plano);
       const card = document.createElement("article");
       card.className = liberado ? "membros-card" : "membros-card membros-card--bloqueado";
       const categoria = document.createElement("p");

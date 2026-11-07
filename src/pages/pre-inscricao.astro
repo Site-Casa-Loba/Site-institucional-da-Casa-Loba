@@ -31,10 +31,10 @@ import Rodape from "../components/Rodape.astro";
             próximas formas de participar.
           </p>
 
-          <!-- PLACEHOLDER: o formulário não envia nada, só impede o recarregamento da página.
-               Quem trata o data-form-placeholder é src/scripts/modais.js, que chega a esta página
-               pelos modais do Cabecalho. Para virar funcional, precisa gravar o e-mail (ex.: nos
-               contatos do Wix). -->
+          <!-- PLACEHOLDER: o formulário não envia nada; o script abaixo só
+               impede o recarregamento da página. Para virar funcional, precisa
+               gravar o e-mail (ex.: na coleção `inscricoes` do CMS, ver
+               docs/CMS.md). -->
           <form class="pre-inscricao__form" data-form-placeholder>
             <label class="campo">
               <span>Email</span>
@@ -50,6 +50,11 @@ import Rodape from "../components/Rodape.astro";
 
   <Rodape />
 </Layout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>("[data-form-placeholder]");
+  form?.addEventListener("submit", (evento) => evento.preventDefault());
+</script>
 
 <style>
   /* Card creme com o arco à esquerda, encostado na base, e o texto à direita */

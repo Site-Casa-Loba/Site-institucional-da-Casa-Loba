@@ -11,6 +11,7 @@ import "../styles/membros.css";
 
 <script>
   import { auth } from "../lib/auth";
+  import { contasTeste, SENHA_DEMO } from "../lib/auth/mockAuth";
 
   const carregando = document.querySelector<HTMLElement>("[data-guard-loading]");
   const conteudo = document.querySelector<HTMLElement>("[data-guard-content]");
@@ -23,26 +24,21 @@ import "../styles/membros.css";
     } else if (carregando && conteudo) {
       carregando.hidden = true;
       conteudo.hidden = false;
-      document.dispatchEvent(new CustomEvent("casa-loba:usuaria", { detail: usuaria }));
       if (import.meta.env.DEV) {
         const seletor = document.createElement("label");
         seletor.className = "seletor-plano-dev";
         seletor.textContent = "Trocar plano (DEV)";
         const select = document.createElement("select");
         select.setAttribute("aria-label", "Trocar usuária de demonstração");
-        for (const [email, rotulo] of [
-          ["lobaessencial@teste.com", "Loba Essencial"],
-          ["lobaativa@teste.com", "Loba Ativa"],
-          ["lobarede@teste.com", "Loba Rede"],
-        ]) {
+        for (const conta of contasTeste) {
           const opcao = document.createElement("option");
-          opcao.value = email;
-          opcao.textContent = rotulo;
-          opcao.selected = usuaria.email === email;
+          opcao.value = conta.email;
+          opcao.textContent = conta.nome;
+          opcao.selected = usuaria.email === conta.email;
           select.append(opcao);
         }
         select.addEventListener("change", async () => {
-          await auth.entrar(select.value, "casaloba123");
+          await auth.entrar(select.value, SENHA_DEMO);
           window.location.reload();
         });
         seletor.append(select);

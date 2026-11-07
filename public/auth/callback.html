@@ -26,6 +26,12 @@
    * o host do Wix reserva /api/* (tudo ali responde 404), então a URL
    * exata cadastrada no app OAuth é esta. O PUBLIC_WIX_CLIENT_ID é
    * público por design e deve ficar igual ao do .env.
+   *
+   * CONTRATOS COMPARTILHADOS com os módulos TypeScript (mudou um, mude o
+   * outro junto — este HTML não pode importar do bundle):
+   *   - chave `casaloba_session` e shape dos tokens: src/lib/auth/wixSession.ts
+   *   - chave `casaloba_oauth`, validação do ?redirect= e RETORNO_PADRAO:
+   *     src/lib/auth/iniciarLoginWix.ts
    */
   var CLIENT_ID = "177d2fe1-7c67-4af7-a2e0-482dc527d3aa";
   var statusEl = document.getElementById("status");

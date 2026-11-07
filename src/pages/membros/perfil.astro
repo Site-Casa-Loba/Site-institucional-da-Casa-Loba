@@ -45,7 +45,7 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
 
 <script>
   import { auth } from "../../lib/auth";
-  import { obterPlanoMembro } from "../../lib/membros";
+  import { obterPlano } from "../../lib/planos";
 
   const usuaria = await auth.usuariaAtual();
   const form = document.querySelector<HTMLFormElement>("#form-perfil");
@@ -57,7 +57,7 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
     nome.value = usuaria.nome;
     email.value = usuaria.email;
     imagem.value = usuaria.imagem ?? "";
-    const plano = obterPlanoMembro(usuaria.plano);
+    const plano = obterPlano(usuaria.plano);
     const nomePlano = document.querySelector<HTMLElement>("[data-nome-plano]");
     const beneficios = document.querySelector<HTMLElement>("[data-beneficios-plano]");
     if (nomePlano) nomePlano.textContent = plano?.nome ?? "Não identificado";

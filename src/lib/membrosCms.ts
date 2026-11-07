@@ -1,17 +1,21 @@
 /**
- * Leitura dos conteúdos da área de membros no NAVEGADOR, com o token do
+ * Leitura dos conteúdos da área de membros NO NAVEGADOR, com o token do
  * membro (sessão Wix). O Wix recusa leitores anônimos com WDE0027, então
  * o conteúdo só existe depois do login — nunca no bundle estático.
  *
  * Como o site é estático, a lista de slugs fica fixa em SLUGS_CONTEUDOS
- * (os conteúdos atuais são placeholder; conteúdo novo exige deploy).
+ * (os conteúdos atuais são placeholder; conteúdo novo exige deploy) e
+ * precisa bater com os slugs da coleção `conteudos` do CMS.
  */
-import { createClient, OAuthStrategy } from "@wix/sdk";
 import { items } from "@wix/data";
-import { sessaoValida } from "./auth/wixSession";
-import type { TokensWix } from "./auth/wixSession";
+import {
+  criarClienteMembro,
+  sessaoValida,
+  type TokensWix,
+} from "./auth/wixSession";
+import type { PlanoPagoId } from "./planos";
 
-/** Slugs dos conteúdos publicados — precisa bater com as coleções do CMS. */
+/** Slugs dos conteúdos publicados — precisa bater com os do CMS. */
 export const SLUGS_CONTEUDOS = [
   "boas-vindas",
   "rede-de-apoio",
@@ -26,28 +30,18 @@ export interface ConteudoMembro {
   titulo: string;
   categoria: string;
   resumo: string;
-  plano: "loba-essencial" | "loba-ativa" | "loba-rede";
+  plano: PlanoPagoId;
   video_url?: string;
   conteudo: string;
   ordem: number;
   publicado: boolean;
 }
 
-function clienteMembro(tokens: TokensWix) {
-  return createClient({
-    modules: { items },
-    auth: OAuthStrategy({
-      clientId: import.meta.env.PUBLIC_WIX_CLIENT_ID,
-      tokens: tokens as never,
-    }),
-  });
-}
-
 /** Conteúdos publicados; [] se não houver sessão de membro ou der erro. */
 export async function obterConteudosMembro(): Promise<ConteudoMembro[]> {
   const tokens = await sessaoValida();
-  if (!tokens) return [];
-  const client = clienteMembro(tokens);
+  if (!tokens) return [] as ConteudoMembro[];
+  const client = criarClienteMembro(tokens, { items });
   const resposta = await client.items.query("conteudos").limit(50).find();
   const linhas =
     (resposta as unknown as { items?: Array<{ data?: ConteudoMembro }> }).items ??

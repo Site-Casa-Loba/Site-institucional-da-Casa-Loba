@@ -1,13 +1,12 @@
+/**
+ * Auth do site: Wix (conta real) em primeiro lugar; o mock local de
+ * demonstração (senha casaloba123) fica para as contas de teste e para os
+ * fluxos ainda sem versão Wix (cadastro, perfil, recuperação de senha —
+ * ver docs/AUTH.md e docs/INSTRUCOES-MOCKCUP.md).
+ */
 import mockAuth from "./mockAuth";
 import { usuariaWix } from "./wixAuth";
 import { limparSessaoLocal } from "./wixSession";
-
-/**
- * Auth do site: Wix (conta real) com precedência; o mock local de
- * demonstração (senha casaloba123) fica para as contas de teste e para os
- * fluxos ainda não migrados (cadastro, perfil, recuperação de senha — ver
- * tasks "Configurar página de login do Wix" / "Configurar planos").
- */
 export const auth = {
   cadastrar: mockAuth.cadastrar,
   entrar: mockAuth.entrar,

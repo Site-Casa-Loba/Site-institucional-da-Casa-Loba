@@ -1,11 +1,10 @@
 ---
 // Card de um plano, montado com as classes .plano* de src/styles/global.css.
-// Os dados vêm do catálogo em src/lib/planos.ts (ou do card livre, em GradePlanos.astro).
+// Os dados vêm do catálogo em src/lib/planos.ts.
 import type { Plano } from "../lib/planos";
 
 interface Props {
-  // O card livre não tem id nem uma cor do catálogo, por isso esses dois campos são soltos
-  plano: Omit<Plano, "id" | "cor"> & { cor: string };
+  plano: Plano;
   // Destino do botão "assinar plano". Sem href, o card aparece sem botão.
   href?: string;
 }

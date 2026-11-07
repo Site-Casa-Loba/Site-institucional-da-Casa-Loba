@@ -1,8 +1,10 @@
 /**
- * SERVIDOR APENAS — nunca importar em scripts de cliente (.js em <script>).
- * Este módulo usa WIX_API_TOKEN, uma credencial de servidor; ela não pode
- * aparecer no bundle do navegador. Importe apenas em frontmatter de .astro
- * ou em endpoints (src/pages/api/**), que rodam no servidor/build.
+ * SERVIDOR/PREFETCH APENAS — nunca importar em scripts de cliente (.js em
+ * <script>): usa WIX_API_TOKEN (credencial de servidor). Importe só no
+ * frontmatter de .astro ou em endpoints, que rodam no build.
+ *
+ * Contrato: erro não derruba o build — quem chama recebe { ok: false, erro }
+ * e decide o que renderizar.
  */
 import { createClient, OAuthStrategy } from "@wix/sdk";
 import { items } from "@wix/data";
@@ -10,19 +12,12 @@ import { items } from "@wix/data";
 /**
  * Leitura do CMS (Wix Data) pelo Astro. Ver docs/CMS.md.
  *
- * Caminho principal: SDK do Wix com token de visitante (OAuth do app headless
- * do site — o CompanionAppId do site headless, é público por design).
- * Verificado em 04/11/2026: a leitura dos planos semeados funciona com esse
- * client ID. O client ID anterior do .env pertencia a outro site (sem CMS
- * instalado) e falhava com "WDE0110: Wix CMS app is not installed for site".
- *
- * Fallback: REST da Data Items API com a chave de servidor (WIX_API_TOKEN +
- * wix-site-id), escopada ao site headless — também verificada. O fallback
- * existe para o CI/build sem client ID e para transitórios do SDK. Atenção:
- * a chave eleva permissões — usar só no servidor.
- *
- * Erros não derrubam o build: quem chama recebe { ok: false, erro } e decide
- * o que renderizar.
+ * Caminho principal: SDK com token de visitante (PUBLIC_WIX_CLIENT_ID —
+ * é o do próprio site headless; client ID de outro site falha com
+ * "WDE0110: Wix CMS app is not installed for site"). Fallback: REST da
+ * Data Items API com WIX_API_TOKEN — para o CI/build sem client ID e
+ * para transitórios do SDK; leitura REST lê coleções restritas mesmo
+ * para anônimos, por isso também é só-servidor.
  */
 
 export interface ResultadoCms<T> {
@@ -159,26 +154,7 @@ export interface PlanoCms {
   ativo: boolean;
 }
 
-export interface ConteudoCms {
-  _id?: string;
-  slug: string;
-  titulo: string;
-  categoria: string;
-  resumo: string;
-  plano: string;
-  video_url?: string;
-  conteudo: string;
-  ordem: number;
-  publicado: boolean;
-}
-
 // Leitura pública (ANYONE): usada na landing e na página de teste.
 export function obterPlanosCms(): Promise<ResultadoCms<PlanoCms>> {
   return consultar<PlanoCms>("planos", { ordenarPor: "ordem" });
-}
-
-// Leitura restrita a membros (SITE_MEMBER) para o público anônimo; a chave de
-// servidor lê mesmo assim (acesso elevado) — usar só no servidor.
-export function obterConteudosCms(): Promise<ResultadoCms<ConteudoCms>> {
-  return consultar<ConteudoCms>("conteudos", { ordenarPor: "ordem" });
 }

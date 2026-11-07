@@ -6,7 +6,6 @@ interface Props {
 const { solido = false } = Astro.props;
 ---
 
-<!-- navegação flutuante -->
 <nav
   class:list={["nav-flutuante", { "is-scrolled": solido }]}
   id="navFlutuante"
@@ -33,13 +32,10 @@ const { solido = false } = Astro.props;
 <script src="../scripts/menu.js"></script>
 <script>
   import { auth } from "../lib/auth";
-  import { iniciarLoginWix } from "../lib/auth/iniciarLoginWix";
+  import { iniciarLoginWix, destinoSeguro } from "../lib/auth/iniciarLoginWix";
 
   // Entrar/Cadastrar vão direto ao Wix (sem modal, sem página intermediária).
-  const destino = (() => {
-    const redirect = new URLSearchParams(window.location.search).get("redirect");
-    return redirect?.startsWith("/") && !redirect.startsWith("//") ? redirect : "/membros.html";
-  })();
+  const destino = destinoSeguro(new URLSearchParams(window.location.search).get("redirect"));
 
   const irAoWix = async (botao: HTMLButtonElement, modo: "login" | "signup") => {
     const rotulo = botao.textContent;
@@ -64,8 +60,7 @@ const { solido = false } = Astro.props;
   });
 
   // Fecha o menu da conta ao clicar fora dele
-  document.addEventListener("click", (evento) => {
-    const menu = document.querySelector<HTMLDetailsElement>(".perfil-menu");
+  document.addEventListener("click", (evento) => {    const menu = document.querySelector<HTMLDetailsElement>(".perfil-menu");
     if (!menu || !menu.open) return;
     if (evento.target instanceof Node && !menu.contains(evento.target)) {
       menu.open = false;
@@ -145,7 +140,6 @@ const { solido = false } = Astro.props;
 </script>
 
 <style>
-  /* menu*/
   .nav-flutuante {
     position: fixed;
     top: 0;
@@ -162,7 +156,6 @@ const { solido = false } = Astro.props;
     justify-content: space-between;
   }
 
-  /* LOGO */
   .logo {
     display: inline-flex;
     align-items: center;
@@ -229,14 +222,12 @@ const { solido = false } = Astro.props;
     opacity: 0.6;
   }
 
-  /* Estado "rolado": barra sólida no topo */
   .nav-flutuante.is-scrolled {
     background: var(--creme);
     padding: 12px 0;
     box-shadow: 0 1px 0 rgba(43, 28, 46, 0.08);
   }
 
-  /* Estado logado: cápsula com contorno ameixa, avatar e nome */
   :global(.perfil-link) {
     display: inline-flex;
     align-items: center;

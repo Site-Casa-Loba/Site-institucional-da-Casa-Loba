@@ -38,11 +38,11 @@ Cada arquivo em `src/pages/` vira uma página. No host do Wix Headless os arquiv
 | Página | Arquivo | Observação |
 |---|---|---|
 | Landing (home) | `src/pages/index.astro` | Textos da versão atual; planos ainda sem preço definido |
-| Cadastro | `src/pages/cadastro.astro` | Cadastro local de demonstração |
-| Login | `src/pages/entrar.astro` | Página de login; o cabeçalho também abre em modal (`ModalLogin.astro`) |
+| Cadastro | `src/pages/cadastro.astro` | Cadastro local de demonstração (página órfã: o cadastro real é o do Wix, pelo cabeçalho) |
+| Login | `src/pages/entrar.astro` | Página de login; os botões Entrar/Cadastrar do cabeçalho vão direto ao login do Wix |
 | Recuperar senha | `src/pages/recuperar-senha.astro` | Simulado; envio real de e-mail só na versão Wix |
-| Perfil da usuária | `src/pages/perfil.astro` | Redireciona para `/membros/perfil.html` |
-| Planos | `src/pages/planos.astro` | Já implementada. Comparação dos planos, com dados provisórios em `src/lib/planos.ts`. Por enquanto, "assinar" leva à pré-inscrição |
+| Perfil da usuária | `src/pages/membros/perfil.astro` | Edição de nome e foto (mock local); e-mail não editável |
+| Planos | `src/pages/planos.astro` | Já implementada. Cards da `GradePlanos.astro`, dados do catálogo em `src/lib/planos.ts` (CMS + fallback). Por enquanto, "assinar" leva à pré-inscrição |
 | Pré-inscrição / lista de espera | `src/pages/pre-inscricao.astro` | Já implementada. Substitui o checkout enquanto a comunidade paga não for lançada. O formulário de e-mail ainda não envia nada |
 | Checkout | `src/pages/checkout.astro` | Pagamento por cartão dentro do site. Só entra se a cobrança for lançada |
 | Confirmação de pagamento | `src/pages/confirmacao.astro` | Só entra junto com o checkout |
@@ -52,7 +52,7 @@ Cada arquivo em `src/pages/` vira uma página. No host do Wix Headless os arquiv
 | Termos de uso | `src/pages/termos-de-uso.astro` | Minuta 0.2 com revisão jurídica pendente |
 | Política de privacidade | `src/pages/politica-de-privacidade.astro` | Minuta LGPD 0.2 com revisão jurídica pendente |
 
-> Login e cadastro são páginas (`/entrar.html` e `/cadastro.html`); o login também abre em modal pelo cabeçalho. A rota `/login` não existe. O login em produção é o real do site; contas de demonstração existem apenas em `npm run dev` — veja `docs/AUTH.md`.
+> Login e cadastro são páginas (`/entrar.html` e `/cadastro.html`); os botões Entrar/Cadastrar do cabeçalho (e da página de entrar) abrem o login real do Wix. A rota `/login` não existe. Contas de demonstração existem apenas em `npm run dev` — veja `docs/AUTH.md`.
 
 ### Versão 2
 
@@ -87,7 +87,10 @@ Atualize estas tabelas ao criar, renomear ou remover uma página.
 
 A Cuidadoteca, os eventos próprios e as parcerias com coworkings ainda são objetivos futuros. O site deve apresentá-los como iniciativas **"em breve"**, nunca como serviços em funcionamento.
 
-Os planos ainda não foram definidos pelas sócias (quantidade, nomes, preços e benefícios). Os nomes e valores que aparecem hoje são provisórios.
+Os nomes, preços e benefícios dos planos abaixo estão definidos e vivem
+numa fonte só no código: o catálogo em `src/lib/planos.ts` (com cópia na
+coleção `planos` do CMS — mudou num lugar, mude no outro; ver
+`docs/CMS.md`).
 
 ## Identidade visual
 

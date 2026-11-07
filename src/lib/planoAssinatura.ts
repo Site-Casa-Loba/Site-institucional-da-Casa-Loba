@@ -1,43 +1,24 @@
 /**
- * Helper reutilizável de plano do membro (task "Implementar verificação de
- * plano no Astro").
+ * Plano efetivo do membro, lido do Wix Pricing Plans com o token dele.
  *
- * Fonte da verdade pretendida: Wix Pricing Plans (assinatura ativa do
- * membro, lida com o token de membro). Enquanto os planos não forem
- * configurados no Wix, nenhuma assinatura existe e tudo cai no plano
- * mínimo "loba" — comportamento seguro e documentado.
- *
- * O gate de nível reutiliza `temAcessoAoConteudo` de `src/lib/membros.ts`
- * (loba < matilha < alcateia), aplicado sobre o campo `plano` mínimo dos
- * conteúdos do CMS.
+ * Fonte da verdade: assinatura ativa. Enquanto os planos não existirem no
+ * Wix, nenhuma assinatura é lida e tudo cai no PLANO_MINIMO —
+ * comportamento seguro e documentado. O gate de nível fica em
+ * `src/lib/planos.ts` (temAcessoAoConteudo), aplicado sobre o campo
+ * `plano` mínimo dos conteúdos do CMS.
  */
-import { createClient, OAuthStrategy } from "@wix/sdk";
 import { planSubscriptions } from "@wix/pricing-plans";
-import { sessaoValida } from "./auth/wixSession";
-import type { TokensWix } from "./auth/wixSession";
-import { obterPlanoMembro, type PlanoMembroId } from "./membros";
-
-// Nome do plano no Wix (minúsculo e sem acento) → id interno do plano.
-const PLANOS_POR_NOME = new Map<string, PlanoMembroId>([
-  ["loba essencial", "loba-essencial"],
-  ["loba ativa", "loba-ativa"],
-  ["loba rede", "loba-rede"],
-]);
-
-/**
- * Normaliza um nome/ID de plano do Wix para o catálogo da Casa Loba.
- * "Loba" → "loba", "Matilha" → "matilha", "Alcateia"/"alcateia" → "alcateia".
- * Nome desconhecido → null (nunca vira plano por chute).
- */
-export function normalizaNomePlano(valor: unknown): PlanoMembroId | null {
-  if (typeof valor !== "string") return null;
-  const normalizado = valor
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .trim()
-    .toLowerCase();
-  return PLANOS_POR_NOME.get(normalizado) ?? null;
-}
+import {
+  criarClienteMembro,
+  sessaoValida,
+  type TokensWix,
+} from "./auth/wixSession";
+import {
+  normalizaNomePlanoWix,
+  obterPlano,
+  PLANO_MINIMO,
+  type PlanoPagoId,
+} from "./planos";
 
 export interface AssinaturaAtiva {
   /** Nome/ID do plano no Wix, se informado */
@@ -50,13 +31,17 @@ export interface AssinaturaAtiva {
 
 const STATUS_ATIVOS = new Set(["ACTIVE", "STARTED", "TRIALING", "ONGOING"]);
 
+function texto(valor: unknown): string | undefined {
+  return typeof valor === "string" && valor.length > 0 ? valor : undefined;
+}
+
 /**
  * Escolhe o plano de maior nível entre assinaturas ativas e não expiradas.
- * Puro e testável: nenhuma chamada de rede aqui.
+ * Puro: nenhuma chamada de rede aqui.
  */
 export function escolherPlano(
   assinaturas: AssinaturaAtiva[],
-): PlanoMembroId | null {
+): PlanoPagoId | null {
   const agora = Date.now();
   const ativas = assinaturas.filter((a) => {
     const status = (a.status ?? "").toUpperCase();
@@ -64,12 +49,12 @@ export function escolherPlano(
     if (a.expiraEm && Date.parse(a.expiraEm) < agora) return false;
     return true;
   });
-  let melhor: PlanoMembroId | null = null;
+  let melhor: PlanoPagoId | null = null;
   let melhorNivel = 0;
   for (const a of ativas) {
-    const plano = normalizaNomePlano(a.plano);
+    const plano = normalizaNomePlanoWix(a.plano);
     if (!plano) continue;
-    const nivel = obterPlanoMembro(plano)?.nivel ?? 0;
+    const nivel = obterPlano(plano)?.nivel ?? 0;
     if (nivel > melhorNivel) {
       melhor = plano;
       melhorNivel = nivel;
@@ -78,27 +63,16 @@ export function escolherPlano(
   return melhor;
 }
 
-function clienteCom(tokens: TokensWix) {
-  return createClient({
-    modules: { planSubscriptions },
-    auth: OAuthStrategy({
-      clientId: import.meta.env.PUBLIC_WIX_CLIENT_ID,
-      tokens: tokens as never,
-    }),
-  });
-}
-
 /**
  * Lê as assinaturas do membro no Wix Pricing Plans com o token dele.
  * Qualquer erro (app não instalado, sem escopo, rede) retorna [] —
- * nunca lança. Isso mantém a experiência de membros com plano mínimo
- * funcionando mesmo sem planos configurados.
+ * nunca lança.
  */
 export async function obterAssinaturasMembro(
   tokens: TokensWix,
 ): Promise<AssinaturaAtiva[]> {
   try {
-    const client = clienteCom(tokens);
+    const client = criarClienteMembro(tokens, { planSubscriptions });
     // Query builder (sem argumentos): assinaturas visíveis ao membro.
     const resultado = (await client.planSubscriptions
       .queryPlanSubscriptions()
@@ -116,13 +90,18 @@ export async function obterAssinaturasMembro(
     const lista =
       resultado?.planSubscriptions ?? resultado?.subscriptions ?? [];
     return lista.map((s) => {
-      const plano = (s as Record<string, unknown>)?.plan as
-        | { name?: string; id?: string }
-        | undefined;
+      const linha = s as {
+        plan?: { name?: string; id?: string };
+        planId?: unknown;
+        status?: unknown;
+        currentPeriodEndDate?: unknown;
+        endDate?: unknown;
+      };
       return {
-        plano: plano?.name ?? plano?.id ?? (s as Record<string, unknown>)?.planId as string,
-        status: s?.status,
-        expiraEm: s?.currentPeriodEndDate ?? s?.endDate ?? null,
+        plano:
+          linha.plan?.name ?? linha.plan?.id ?? texto(linha.planId),
+        status: texto(linha.status),
+        expiraEm: texto(linha.currentPeriodEndDate) ?? texto(linha.endDate) ?? null,
       };
     });
   } catch (erro) {
@@ -133,11 +112,11 @@ export async function obterAssinaturasMembro(
 
 /**
  * Plano efetivo do membro logado: assinatura ativa de maior nível, ou
- * "loba" (mínimo) quando não há assinatura legível.
+ * PLANO_MINIMO quando não há assinatura legível.
  */
-export async function planoDoMembro(): Promise<PlanoMembroId> {
+export async function planoDoMembro(): Promise<PlanoPagoId> {
   const tokens = await sessaoValida();
-  if (!tokens) return "loba-essencial";
+  if (!tokens) return PLANO_MINIMO;
   const assinaturas = await obterAssinaturasMembro(tokens);
-  return escolherPlano(assinaturas) ?? "loba-essencial";
+  return escolherPlano(assinaturas) ?? PLANO_MINIMO;
 }

@@ -86,7 +86,7 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
 
 <script>
   import { auth } from "../../lib/auth";
-  import { obterPlanoMembro } from "../../lib/membros";
+  import { obterPlano } from "../../lib/planos";
 
   const usuaria = await auth.usuariaAtual();
   const intro = document.querySelector<HTMLElement>("[data-intro-assinatura]");
@@ -96,7 +96,7 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
   const beneficios = document.querySelector<HTMLElement>("[data-beneficios]");
 
   if (usuaria && detalhes) {
-    const plano = obterPlanoMembro(usuaria.plano);
+    const plano = obterPlano(usuaria.plano);
     const nomePlano = plano?.nome ?? "Não identificado";
     if (planoAtual) planoAtual.textContent = nomePlano;
     if (valorPlano) valorPlano.textContent = nomePlano;
@@ -115,8 +115,4 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
   } else if (intro) {
     intro.textContent = "Sua sessão não foi encontrada. Volte à área de membros para entrar novamente.";
   }
-
-  document.querySelector<HTMLButtonElement>("[data-cancelar]")?.addEventListener("click", () => {
-    // PLACEHOLDER: cancelamento real depende do Pricing Plans do Wix (task 17/28).
-  });
 </script>
