@@ -38,7 +38,6 @@ Cada arquivo em `src/pages/` vira uma página. No host do Wix Headless os arquiv
 | Página | Arquivo | Observação |
 |---|---|---|
 | Landing (home) | `src/pages/index.astro` | Textos da versão atual; planos ainda sem preço definido |
-| Cadastro | removida | O cadastro real é o do Wix, pelos botões do cabeçalho |
 | Login | `src/pages/entrar.astro` | Página de login; os botões Entrar/Cadastrar do cabeçalho vão direto ao login do Wix |
 | Perfil da usuária | `src/pages/membros/perfil.astro` | Edição de nome e foto (mock local); e-mail não editável |
 | Planos | `src/pages/planos.astro` | Já implementada. Cards da `GradePlanos.astro`, dados do catálogo em `src/lib/planos.ts` (CMS + fallback). Por enquanto, "assinar" leva à pré-inscrição |
