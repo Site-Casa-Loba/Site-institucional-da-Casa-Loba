@@ -1,37 +1,24 @@
 /**
  * Serviço de autenticação via Wix (membro real, login na página do Wix).
- *
- * Regras atuais:
- * - `usuariaWix` devolve o membro logado pelo Wix, ou null.
- * - O plano vem de `src/lib/planoAssinatura.ts` (Pricing Plans, com
- *   fallback "loba" enquanto os planos não forem configurados no Wix).
- * - Edição de perfil do membro Wix fica para depois (perfil usa mock).
+ * Devolve o membro logado ou null. O plano vem de `planoAssinatura.ts`
+ * (Pricing Plans, com fallback PLANO_MINIMO enquanto não há assinatura).
+ * Edição de perfil do membro Wix fica para depois (perfil usa mock).
  */
-import { createClient, OAuthStrategy } from "@wix/sdk";
-import { members } from "@wix/members";
-import { planoDoMembro } from "../planoAssinatura";
 import {
-  sessaoValida,
+  criarClienteMembro,
   salvarSessaoLocal,
+  sessaoValida,
   type TokensWix,
 } from "./wixSession";
-import type { Usuaria } from "../usuaria-mock";
-
-function clienteCom(tokens: TokensWix) {
-  return createClient({
-    modules: { members },
-    auth: OAuthStrategy({
-      clientId: import.meta.env.PUBLIC_WIX_CLIENT_ID,
-      tokens: tokens as never,
-    }),
-  });
-}
+import { planoDoMembro } from "../planoAssinatura";
+import type { Usuaria } from "../usuaria";
+import { members } from "@wix/members";
 
 export async function usuariaWix(): Promise<Usuaria | null> {
   const tokens = await sessaoValida();
   if (!tokens) return null;
   try {
-    const client = clienteCom(tokens);
+    const client = criarClienteMembro(tokens, { members });
     const resposta = (await client.members.getCurrentMember({
       fieldsets: ["EXTENDED"],
     })) as unknown as {
@@ -47,6 +34,7 @@ export async function usuariaWix(): Promise<Usuaria | null> {
       (resposta as unknown as { loginEmail?: string; profile?: { nickname?: string; slug?: string; photo?: { url?: string } }; contact?: { firstName?: string } });
     const perfil = membro?.profile ?? {};
     const contato = membro?.contact ?? {};
+    // O Wix pode renovar os tokens durante a chamada; salva se veio algo novo.
     try {
       const atualizados = client.auth.getTokens() as TokensWix | undefined;
       if (

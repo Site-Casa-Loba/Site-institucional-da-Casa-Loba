@@ -1,4 +1,4 @@
-import type { Usuaria } from "../usuaria-mock";
+import type { Usuaria } from "../usuaria";
 
 export interface AuthService {
   cadastrar(dados: { nome: string; email: string; senha: string }): Promise<Usuaria>;

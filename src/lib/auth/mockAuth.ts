@@ -1,20 +1,22 @@
-import type { PlanoMembroId } from "../membros";
-import type { Usuaria } from "../usuaria-mock";
+import type { PlanoPagoId } from "../planos";
+import type { Usuaria } from "../usuaria";
 import type { AuthService } from "./types";
 
 interface ContaSalva {
   nome: string;
   email: string;
-  plano: PlanoMembroId;
+  plano: PlanoPagoId;
   imagem?: string;
 }
 
 const CHAVE_SESSAO = "casa-loba-sessao";
 const CHAVE_CONTAS = "casa-loba-contas";
-const SENHA_DEMO = "casaloba123";
+export const SENHA_DEMO = "casaloba123";
 const EMAIL_VALIDO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const contasTeste: ContaSalva[] = [
+// Contas fixas de demonstração (também usadas pelo seletor DEV em
+// AreaProtegida.astro). As contas *@teste.com não entram no build.
+export const contasTeste: ContaSalva[] = [
   { nome: "Loba Essencial", email: "lobaessencial@teste.com", plano: "loba-essencial" },
   { nome: "Loba Ativa", email: "lobaativa@teste.com", plano: "loba-ativa" },
   { nome: "Loba Rede", email: "lobarede@teste.com", plano: "loba-rede" },
