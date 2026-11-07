@@ -1,21 +1,21 @@
 export const planosMembros = [
   {
-    id: "loba",
-    nome: "Loba",
+    id: "loba-essencial",
+    nome: "Loba Essencial",
     nivel: 1,
     beneficios: ["Boas-vindas à comunidade", "Conteúdos para começar"],
   },
   {
-    id: "matilha",
-    nome: "Matilha",
+    id: "loba-ativa",
+    nome: "Loba Ativa",
     nivel: 2,
-    beneficios: ["Tudo do plano Loba", "Rodas e encontros exclusivos"],
+    beneficios: ["Tudo do plano Loba Essencial", "Rodas e encontros exclusivos"],
   },
   {
-    id: "alcateia",
-    nome: "Alcateia",
+    id: "loba-rede",
+    nome: "Loba Rede",
     nivel: 3,
-    beneficios: ["Tudo do plano Matilha", "Biblioteca completa e materiais especiais"],
+    beneficios: ["Tudo do plano Loba Ativa", "Biblioteca completa e materiais especiais"],
   },
 ] as const;
 

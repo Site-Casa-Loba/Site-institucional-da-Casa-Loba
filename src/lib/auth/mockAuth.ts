@@ -15,9 +15,9 @@ const SENHA_DEMO = "casaloba123";
 const EMAIL_VALIDO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const contasTeste: ContaSalva[] = [
-  { nome: "Loba", email: "loba@teste.com", plano: "loba" },
-  { nome: "Matilha", email: "matilha@teste.com", plano: "matilha" },
-  { nome: "Alcateia", email: "alcateia@teste.com", plano: "alcateia" },
+  { nome: "Loba Essencial", email: "lobaessencial@teste.com", plano: "loba-essencial" },
+  { nome: "Loba Ativa", email: "lobaativa@teste.com", plano: "loba-ativa" },
+  { nome: "Loba Rede", email: "lobarede@teste.com", plano: "loba-rede" },
 ];
 
 function esperar(): Promise<void> {
@@ -82,7 +82,7 @@ const mockAuth: AuthService = {
     if (obterConta(normalizado)) throw new Error("Este e-mail já está cadastrado. Faça login para continuar.");
     if (senha !== SENHA_DEMO) throw new Error(`Use a senha fixa de demonstração: ${SENHA_DEMO}.`);
 
-    const conta: ContaSalva = { nome: nome.trim(), email: normalizado, plano: "loba" };
+    const conta: ContaSalva = { nome: nome.trim(), email: normalizado, plano: "loba-essencial" };
     salvarContas([...lerContas(), conta]);
     salvarSessao(normalizado);
     return transformarConta(conta);

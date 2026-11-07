@@ -17,6 +17,13 @@ import { sessaoValida } from "./auth/wixSession";
 import type { TokensWix } from "./auth/wixSession";
 import { obterPlanoMembro, type PlanoMembroId } from "./membros";
 
+// Nome do plano no Wix (minúsculo e sem acento) → id interno do plano.
+const PLANOS_POR_NOME = new Map<string, PlanoMembroId>([
+  ["loba essencial", "loba-essencial"],
+  ["loba ativa", "loba-ativa"],
+  ["loba rede", "loba-rede"],
+]);
+
 /**
  * Normaliza um nome/ID de plano do Wix para o catálogo da Casa Loba.
  * "Loba" → "loba", "Matilha" → "matilha", "Alcateia"/"alcateia" → "alcateia".
@@ -29,13 +36,7 @@ export function normalizaNomePlano(valor: unknown): PlanoMembroId | null {
     .replace(/[̀-ͯ]/g, "")
     .trim()
     .toLowerCase();
-  if (normalizado === "loba" || normalizado === "matilha") {
-    return normalizado as PlanoMembroId;
-  }
-  if (normalizado === "alcateia" || normalizado === "alcatéia") {
-    return "alcateia";
-  }
-  return null;
+  return PLANOS_POR_NOME.get(normalizado) ?? null;
 }
 
 export interface AssinaturaAtiva {
@@ -136,7 +137,7 @@ export async function obterAssinaturasMembro(
  */
 export async function planoDoMembro(): Promise<PlanoMembroId> {
   const tokens = await sessaoValida();
-  if (!tokens) return "loba";
+  if (!tokens) return "loba-essencial";
   const assinaturas = await obterAssinaturasMembro(tokens);
-  return escolherPlano(assinaturas) ?? "loba";
+  return escolherPlano(assinaturas) ?? "loba-essencial";
 }

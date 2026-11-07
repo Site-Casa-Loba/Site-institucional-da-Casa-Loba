@@ -12,7 +12,7 @@
 
 import { obterPlanosCms } from "./cms";
 
-export type PlanoId = "loba" | "matilha" | "alcateia";
+export type PlanoId = "loba-essencial" | "loba-ativa" | "loba-rede";
 
 // Cor do selo e do botão do plano: vira .plano__selo--<cor> e .btn--<cor>
 export type CorPlano = "rosa" | "azul" | "vermelho";
@@ -31,42 +31,41 @@ export interface Plano {
 
 const planosLocais: Plano[] = [
   {
-    id: "loba",
-    nome: "loba",
+    id: "loba-essencial",
+    nome: "Loba Essencial",
     selo: "para começar",
     cor: "rosa",
-    preco: "[R$ 00]",
+    preco: "R$ 19,90",
     beneficios: [
-      "Participação na comunidade Casa Loba",
-      "Trocas com mulheres e mães empreendedoras",
-      "Informações sobre a programação da Casa",
+      "Participação na comunidade online Casa Loba",
+      "Rodas de conversa mensais",
+      "Materiais sobre carreira e maternidade"
     ],
   },
   {
-    id: "matilha",
-    nome: "matilha",
+    id: "loba-ativa",
+    nome: "Loba Ativa",
     selo: "para se conectar",
     cor: "azul",
-    preco: "[R$ 00]",
+    preco: "R$ 49,90",
     beneficios: [
-      "Todos os benefícios do plano loba",
-      "Acesso ao mural de conexões profissionais",
-      "Acesso a uma seleção de cursos gravados",
-      "Espaço para apresentar seu negócio à comunidade",
+      "Todos os benefícios do plano Loba Essencial",
+      "Meia diária de cuidadoteca no mês",
+      "Desconto no Sábado Loba"
     ],
-    destaque: true,
+    
   },
   {
-    id: "alcateia",
-    nome: "alcateia",
+    id: "loba-rede",
+    nome: "Loba Rede",
     selo: "para ampliar sua participação",
     cor: "vermelho",
-    preco: "[R$ 00]",
+    preco: "R$ 149,90",
     beneficios: [
-      "Todos os benefícios do plano matilha",
-      "Acesso ampliado aos cursos gravados",
-      "Participação em encontros exclusivos",
-      "Condições especiais em iniciativas parceiras",
+      "Todos os benefícios do plano Loba Ativa",
+      "Cortesia no Sábado Loba",
+      "Conexões de rede",
+      "Mentoria entre associadas"
     ],
   },
 ];
@@ -90,7 +89,7 @@ export async function obterPlanos(): Promise<Plano[]> {
     // Converte os dados do Wix para a interface Plano.
     const planosConvertidos: Plano[] = planosAtivos
       .filter((plano) =>
-        ["loba", "matilha", "alcateia"].includes(plano.slug)
+        ["loba-essencial", "loba-ativa", "loba-rede"].includes(plano.slug)
       )
       .map((plano) => ({
         id: plano.slug as PlanoId,

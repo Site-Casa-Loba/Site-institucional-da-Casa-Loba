@@ -26,7 +26,7 @@ export interface ConteudoMembro {
   titulo: string;
   categoria: string;
   resumo: string;
-  plano: "loba" | "matilha" | "alcateia";
+  plano: "loba-essencial" | "loba-ativa" | "loba-rede";
   video_url?: string;
   conteudo: string;
   ordem: number;
