@@ -1,23 +1,17 @@
 ---
-// Grade de planos: usada na página inicial e em /planos, para ficarem idênticas.
 import CartaoPlano from "./CartaoPlano.astro";
-import { CATALOGO_PLANOS, obterPlanos } from "../lib/planos";
+import { PLANO_LIVRE, obterPlano, obterPlanos } from "../lib/planos";
 
-const planos = await obterPlanos();
-
-// O plano gratuito existe só no catálogo local (não é assinatura no Wix);
-// entra sempre, antes dos planos pagos.
-const planoLivre = CATALOGO_PLANOS[0];
-const planosPagos = planos.filter((plano) => plano.id !== "loba-livre");
+const planoLivre = obterPlano(PLANO_LIVRE);
+const planosPagos = await obterPlanos();
 ---
 
 <div class="grid-planos">
-  <CartaoPlano plano={planoLivre} />
+  {planoLivre && <CartaoPlano plano={planoLivre} />}
   {planosPagos.map((plano) => <CartaoPlano plano={plano} href="/pre-inscricao.html" />)}
 </div>
 
 <style>
-  /* 4 colunas no desktop, 2 no tablet, 1 no celular */
   .grid-planos {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));

@@ -1,10 +1,31 @@
 ---
-// Comunidade de WhatsApp (V2): acesso ao grupo principal da Casa Loba.
 // PLACEHOLDER: o link de convite real ainda não existe; a entrada definitiva
 // virá com a assinatura (Wix) e será enviada por e-mail após a confirmação.
 import Layout from "../../layouts/Layout.astro";
 import Cabecalho from "../../components/Cabecalho.astro";
 import AreaProtegida from "../../components/AreaProtegida.astro";
+import { obterPlano } from "../../lib/planos";
+
+const niveis = [
+  {
+    id: "loba-essencial",
+    arco: "vermelho",
+    texto: "Grupo principal da comunidade: avisos da Casa e trocas do dia a dia.",
+  },
+  {
+    id: "loba-ativa",
+    arco: "azul",
+    texto: "Tudo do Essencial, mais o grupo de networking para conexões profissionais.",
+  },
+  {
+    id: "loba-rede",
+    arco: "agua",
+    texto: "Tudo do Ativa, mais um grupo próximo com as mentorias e encontros exclusivos.",
+  },
+].flatMap(({ id, arco, texto }) => {
+  const plano = obterPlano(id);
+  return plano ? [{ arco, nome: plano.nome, texto }] : [];
+});
 ---
 
 <Layout title="Comunidade no WhatsApp — Casa Loba" noindex>
@@ -34,13 +55,13 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
               <!-- PLACEHOLDER: trocar por "https://chat.whatsapp.com/<convite real>"
                    quando o grupo for criado. O link definitivo será enviado por e-mail
                    após a confirmação da assinatura. -->
-              <a class="btn btn--vermelho" href="/contato.html">Quero entrar na comunidade</a>
+              <a class="btn btn--vermelho" href="/pre-inscricao.html">Quero entrar na comunidade</a>
               <a class="btn btn--ghost" href="/membros/assinatura.html">Ver minha assinatura</a>
             </div>
             <p class="aviso-demo">
               <strong>Demonstração:</strong> os planos ainda não são cobrados. O convite direto
               no WhatsApp chega junto com a cobrança; até lá, os pedidos de entrada passam
-              pela página de contato.
+              pela pré-inscrição.
             </p>
           </div>
         </section>
@@ -61,21 +82,13 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
         <section class="membros-secao" aria-labelledby="titulo-niveis">
           <h2 id="titulo-niveis">Onde você participa</h2>
           <div class="membros-grade">
-            <article class="card">
-              <div class="card__arco card__arco--vermelho"></div>
-              <h3 class="card__titulo">Loba Essencial</h3>
-              <p class="card__texto">Grupo principal da comunidade: avisos da Casa e trocas do dia a dia.</p>
-            </article>
-            <article class="card">
-              <div class="card__arco card__arco--azul"></div>
-              <h3 class="card__titulo">Loba Ativa</h3>
-              <p class="card__texto">Tudo do Essencial, mais o grupo de networking para conexões profissionais.</p>
-            </article>
-            <article class="card">
-              <div class="card__arco card__arco--agua"></div>
-              <h3 class="card__titulo">Loba Rede</h3>
-              <p class="card__texto">Tudo do Ativa, mais um grupo próximo com as mentorias e encontros exclusivos.</p>
-            </article>
+            {niveis.map((nivel) => (
+              <article class="card">
+                <div class={`card__arco card__arco--${nivel.arco}`}></div>
+                <h3 class="card__titulo">{nivel.nome}</h3>
+                <p class="card__texto">{nivel.texto}</p>
+              </article>
+            ))}
           </div>
         </section>
       </div>

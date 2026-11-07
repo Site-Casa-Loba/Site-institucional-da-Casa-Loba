@@ -1,23 +1,21 @@
 /**
- * Catálogo dos planos — fonte única no código.
+ * Catálogo dos planos: fonte única no código.
  *
  * Quando os planos forem publicados, a fonte no ar é a coleção `planos`
  * do CMS (leitura pública já validada, ver docs/CMS.md); a lista abaixo é
  * o fallback do build sem CMS e a fonte de `nivel`, que o CMS não tem.
- * Débito para as sócias: preços podem mudar — aqui E na coleção `planos`.
+ * Débito para as sócias: preços podem mudar, aqui E na coleção `planos`.
  */
-import { obterPlanosCms, type PlanoCms } from "./cms";
+import { obterPlanosCms, type PlanoCms } from "./planoCms";
 
-export type PlanoId =
-  | "loba-livre"
-  | "loba-essencial"
-  | "loba-ativa"
-  | "loba-rede";
+/** Plano gratuito: existe só no catálogo local, não é assinatura no Wix. */
+export const PLANO_LIVRE = "loba-livre" as const;
+
+export type PlanoId = PlanoPagoId | typeof PLANO_LIVRE;
 
 /** Ids dos planos que podem ser assinados (Wix Pricing Plans). */
-export type PlanoPagoId = Exclude<PlanoId, "loba-livre">;
+export type PlanoPagoId = "loba-essencial" | "loba-ativa" | "loba-rede";
 
-// Cor do selo e do botão do plano: vira .plano__selo--<cor> e .btn--<cor>
 export type CorPlano = "ameixa" | "rosa" | "azul" | "vermelho";
 
 export interface Plano {
@@ -36,7 +34,7 @@ export interface Plano {
 
 export const CATALOGO_PLANOS: readonly Plano[] = [
   {
-    id: "loba-livre",
+    id: PLANO_LIVRE,
     nome: "Loba Livre",
     selo: "porta de entrada",
     cor: "ameixa",
@@ -96,6 +94,11 @@ export function obterPlano(id: string): Plano | undefined {
   return CATALOGO_PLANOS.find((plano) => plano.id.toLowerCase() === buscado);
 }
 
+/** Nome do plano; null quando o id não existe no catálogo. */
+export function nomeDoPlano(id: string): string | null {
+  return obterPlano(id)?.nome ?? null;
+}
+
 /** Plano mínimo conferido pela área de membros (sem assinatura legível). */
 export const PLANO_MINIMO: PlanoPagoId = "loba-essencial";
 
@@ -145,22 +148,31 @@ function planoDoCms(plano: PlanoCms): Plano {
 
 const IDS_CONHECIDOS = new Set(CATALOGO_PLANOS.map((plano) => plano.id));
 
-// Assíncrona para que a troca por outra fonte remota não mude quem chama.
+/** Planos que podem ser assinados, na ordem do catálogo. */
+function catalogoPago(): Plano[] {
+  return CATALOGO_PLANOS.filter((plano) => plano.id !== PLANO_LIVRE);
+}
+
+/**
+ * Planos para a vitrine: coleção do CMS quando disponível, catálogo local
+ * como fallback. Assíncrona para que outra fonte remota não mude quem chama.
+ */
 export async function obterPlanos(): Promise<Plano[]> {
   try {
     const resultado = await obterPlanosCms();
-    // Se o CMS falhar ou não retornar registros, usa o catálogo local.
-    if (!resultado.ok || resultado.dados.length === 0) {
-      console.warn("[planos] Usando catálogo local como fallback.");
-      return CATALOGO_PLANOS.filter((plano) => plano.nivel > 0) as Plano[];
+    if (resultado.ok && resultado.dados.length > 0) {
+      return resultado.dados
+        .filter(
+          (plano) =>
+            plano.ativo &&
+            plano.slug !== PLANO_LIVRE &&
+            IDS_CONHECIDOS.has(plano.slug as PlanoId),
+        )
+        .map(planoDoCms);
     }
-    // Só planos ativos que esse código conhece; obterPlanosCms já devolve
-    // ordenado por `ordem`.
-    return resultado.dados
-      .filter((plano) => plano.ativo && IDS_CONHECIDOS.has(plano.slug as PlanoId))
-      .map(planoDoCms);
+    console.warn("[planos] Usando catálogo local como fallback.");
   } catch (erro) {
     console.error("[planos] Erro ao consultar CMS:", erro);
-    return CATALOGO_PLANOS.filter((plano) => plano.nivel > 0) as Plano[];
   }
+  return catalogoPago();
 }

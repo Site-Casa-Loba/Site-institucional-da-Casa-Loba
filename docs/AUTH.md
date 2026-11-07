@@ -34,9 +34,11 @@ mock sempre foi).
    (`src/lib/auth/index.ts`) devolve o membro real via
    `members.getCurrentMember` (SDK) quando há sessão válida; o access
    token é renovado via `refresh_token` quando expira.
-   Em produção, sem sessão Wix não há acesso. Em `npm run dev`, o mock de
-   demonstração (senha `casaloba123`) também funciona; no build de
-   produção o mock é eliminado da interface.
+   Em produção, sem sessão Wix não há acesso. Em `npm run dev`, o seletor
+   DEV no canto da área de membros troca entre as contas `*@teste.com`;
+   no build de produção o módulo de demonstração não entra no bundle.
+   A sessão é lida uma vez por página (`src/lib/sessao.ts`), compartilhada
+   entre cabeçalho, guard e página.
    A área de membros lê os conteúdos do CMS com o **token de membro**
    (`src/lib/membrosCms.ts`); o Wix recusa anônimos (`WDE0027`), e o
    conteúdo nunca entra no bundle publicado. Erro transitório ao ler o

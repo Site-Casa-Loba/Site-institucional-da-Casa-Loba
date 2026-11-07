@@ -22,7 +22,7 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
           <p data-sem-liberados hidden>Em breve, mais conteúdos para o seu plano.</p>
           <p role="alert" hidden data-mensagem-erro>Não foi possível carregar os conteúdos. Recarregue a página ou entre novamente.</p>
         </section>
-        <section class="membros-secao" aria-labelledby="titulo-outros">
+        <section class="membros-secao" aria-labelledby="titulo-outros" data-secao-bloqueados>
           <h2 id="titulo-outros">Disponíveis em outros planos</h2>
           <div class="membros-grade" data-conteudos-bloqueados></div>
         </section>
@@ -33,27 +33,32 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
 </Layout>
 
 <script>
-  import { auth } from "../../lib/auth";
-  import { obterPlano, temAcessoAoConteudo } from "../../lib/planos";
-  import { obterConteudosMembro } from "../../lib/membrosCms";
+  import { usuariaDaPagina } from "../../lib/sessao";
+  import { nomeDoPlano, obterPlano, temAcessoAoConteudo } from "../../lib/planos";
+  import { obterConteudosMembro, type ConteudoMembro } from "../../lib/membrosCms";
 
-  const usuaria = await auth.usuariaAtual();
-  const conteudos = usuaria ? await obterConteudosMembro() : [];
-  const erro = document.querySelector<HTMLElement>("[data-mensagem-erro]");
+  const usuaria = await usuariaDaPagina();
   if (usuaria) {
-    if (conteudos.length === 0 && erro) erro.hidden = false;
-    const nome = document.querySelector<HTMLElement>("[data-boas-vindas]");
-    const planoTexto = document.querySelector<HTMLElement>("[data-plano-atual]");
+    const erro = document.querySelector<HTMLElement>("[data-mensagem-erro]");
+    const semLiberados = document.querySelector<HTMLElement>("[data-sem-liberados]");
+    const secaoBloqueados = document.querySelector<HTMLElement>("[data-secao-bloqueados]");
     const liberados = document.querySelector<HTMLElement>("[data-conteudos-liberados]");
     const bloqueados = document.querySelector<HTMLElement>("[data-conteudos-bloqueados]");
-    const semLiberados = document.querySelector<HTMLElement>("[data-sem-liberados]");
-    const planoAtual = obterPlano(usuaria.plano);
-    if (nome) nome.textContent = `Que bom ter você aqui, ${usuaria.nome}.`;
-    if (planoTexto) planoTexto.textContent = planoAtual?.nome ?? "Não identificado";
 
-    for (const conteudo of conteudos) {
-      const liberado = temAcessoAoConteudo(usuaria.plano, conteudo.plano);
-      const planoNecessario = obterPlano(conteudo.plano);
+    let conteudos: ConteudoMembro[] = [];
+    try {
+      conteudos = await obterConteudosMembro();
+    } catch (falha) {
+      console.error("[membros] não foi possível ler os conteúdos:", falha);
+      if (erro) erro.hidden = false;
+    }
+
+    const nome = document.querySelector<HTMLElement>("[data-boas-vindas]");
+    const planoTexto = document.querySelector<HTMLElement>("[data-plano-atual]");
+    if (nome) nome.textContent = `Que bom ter você aqui, ${usuaria.nome}.`;
+    if (planoTexto) planoTexto.textContent = nomeDoPlano(usuaria.plano) ?? "Não identificado";
+
+    const criarCard = (conteudo: ConteudoMembro, liberado: boolean): HTMLElement => {
       const card = document.createElement("article");
       card.className = liberado ? "membros-card" : "membros-card membros-card--bloqueado";
       const categoria = document.createElement("p");
@@ -67,17 +72,32 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
       const rodape = document.createElement("div");
       rodape.className = "membros-card__rodape";
       const status = document.createElement("span");
-      status.textContent = liberado ? "Disponível" : `Bloqueado · Plano ${planoNecessario?.nome ?? conteudo.plano}`;
+      const planoNecessario = obterPlano(conteudo.plano);
+      status.textContent = liberado
+        ? "Disponível"
+        : `Bloqueado · Plano ${planoNecessario?.nome ?? conteudo.plano}`;
       const link = document.createElement("a");
       link.href = `/membros/${conteudo.slug}.html`;
       link.textContent = liberado ? "Acessar →" : "Ver acesso →";
-      link.setAttribute("aria-label", `${liberado ? "Acessar" : "Ver conteúdo bloqueado"}: ${conteudo.titulo}`);
+      link.setAttribute(
+        "aria-label",
+        `${liberado ? "Acessar" : "Ver conteúdo bloqueado"}: ${conteudo.titulo}`,
+      );
       rodape.append(status, link);
       card.append(categoria, titulo, resumo, rodape);
-      (liberado ? liberados : bloqueados)?.append(card);
+      return card;
+    };
+
+    for (const conteudo of conteudos) {
+      const liberado = temAcessoAoConteudo(usuaria.plano, conteudo.plano);
+      (liberado ? liberados : bloqueados)?.append(criarCard(conteudo, liberado));
     }
 
-    if (semLiberados) semLiberados.hidden = conteudos.some((conteudo) =>
-      temAcessoAoConteudo(usuaria.plano, conteudo.plano));
+    if (semLiberados) {
+      semLiberados.hidden = conteudos.some((conteudo) =>
+        temAcessoAoConteudo(usuaria.plano, conteudo.plano));
+    }
+    if (secaoBloqueados) secaoBloqueados.hidden = !conteudos.some((conteudo) =>
+      !temAcessoAoConteudo(usuaria.plano, conteudo.plano));
   }
 </script>
