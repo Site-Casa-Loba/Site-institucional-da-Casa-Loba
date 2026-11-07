@@ -4,7 +4,9 @@
 
 ## Usuárias de teste
 
-Não há senha: o seletor DEV troca a conta logada direto.
+Não há senha. Na página `/entrar.html`, o bloco "Conta de demonstração (DEV)"
+cria a sessão com um clique; dentro da área de membros, o seletor flutuante
+"Trocar plano (DEV)" troca a conta logada. Em produção nada disso aparece.
 
 | E-mail | Plano |
 |---|---|

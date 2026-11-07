@@ -32,6 +32,42 @@ import Cabecalho from "../components/Cabecalho.astro";
   const botaoCadastrar = document.querySelector<HTMLButtonElement>("#botao-cadastrar-wix");
   if (botaoCadastrar) ligarBotaoEntrar(botaoCadastrar, { modo: "signup", destino, mensagem });
 
+  if (import.meta.env.DEV) {
+    const { CONTAS_DEMO } = await import("../lib/auth/demo");
+    const { auth } = await import("../lib/auth");
+
+    const caixa = document.createElement("div");
+    caixa.className = "painel-entrar__demo";
+    const rotulo = document.createElement("label");
+    rotulo.textContent = "Conta de demonstração (DEV)";
+    const select = document.createElement("select");
+    select.setAttribute("aria-label", "Entrar com conta de demonstração");
+    for (const conta of CONTAS_DEMO) {
+      const opcao = document.createElement("option");
+      opcao.value = conta.email;
+      opcao.textContent = `${conta.nome} (${conta.email})`;
+      select.append(opcao);
+    }
+    const botaoDemo = document.createElement("button");
+    botaoDemo.type = "button";
+    botaoDemo.className = "btn btn--vermelho btn--full";
+    botaoDemo.textContent = "Entrar com a conta de demonstração";
+    botaoDemo.addEventListener("click", async () => {
+      try {
+        await auth.entrarDemo(select.value);
+        window.location.replace(destino);
+      } catch (erro) {
+        if (mensagem) {
+          mensagem.textContent = erro instanceof Error ? erro.message : "Não foi possível entrar com a conta de demonstração.";
+          mensagem.focus();
+        }
+      }
+    });
+    rotulo.append(select);
+    caixa.append(rotulo, botaoDemo);
+    document.querySelector(".painel-entrar")?.append(caixa);
+  }
+
   try {
     if (await usuariaDaPagina()) window.location.replace("/membros.html");
   } catch (erro) {
@@ -78,6 +114,30 @@ import Cabecalho from "../components/Cabecalho.astro";
 
   .painel-entrar__mensagem {
     margin-top: 12px;
+  }
+
+  .painel-entrar__demo {
+    display: grid;
+    gap: 12px;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--ameixa);
+    font-size: 0.95rem;
+  }
+
+  .painel-entrar__demo label {
+    display: grid;
+    gap: 6px;
+    opacity: 0.85;
+  }
+
+  .painel-entrar__demo select {
+    padding: 8px 10px;
+    border: 1px solid var(--ameixa);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--ameixa);
+    font: inherit;
   }
 
   @media (max-width: 560px) {
