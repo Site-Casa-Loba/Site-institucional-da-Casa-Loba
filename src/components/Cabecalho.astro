@@ -1,4 +1,6 @@
 ---
+import Logo from "./Logo.astro";
+
 interface Props {
   solido?: boolean;
 }
@@ -11,11 +13,7 @@ const { solido = false } = Astro.props;
   id="navFlutuante"
 >
   <div class="container nav-flutuante__inner">
-    <a href="/#topo" class="logo">
-      <span class="logo__texto">casa</span>
-      <img src="/assets/images/lobo_logo.svg" alt="Loba uivando" class="logo__icone" />
-      <span class="logo__texto">loba</span>
-    </a>
+    <Logo href="/#topo" />
     <div class="nav-links">
       <a href="/#secao-sobre">Sobre a Casa Loba</a>
       <a href="/#secao-frentes">Nossas frentes</a>
@@ -131,32 +129,6 @@ const { solido = false } = Astro.props;
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
-
-  .logo {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--font-titulo);
-    font-weight: 800;
-    font-size: 1.4rem;
-    letter-spacing: -0.03em;
-    color: var(--ameixa);
-    transition: opacity 0.2s;
-  }
-
-  .logo:hover {
-    opacity: 0.8;
-  }
-
-  .logo__texto {
-    line-height: 1;
-  }
-
-  .logo__icone {
-    width: auto;
-    height: 1.5em;
-    display: block;
   }
 
   .nav-links {

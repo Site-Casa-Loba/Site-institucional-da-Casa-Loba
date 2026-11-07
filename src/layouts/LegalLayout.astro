@@ -1,5 +1,6 @@
 ---
 import Layout from "./Layout.astro";
+import Logo from "../components/Logo.astro";
 import Rodape from "../components/Rodape.astro";
 
 interface Props {
@@ -18,11 +19,7 @@ const sections = headings.filter((heading) => heading.depth === 2);
     <a href="#documento" class="legal-skip">Ir para o documento</a>
     <header class="legal-header">
       <div class="container legal-header__inner">
-        <a href="/" class="logo" aria-label="Casa Loba — início">
-          <span class="logo__texto">casa</span>
-          <img src="/assets/images/lobo_logo.svg" alt="" class="logo__icone" />
-          <span class="logo__texto">loba</span>
-        </a>
+        <Logo href="/" />
         <a href="/" class="btn btn--sm btn--ghost">voltar para a casa</a>
       </div>
     </header>

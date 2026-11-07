@@ -1,0 +1,59 @@
+---
+/**
+ * Logo "casa 🐺 loba" — fonte única do markup e dos estilos.
+ *
+ * Antes o markup vivia duplicado em Cabecalho.astro e LegalLayout.astro, mas o
+ * CSS estava escopado só no Cabecalho: nas páginas legais o <img> caía no
+ * tamanho intrínseco do SVG (1640px). Mantendo markup e estilo juntos aqui, o
+ * componente funciona em qualquer layout.
+ *
+ * O texto visível ("casa loba") já dá o nome acessível ao link, por isso a
+ * imagem usa alt vazio.
+ */
+interface Props {
+  href?: string;
+  /** Altura do ícone, em qualquer unidade CSS. */
+  tamanho?: string;
+  class?: string;
+}
+
+const {
+  href = "/",
+  tamanho = "1.5em",
+  class: className,
+} = Astro.props;
+---
+
+<a href={href} class:list={["logo", className]} style={`--logo-tamanho: ${tamanho}`}>
+  <span class="logo__texto">casa</span>
+  <img src="/assets/images/lobo_logo.svg" alt="" class="logo__icone" />
+  <span class="logo__texto">loba</span>
+</a>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-titulo);
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: -0.03em;
+    color: var(--ameixa);
+    transition: opacity 0.2s;
+  }
+
+  .logo:hover {
+    opacity: 0.8;
+  }
+
+  .logo__texto {
+    line-height: 1;
+  }
+
+  .logo__icone {
+    width: auto;
+    height: var(--logo-tamanho, 1.5em);
+    display: block;
+  }
+</style>
