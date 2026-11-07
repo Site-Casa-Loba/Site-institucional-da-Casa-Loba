@@ -85,8 +85,6 @@ Atualize estas tabelas ao criar, renomear ou remover uma página.
 
 ## Conteúdo: o que o site pode afirmar
 
-A Cuidadoteca, os eventos próprios e as parcerias com coworkings ainda são objetivos futuros. O site deve apresentá-los como iniciativas **"em breve"**, nunca como serviços em funcionamento.
-
 Os nomes, preços e benefícios dos planos abaixo estão definidos e vivem
 numa fonte só no código: o catálogo em `src/lib/planos.ts` (com cópia na
 coleção `planos` do CMS — mudou num lugar, mude no outro; ver
