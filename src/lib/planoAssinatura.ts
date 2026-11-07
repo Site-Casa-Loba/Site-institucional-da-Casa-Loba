@@ -31,6 +31,10 @@ export interface AssinaturaAtiva {
 
 const STATUS_ATIVOS = new Set(["ACTIVE", "STARTED", "TRIALING", "ONGOING"]);
 
+function texto(valor: unknown): string | undefined {
+  return typeof valor === "string" && valor.length > 0 ? valor : undefined;
+}
+
 /**
  * Escolhe o plano de maior nível entre assinaturas ativas e não expiradas.
  * Puro: nenhuma chamada de rede aqui.
@@ -86,14 +90,18 @@ export async function obterAssinaturasMembro(
     const lista =
       resultado?.planSubscriptions ?? resultado?.subscriptions ?? [];
     return lista.map((s) => {
-      const plano = (s as Record<string, unknown>)?.plan as
-        | { name?: string; id?: string }
-        | undefined;
+      const linha = s as {
+        plan?: { name?: string; id?: string };
+        planId?: unknown;
+        status?: unknown;
+        currentPeriodEndDate?: unknown;
+        endDate?: unknown;
+      };
       return {
         plano:
-          plano?.name ?? plano?.id ?? (s as Record<string, unknown>)?.planId,
-        status: s?.status,
-        expiraEm: s?.currentPeriodEndDate ?? s?.endDate ?? null,
+          linha.plan?.name ?? linha.plan?.id ?? texto(linha.planId),
+        status: texto(linha.status),
+        expiraEm: texto(linha.currentPeriodEndDate) ?? texto(linha.endDate) ?? null,
       };
     });
   } catch (erro) {
