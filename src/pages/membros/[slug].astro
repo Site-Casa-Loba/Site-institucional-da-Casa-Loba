@@ -30,7 +30,7 @@ export const titulo = "Membro — Casa Loba";
 
 <script>
   import { auth } from "../../lib/auth";
-  import { obterPlanoMembro, temAcessoAoConteudo } from "../../lib/membros";
+  import { obterPlano, temAcessoAoConteudo } from "../../lib/planos";
   import { obterConteudoMembro } from "../../lib/membrosCms";
 
   const destino = document.querySelector<HTMLElement>("[data-conteudo-dinamico]");
@@ -82,8 +82,8 @@ export const titulo = "Membro — Casa Loba";
       artigo.append(categoria, titulo, resumo, corpo);
       destino.append(artigo);
     } else {
-      const planoNecessario = obterPlanoMembro(conteudo.plano);
-      const planoAtual = obterPlanoMembro(usuaria.plano);
+      const planoNecessario = obterPlano(conteudo.plano);
+      const planoAtual = obterPlano(usuaria.plano);
       const bloqueio = document.createElement("section");
       bloqueio.className = "conteudo-bloqueado";
       bloqueio.setAttribute("aria-labelledby", "titulo-bloqueio");

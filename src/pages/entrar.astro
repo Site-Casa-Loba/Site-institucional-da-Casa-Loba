@@ -21,13 +21,11 @@ import Cabecalho from "../components/Cabecalho.astro";
 
 <script>
   import { auth } from "../lib/auth";
-  import { iniciarLoginWix } from "../lib/auth/iniciarLoginWix";
+  import { iniciarLoginWix, destinoSeguro } from "../lib/auth/iniciarLoginWix";
 
   const mensagem = document.querySelector<HTMLElement>("#mensagem-entrar");
   const botaoWix = document.querySelector<HTMLButtonElement>("#botao-entrar-wix");
-  const params = new URLSearchParams(window.location.search);
-  const redirect = params.get("redirect");
-  const destino = redirect?.startsWith("/") && !redirect.startsWith("//") ? redirect : "/membros.html";
+  const destino = destinoSeguro(new URLSearchParams(window.location.search).get("redirect"));
 
   botaoWix?.addEventListener("click", () => {
     botaoWix.disabled = true;
@@ -70,8 +68,6 @@ import Cabecalho from "../components/Cabecalho.astro";
 </script>
 
 <style>
-  /* Tela de login no visual da identidade (commit 7727f12):
-     painel estreito e centralizado, título e chamada centralizados. */
   .painel-entrar {
     width: min(100% - 32px, 520px);
     text-align: center;

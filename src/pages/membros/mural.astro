@@ -93,7 +93,6 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
     autora: string;
     texto: string;
     quando: string;
-    curtidas: number;
   }
 
   function lerJson<T>(chave: string, fallback: T): T {
@@ -149,7 +148,7 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
       curtir.type = "button";
       curtir.className = "publicacao__curtir";
       const ligarBotao = (marcada: boolean): void => {
-        curtir.textContent = `apoiar · ${postagem.curtidas + (marcada ? 1 : 0)}`;
+        curtir.textContent = `apoiar · ${marcada ? 1 : 0}`;
         curtir.setAttribute("aria-pressed", marcada ? "true" : "false");
       };
       ligarBotao(curtidas.includes(postagem.id));
@@ -170,18 +169,13 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
     evento.preventDefault();
     if (!form.reportValidity()) return;
     const campo = form.elements.namedItem("texto") as HTMLTextAreaElement;
-    const texto = campo.value.trim();
-    if (texto.length < 4) {
-      if (mensagem) mensagem.textContent = "Escreva um pouco mais antes de publicar.";
-      return;
-    }
+    campo.value = campo.value.trim();
     const postagens = lerJson<Postagem[]>(CHAVE_POSTAGENS, []);
     const postagem: Postagem = {
       id: `local-${Date.now()}`,
       autora: usuaria?.nome ?? "Você",
-      texto,
+      texto: campo.value,
       quando: "agora",
-      curtidas: 0,
     };
     salvarJson(CHAVE_POSTAGENS, [postagem, ...postagens]);
     campo.value = "";
