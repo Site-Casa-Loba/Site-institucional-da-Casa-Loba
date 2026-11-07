@@ -63,6 +63,15 @@ const { solido = false } = Astro.props;
     if (cadastrar) void irAoWix(cadastrar, "signup");
   });
 
+  // Fecha o menu da conta ao clicar fora dele
+  document.addEventListener("click", (evento) => {
+    const menu = document.querySelector<HTMLDetailsElement>(".perfil-menu");
+    if (!menu || !menu.open) return;
+    if (evento.target instanceof Node && !menu.contains(evento.target)) {
+      menu.open = false;
+    }
+  });
+  
   const area = document.querySelector<HTMLElement>("[data-nav-auth]");
   if (area) {
     try {
