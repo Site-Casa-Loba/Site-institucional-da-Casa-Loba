@@ -8,11 +8,11 @@ Todas usam a senha fixa de demonstração `casaloba123`:
 
 | E-mail | Plano |
 |---|---|
-| `loba@teste.com` | Loba |
-| `matilha@teste.com` | Matilha |
-| `alcateia@teste.com` | Alcateia |
+| `lobaessencial@teste.com` | Loba Essencial|
+| `lobaativa@teste.com` | Loba Ativa |
+| `lobarede@teste.com` | Loba Rede |
 
-O mock não guarda senhas. Sessão, cadastro e alterações de perfil ficam no `localStorage` do navegador. Cadastros novos começam no plano Loba.
+O mock não guarda senhas. Sessão, cadastro e alterações de perfil ficam no `localStorage` do navegador. Cadastros novos começam no plano Loba Essencial.
 
 ## Rotas
 
