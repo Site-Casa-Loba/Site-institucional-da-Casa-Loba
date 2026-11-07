@@ -1,155 +1,76 @@
-import type { PlanoPagoId } from "../planos";
+/**
+ * Conta de demonstração no navegador (DEV). Só as contas de `demo.ts` entram;
+ * a sessão e as edições de perfil ficam no localStorage deste navegador.
+ */
+import { lerJson, remover, salvarJson } from "../armazenamento";
 import type { Usuaria } from "../usuaria";
-import type { AuthService } from "./types";
-
-interface ContaSalva {
-  nome: string;
-  email: string;
-  plano: PlanoPagoId;
-  imagem?: string;
-}
+import { CONTAS_DEMO, type ContaDemo } from "./demo";
 
 const CHAVE_SESSAO = "casa-loba-sessao";
-const CHAVE_CONTAS = "casa-loba-contas";
-export const SENHA_DEMO = "casaloba123";
-const EMAIL_VALIDO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const CHAVE_PERFIS = "casa-loba-perfis";
 
-// Contas fixas de demonstração (também usadas pelo seletor DEV em
-// AreaProtegida.astro). As contas *@teste.com não entram no build.
-export const contasTeste: ContaSalva[] = [
-  { nome: "Loba Essencial", email: "lobaessencial@teste.com", plano: "loba-essencial" },
-  { nome: "Loba Ativa", email: "lobaativa@teste.com", plano: "loba-ativa" },
-  { nome: "Loba Rede", email: "lobarede@teste.com", plano: "loba-rede" },
-];
+type PerfilDemo = ContaDemo & { imagem?: string };
 
-function esperar(): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, 300 + Math.floor(Math.random() * 301)));
+interface SessaoDemo {
+  email: string;
 }
 
-function armazenamentoDisponivel(): boolean {
-  return typeof window !== "undefined";
+function lerPerfis(): PerfilDemo[] {
+  return lerJson<PerfilDemo[]>(CHAVE_PERFIS, []);
 }
 
-function lerContas(): ContaSalva[] {
-  if (!armazenamentoDisponivel()) return [];
+function salvarPerfis(perfis: PerfilDemo[]): void {
   try {
-    const contas = window.localStorage.getItem(CHAVE_CONTAS);
-    return contas ? (JSON.parse(contas) as ContaSalva[]) : [];
-  } catch (erro) {
-    console.error("Não foi possível ler as contas da demonstração.", erro);
-    throw new Error("Não foi possível acessar os dados locais. Verifique o armazenamento do navegador.");
-  }
-}
-
-function salvarContas(contas: ContaSalva[]): void {
-  if (!armazenamentoDisponivel()) return;
-  try {
-    window.localStorage.setItem(CHAVE_CONTAS, JSON.stringify(contas));
-  } catch (erro) {
-    console.error("Não foi possível salvar as contas da demonstração.", erro);
+    salvarJson(CHAVE_PERFIS, perfis);
+  } catch {
     throw new Error("Não foi possível salvar seus dados neste navegador.");
   }
 }
 
-function obterConta(email: string): ContaSalva | undefined {
-  const normalizado = email.trim().toLowerCase();
-  const contasSalvas = lerContas();
-  const contasDemo = contasTeste.map((conta) =>
-    contasSalvas.find((salva) => salva.email === conta.email) ?? conta,
-  );
-  return [...contasDemo, ...contasSalvas.filter((conta) => !contasTeste.some((demo) => demo.email === conta.email))]
-    .find((conta) => conta.email === normalizado);
+/** Perfil editado (se houver) sobre a conta fixa de demonstração. */
+function perfilDe(email: string): PerfilDemo | undefined {
+  const conta = CONTAS_DEMO.find((demo) => demo.email === email);
+  if (!conta) return undefined;
+  return lerPerfis().find((perfil) => perfil.email === email) ?? conta;
 }
 
-function transformarConta(conta: ContaSalva): Usuaria {
-  return { ...conta };
+function comoUsuaria({ nome, email, plano, imagem }: PerfilDemo): Usuaria {
+  return { nome, email, plano, ...(imagem ? { imagem } : {}) };
 }
 
 function salvarSessao(email: string): void {
-  if (!armazenamentoDisponivel()) return;
   try {
-    window.localStorage.setItem(CHAVE_SESSAO, email);
-  } catch (erro) {
-    console.error("Não foi possível salvar a sessão da demonstração.", erro);
+    salvarJson(CHAVE_SESSAO, { email } satisfies SessaoDemo);
+  } catch {
     throw new Error("Não foi possível iniciar sua sessão neste navegador.");
   }
 }
 
-// Senha apenas de demonstração: não é persistida e não representa autenticação real.
-const mockAuth: AuthService = {
-  async cadastrar({ nome, email, senha }) {
-    await esperar();
-    const normalizado = email.trim().toLowerCase();
-    if (!EMAIL_VALIDO.test(normalizado)) throw new Error("Informe um e-mail válido.");
-    if (obterConta(normalizado)) throw new Error("Este e-mail já está cadastrado. Faça login para continuar.");
-    if (senha !== SENHA_DEMO) throw new Error(`Use a senha fixa de demonstração: ${SENHA_DEMO}.`);
-
-    const conta: ContaSalva = { nome: nome.trim(), email: normalizado, plano: "loba-essencial" };
-    salvarContas([...lerContas(), conta]);
-    salvarSessao(normalizado);
-    return transformarConta(conta);
+const mockAuth = {
+  /** Troca a conta logada pela conta de demonstração `email`. */
+  entrarDemo(email: string): Usuaria {
+    const perfil = perfilDe(email);
+    if (!perfil) throw new Error("Conta de demonstração desconhecida.");
+    salvarSessao(perfil.email);
+    return comoUsuaria(perfil);
   },
 
-  async entrar(email, senha) {
-    await esperar();
-    const normalizado = email.trim().toLowerCase();
-    if (!EMAIL_VALIDO.test(normalizado)) throw new Error("Informe um e-mail válido.");
-    const conta = obterConta(normalizado);
-    if (!conta || senha !== SENHA_DEMO) {
-      throw new Error(`E-mail ou senha incorretos. Use a senha de demonstração ${SENHA_DEMO}.`);
-    }
-    salvarSessao(normalizado);
-    return transformarConta(conta);
+  sair(): void {
+    remover(CHAVE_SESSAO);
   },
 
-  async sair() {
-    if (!armazenamentoDisponivel()) return;
-    try {
-      window.localStorage.removeItem(CHAVE_SESSAO);
-    } catch (erro) {
-      console.error("Não foi possível encerrar a sessão da demonstração.", erro);
-      throw new Error("Não foi possível encerrar sua sessão. Tente novamente.");
-    }
+  usuariaAtual(): Usuaria | null {
+    const { email } = lerJson<SessaoDemo>(CHAVE_SESSAO, { email: "" });
+    const perfil = email ? perfilDe(email) : undefined;
+    return perfil ? comoUsuaria(perfil) : null;
   },
 
-  async recuperarSenha(email) {
-    await esperar();
-    if (!EMAIL_VALIDO.test(email.trim())) throw new Error("Informe um e-mail válido.");
-    // WIX: solicitar recuperação de senha sem revelar se a conta existe.
-  },
-
-  async redefinirSenha(_token, _novaSenha) {
-    await esperar();
-    // WIX: validar token e definir uma nova senha.
-  },
-
-  async atualizarPerfil(dados) {
-    await esperar();
-    const usuaria = await this.usuariaAtual();
-    if (!usuaria) throw new Error("Sua sessão expirou. Entre novamente.");
-    const contas = lerContas();
-    const atualizada: ContaSalva = { ...usuaria, ...dados };
-    salvarContas([...contas.filter((conta) => conta.email !== usuaria.email), atualizada]);
-    return transformarConta(atualizada);
-  },
-
-  async usuariaAtual() {
-    if (!armazenamentoDisponivel()) return null;
-    try {
-      const email = window.localStorage.getItem(CHAVE_SESSAO);
-      if (!email) return null;
-      const conta = obterConta(email);
-      if (!conta) {
-        window.localStorage.removeItem(CHAVE_SESSAO);
-        return null;
-      }
-      const salva = lerContas().find((item) => item.email === conta.email);
-      return transformarConta(salva ?? conta);
-    } catch (erro) {
-      if (erro instanceof Error && erro.message.startsWith("Não foi possível acessar")) throw erro;
-      console.error("Não foi possível recuperar a sessão da demonstração.", erro);
-      throw new Error("Não foi possível verificar sua sessão neste navegador.");
-    }
+  atualizarPerfil(dados: Partial<Pick<Usuaria, "nome" | "imagem">>): Usuaria {
+    const atual = mockAuth.usuariaAtual();
+    if (!atual) throw new Error("Sua sessão expirou. Entre novamente.");
+    const perfil: PerfilDemo = { ...atual, ...dados };
+    salvarPerfis([...lerPerfis().filter((item) => item.email !== atual.email), perfil]);
+    return comoUsuaria(perfil);
   },
 };
 

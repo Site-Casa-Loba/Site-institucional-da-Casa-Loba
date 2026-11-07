@@ -1,10 +1,10 @@
-> **Nota (04/11/2026):** este documento descreve o mock local, que funciona só em `npm run dev`. No build de produção o login é o real do site — veja `docs/AUTH.md` e `docs/CMS.md`. As contas `*@teste.com` não entram no ar.
+> **Nota:** este documento descreve a conta de demonstração, que funciona só em `npm run dev` (seletor DEV no canto da área de membros). No build de produção o login é o real do site e o módulo de demonstração não entra no bundle. Veja `docs/AUTH.md` e `docs/CMS.md`.
 
-# Mock da área de membros
+# Conta de demonstração
 
 ## Usuárias de teste
 
-Todas usam a senha fixa de demonstração `casaloba123`:
+Não há senha: o seletor DEV troca a conta logada direto.
 
 | E-mail | Plano |
 |---|---|
@@ -12,16 +12,13 @@ Todas usam a senha fixa de demonstração `casaloba123`:
 | `lobaativa@teste.com` | Loba Ativa |
 | `lobarede@teste.com` | Loba Rede |
 
-O mock não guarda senhas. Sessão, cadastro e alterações de perfil ficam no `localStorage` do navegador. Cadastros novos começam no plano Loba Essencial.
+Sessão, troca de conta e alterações de perfil ficam no `localStorage` deste navegador.
 
 ## Rotas
 
 No host do Wix Headless, as páginas são servidas como arquivos `.html`; use o sufixo nos links.
 
-- `/cadastro.html` — cadastro local
 - `/entrar.html` — login e retorno ao destino solicitado por `?redirect=`
-- `/recuperar-senha.html` — confirmação genérica de recuperação
-- `/redefinir-senha.html?token=demo` — formulário demonstrativo de redefinição
 - `/membros.html` — conteúdos liberados e conteúdos de outros planos
 - `/membros/[slug].html` — conteúdo ou tela de bloqueio conforme o plano
 - `/membros/perfil.html` — edição de nome e URL da foto, plano e saída

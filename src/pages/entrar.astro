@@ -14,57 +14,32 @@ import Cabecalho from "../components/Cabecalho.astro";
       </p>
       <button class="btn btn--vermelho btn--full" type="button" id="botao-entrar-wix">Entrar</button>
       <p class="form-acesso__mensagem painel-entrar__mensagem" id="mensagem-entrar" aria-live="assertive" tabindex="-1"></p>
-      <a class="painel-entrar__esqueci" href="/recuperar-senha.html">Esqueci minha senha</a>
     </section>
   </main>
 </Layout>
 
 <script>
-  import { auth } from "../lib/auth";
-  import { iniciarLoginWix, destinoSeguro } from "../lib/auth/iniciarLoginWix";
+  import { usuariaDaPagina } from "../lib/sessao";
+  import { ligarBotaoEntrar } from "../lib/auth/iniciarLoginWix";
+  import { destinoSeguro } from "../lib/auth/contrato";
 
   const mensagem = document.querySelector<HTMLElement>("#mensagem-entrar");
-  const botaoWix = document.querySelector<HTMLButtonElement>("#botao-entrar-wix");
   const destino = destinoSeguro(new URLSearchParams(window.location.search).get("redirect"));
 
-  botaoWix?.addEventListener("click", () => {
-    botaoWix.disabled = true;
-    botaoWix.textContent = "Entrando…";
-    iniciarLoginWix(destino).catch((erro) => {
-      console.error("[auth] não foi possível iniciar o login:", erro);
-      botaoWix.disabled = false;
-      botaoWix.textContent = "Entrar";
-      if (mensagem) {
-        mensagem.textContent = "Não foi possível entrar. Tente novamente.";
-        mensagem.focus();
-      }
-    });
-  });
+  const botaoEntrar = document.querySelector<HTMLButtonElement>("#botao-entrar-wix");
+  if (botaoEntrar) ligarBotaoEntrar(botaoEntrar, { modo: "login", destino, mensagem });
 
   const botaoCadastrar = document.querySelector<HTMLButtonElement>("#botao-cadastrar-wix");
-  botaoCadastrar?.addEventListener("click", () => {
-    botaoCadastrar.disabled = true;
-    botaoCadastrar.textContent = "Abrindo cadastro…";
-    iniciarLoginWix(destino, "signup").catch((erro) => {
-      console.error("[auth] não foi possível iniciar o cadastro:", erro);
-      botaoCadastrar.disabled = false;
-      botaoCadastrar.textContent = "Cadastre-se";
-      if (mensagem) {
-        mensagem.textContent = "Não foi possível abrir o cadastro. Tente novamente.";
-        mensagem.focus();
-      }
-    });
-  });
+  if (botaoCadastrar) ligarBotaoEntrar(botaoCadastrar, { modo: "signup", destino, mensagem });
 
   try {
-    if (await auth.usuariaAtual()) window.location.replace("/membros.html");
+    if (await usuariaDaPagina()) window.location.replace("/membros.html");
   } catch (erro) {
     if (mensagem) {
       mensagem.textContent = erro instanceof Error ? erro.message : "Não foi possível verificar sua sessão.";
       mensagem.focus();
     }
   }
-
 </script>
 
 <style>
@@ -103,13 +78,6 @@ import Cabecalho from "../components/Cabecalho.astro";
 
   .painel-entrar__mensagem {
     margin-top: 12px;
-  }
-
-  .painel-entrar__esqueci {
-    display: inline-block;
-    margin-top: 8px;
-    text-decoration: underline;
-    text-underline-offset: 3px;
   }
 
   @media (max-width: 560px) {

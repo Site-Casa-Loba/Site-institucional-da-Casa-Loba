@@ -2,17 +2,13 @@
  * Plano efetivo do membro, lido do Wix Pricing Plans com o token dele.
  *
  * Fonte da verdade: assinatura ativa. Enquanto os planos não existirem no
- * Wix, nenhuma assinatura é lida e tudo cai no PLANO_MINIMO —
+ * Wix, nenhuma assinatura é lida e tudo cai no PLANO_MINIMO,
  * comportamento seguro e documentado. O gate de nível fica em
  * `src/lib/planos.ts` (temAcessoAoConteudo), aplicado sobre o campo
  * `plano` mínimo dos conteúdos do CMS.
  */
 import { planSubscriptions } from "@wix/pricing-plans";
-import {
-  criarClienteMembro,
-  sessaoValida,
-  type TokensWix,
-} from "./auth/wixSession";
+import { criarClienteMembro, guardarTokensRenovados, type TokensWix } from "./auth/wixSession";
 import {
   normalizaNomePlanoWix,
   obterPlano,
@@ -20,7 +16,7 @@ import {
   type PlanoPagoId,
 } from "./planos";
 
-export interface AssinaturaAtiva {
+export interface AssinaturaWix {
   /** Nome/ID do plano no Wix, se informado */
   plano?: string;
   /** Status da assinatura (ex.: ACTIVE, PAUSED, CANCELED) */
@@ -29,30 +25,32 @@ export interface AssinaturaAtiva {
   expiraEm?: string | null;
 }
 
+/** Status do Wix que liberam o plano. */
 const STATUS_ATIVOS = new Set(["ACTIVE", "STARTED", "TRIALING", "ONGOING"]);
 
-function texto(valor: unknown): string | undefined {
-  return typeof valor === "string" && valor.length > 0 ? valor : undefined;
+/** Assinatura paga e não vencida, a regra que dá acesso ao plano. */
+function assinaturaVigente(
+  assinatura: AssinaturaWix,
+  agora = Date.now(),
+): boolean {
+  const status = (assinatura.status ?? "").toUpperCase();
+  if (status && !STATUS_ATIVOS.has(status)) return false;
+  return !assinatura.expiraEm || Date.parse(assinatura.expiraEm) >= agora;
 }
 
 /**
- * Escolhe o plano de maior nível entre assinaturas ativas e não expiradas.
+ * Escolhe o plano de maior nível entre assinaturas vigentes.
  * Puro: nenhuma chamada de rede aqui.
  */
-export function escolherPlano(
-  assinaturas: AssinaturaAtiva[],
+function escolherPlano(
+  assinaturas: AssinaturaWix[],
+  agora = Date.now(),
 ): PlanoPagoId | null {
-  const agora = Date.now();
-  const ativas = assinaturas.filter((a) => {
-    const status = (a.status ?? "").toUpperCase();
-    if (status && !STATUS_ATIVOS.has(status)) return false;
-    if (a.expiraEm && Date.parse(a.expiraEm) < agora) return false;
-    return true;
-  });
   let melhor: PlanoPagoId | null = null;
   let melhorNivel = 0;
-  for (const a of ativas) {
-    const plano = normalizaNomePlanoWix(a.plano);
+  for (const assinatura of assinaturas) {
+    if (!assinaturaVigente(assinatura, agora)) continue;
+    const plano = normalizaNomePlanoWix(assinatura.plano);
     if (!plano) continue;
     const nivel = obterPlano(plano)?.nivel ?? 0;
     if (nivel > melhorNivel) {
@@ -63,14 +61,17 @@ export function escolherPlano(
   return melhor;
 }
 
+function texto(valor: unknown): string | undefined {
+  return typeof valor === "string" && valor.length > 0 ? valor : undefined;
+}
+
 /**
  * Lê as assinaturas do membro no Wix Pricing Plans com o token dele.
- * Qualquer erro (app não instalado, sem escopo, rede) retorna [] —
- * nunca lança.
+ * Qualquer erro (app não instalado, sem escopo, rede) retorna [] sem lançar.
  */
-export async function obterAssinaturasMembro(
+async function obterAssinaturasMembro(
   tokens: TokensWix,
-): Promise<AssinaturaAtiva[]> {
+): Promise<AssinaturaWix[]> {
   try {
     const client = criarClienteMembro(tokens, { planSubscriptions });
     // Query builder (sem argumentos): assinaturas visíveis ao membro.
@@ -87,8 +88,8 @@ export async function obterAssinaturasMembro(
       }>;
       subscriptions?: Array<Record<string, unknown>>;
     };
-    const lista =
-      resultado?.planSubscriptions ?? resultado?.subscriptions ?? [];
+    guardarTokensRenovados(client, tokens);
+    const lista = resultado?.planSubscriptions ?? resultado?.subscriptions ?? [];
     return lista.map((s) => {
       const linha = s as {
         plan?: { name?: string; id?: string };
@@ -98,8 +99,7 @@ export async function obterAssinaturasMembro(
         endDate?: unknown;
       };
       return {
-        plano:
-          linha.plan?.name ?? linha.plan?.id ?? texto(linha.planId),
+        plano: linha.plan?.name ?? linha.plan?.id ?? texto(linha.planId),
         status: texto(linha.status),
         expiraEm: texto(linha.currentPeriodEndDate) ?? texto(linha.endDate) ?? null,
       };
@@ -111,12 +111,10 @@ export async function obterAssinaturasMembro(
 }
 
 /**
- * Plano efetivo do membro logado: assinatura ativa de maior nível, ou
- * PLANO_MINIMO quando não há assinatura legível.
+ * Plano efetivo de quem tem os `tokens`: assinatura vigente de maior nível,
+ * ou PLANO_MINIMO quando não há assinatura legível.
  */
-export async function planoDoMembro(): Promise<PlanoPagoId> {
-  const tokens = await sessaoValida();
-  if (!tokens) return PLANO_MINIMO;
+export async function planoDoMembro(tokens: TokensWix): Promise<PlanoPagoId> {
   const assinaturas = await obterAssinaturasMembro(tokens);
   return escolherPlano(assinaturas) ?? PLANO_MINIMO;
 }

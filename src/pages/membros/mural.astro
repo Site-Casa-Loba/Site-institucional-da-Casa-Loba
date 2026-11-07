@@ -1,6 +1,5 @@
 ---
-// Mural de networking (V2): espaço de trocas e pedidos entre as membras.
-// Funciona no navegador (localStorage) até existir backend — ver aviso na própria página.
+// Sem backend, as publicações ficam no localStorage. Ver aviso na própria página.
 import Layout from "../../layouts/Layout.astro";
 import Cabecalho from "../../components/Cabecalho.astro";
 import AreaProtegida from "../../components/AreaProtegida.astro";
@@ -76,7 +75,8 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
 </style>
 
 <script>
-  import { auth } from "../../lib/auth";
+  import { usuariaDaPagina } from "../../lib/sessao";
+  import { lerJson, salvarJson } from "../../lib/armazenamento";
 
   const CHAVE_POSTAGENS = "casa-loba-mural-postagens";
   const CHAVE_CURTIDAS = "casa-loba-mural-curtidas";
@@ -86,31 +86,21 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
   const form = document.querySelector<HTMLFormElement>("#form-publicacao");
   const mensagem = document.querySelector<HTMLElement>("#mensagem-publicacao");
 
-  const usuaria = await auth.usuariaAtual();
+  const usuario = await usuariaDaPagina();
+
+  function avisar(erro: unknown, padrao: string): void {
+    console.error("[mural]", erro);
+    if (!mensagem) return;
+    mensagem.dataset.tipo = "erro";
+    mensagem.textContent = erro instanceof Error ? erro.message : padrao;
+    mensagem.focus();
+  }
 
   interface Postagem {
     id: string;
     autora: string;
     texto: string;
     quando: string;
-  }
-
-  function lerJson<T>(chave: string, fallback: T): T {
-    try {
-      const bruto = window.localStorage.getItem(chave);
-      return bruto ? (JSON.parse(bruto) as T) : fallback;
-    } catch (erro) {
-      console.error(`Não foi possível ler "${chave}" no navegador.`, erro);
-      return fallback;
-    }
-  }
-
-  function salvarJson(chave: string, dados: unknown): void {
-    try {
-      window.localStorage.setItem(chave, JSON.stringify(dados));
-    } catch (erro) {
-      console.error(`Não foi possível salvar "${chave}" no navegador.`, erro);
-    }
   }
 
   function renderizar(): void {
@@ -155,7 +145,15 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
       curtir.addEventListener("click", () => {
         const agora = lerJson<string[]>(CHAVE_CURTIDAS, []);
         const marcada = agora.includes(postagem.id);
-        salvarJson(CHAVE_CURTIDAS, marcada ? agora.filter((id) => id !== postagem.id) : [...agora, postagem.id]);
+        try {
+          salvarJson(
+            CHAVE_CURTIDAS,
+            marcada ? agora.filter((id) => id !== postagem.id) : [...agora, postagem.id],
+          );
+        } catch (erro) {
+          avisar(erro, "Não foi possível salvar seu apoio.");
+          return;
+        }
         ligarBotao(!marcada);
       });
       rodape.append(curtir);
@@ -173,11 +171,16 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
     const postagens = lerJson<Postagem[]>(CHAVE_POSTAGENS, []);
     const postagem: Postagem = {
       id: `local-${Date.now()}`,
-      autora: usuaria?.nome ?? "Você",
+      autora: usuario?.nome ?? "Você",
       texto: campo.value,
       quando: "agora",
     };
-    salvarJson(CHAVE_POSTAGENS, [postagem, ...postagens]);
+    try {
+      salvarJson(CHAVE_POSTAGENS, [postagem, ...postagens]);
+    } catch (erro) {
+      avisar(erro, "Não foi possível publicar agora.");
+      return;
+    }
     campo.value = "";
     if (mensagem) {
       mensagem.dataset.tipo = "sucesso";

@@ -97,10 +97,11 @@ sócias mudarem — mude no CMS e no catálogo juntos.
 ## Lendo o CMS pelo Astro
 
 - **Catálogo público (planos):** `src/lib/planos.ts` chama
-  `obterPlanosCms` de `src/lib/cms.ts` — usados por `/planos.html`,
-  pela landing e por `/cms-teste.html` (página de exemplo da validação).
-  O Astro lê no build; sem credenciais, usa token de visitante; no
-  servidor, cai na chave de API (escopo elevado) como fallback.
+  `obterPlanosCms` de `src/lib/planoCms.ts` (tipo e leitura da coleção),
+  sobre a query genérica de `src/lib/cms.ts`, usados por `/planos.html`
+  e pela landing. O Astro lê no build; sem credenciais, usa token de
+  visitante; no servidor, cai na chave de API (escopo elevado) como
+  fallback.
 - **Área de membros (conteudos):** `src/lib/membrosCms.ts` — o navegador
   lê com o **token de membro** da sessão Wix. O Wix recusa anônimos
   (`WDE0027`), então o conteúdo nunca chega ao bundle estático
@@ -110,17 +111,17 @@ sócias mudarem — mude no CMS e no catálogo juntos.
 ## Decisões de segurança (04/11/2026)
 
 - O texto/vídeos dos conteúdos **não** são commitados nem entram no build.
-- Em `npm run dev` existe o mock local de demonstração (senha
-  `casaloba123`); **no build de produção o mock é substituído pelo login
-  real e some da interface** — o único "Entrar" no ar é o real.
+- Em `npm run dev` existe a conta de demonstração (contas `*@teste.com`,
+  trocadas pelo seletor DEV); **no build de produção esse módulo não entra
+  no bundle**. O único "Entrar" no ar é o real.
 - O conteúdo é placeholder (a comunidade paga ainda não lançou), mas a
   arquitetura já está correta para quando o valor existir.
 
 ## Pendências
 
-- **Planos públicos**: feito — `/planos` já lê a coleção `planos`
-  (leitura pública validada em `/cms-teste.html`) e só cai no catálogo
-  local de `src/lib/planos.ts` quando o CMS falha ou está vazio.
+- **Planos públicos**: feito. `/planos` já lê a coleção `planos` e só
+  cai no catálogo local de `src/lib/planos.ts` quando o CMS falha ou
+  está vazio.
   Falta alinhar os slugs da coleção com os ids do catálogo, se ainda
   houver valores antigos (`loba`, `matilha`, `alcateia`).
 - **Plano do membro**: helper pronto (`src/lib/planoAssinatura.ts`), mas

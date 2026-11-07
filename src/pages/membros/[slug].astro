@@ -12,14 +12,13 @@ export function getStaticPaths() {
   return SLUGS_CONTEUDOS.map((slug) => ({ params: { slug } }));
 }
 
-// O título real vem do CMS no navegador (conteúdo não faz parte do bundle).
-export const titulo = "Membro — Casa Loba";
+const { slug } = Astro.params;
 ---
 
-<Layout title={titulo}>
+<Layout title="Membro — Casa Loba">
   <Cabecalho solido />
   <AreaProtegida>
-    <main class="pagina-conteudo-membro" data-pagina-conteudo>
+    <main class="pagina-conteudo-membro" data-pagina-conteudo data-slug={slug}>
       <div class="container">
         <a class="membros-voltar" href="/membros.html">← Voltar à área de membros</a>
         <div data-conteudo-dinamico aria-live="polite"></div>
@@ -29,91 +28,101 @@ export const titulo = "Membro — Casa Loba";
 </Layout>
 
 <script>
-  import { auth } from "../../lib/auth";
+  import { usuariaDaPagina } from "../../lib/sessao";
   import { obterPlano, temAcessoAoConteudo } from "../../lib/planos";
-  import { obterConteudoMembro } from "../../lib/membrosCms";
+  import { obterConteudoMembro, type ConteudoMembro } from "../../lib/membrosCms";
+  import type { Usuaria } from "../../lib/usuaria";
 
+  const pagina = document.querySelector<HTMLElement>("[data-pagina-conteudo]");
   const destino = document.querySelector<HTMLElement>("[data-conteudo-dinamico]");
-  const usuaria = await auth.usuariaAtual();
-  const slug = (window.location.pathname.split("/").filter(Boolean).at(-1) ?? "").replace(/\.html$/, "");
-  const conteudo = usuaria ? await obterConteudoMembro(slug) : null;
+  const slug = pagina?.dataset.slug ?? "";
 
-  if (!usuaria) {
-    window.location.replace(`/entrar.html?redirect=${encodeURIComponent(window.location.pathname)}`);
-  } else if (!conteudo) {
-    if (destino) {
+  const criar = (tag: string, classe?: string, texto?: string): HTMLElement => {
+    const elemento = document.createElement(tag);
+    if (classe) elemento.className = classe;
+    if (texto) elemento.textContent = texto;
+    return elemento;
+  };
+
+  function montarArtigo(conteudo: ConteudoMembro): HTMLElement {
+    const artigo = criar("article", "conteudo-artigo");
+    const corpo = criar("div", "conteudo-artigo__corpo");
+    if (conteudo.video_url) {
+      const videoWrapper = criar("div", "video-wrapper");
+      const iframe = document.createElement("iframe");
+      iframe.src = conteudo.video_url;
+      iframe.title = `Vídeo: ${conteudo.titulo}`;
+      iframe.loading = "lazy";
+      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+      iframe.allowFullscreen = true;
+      videoWrapper.append(iframe);
+      corpo.append(videoWrapper);
+    }
+    corpo.append(
+      criar("p", undefined, conteudo.conteudo),
+      criar("p", undefined, "Este conteúdo é uma demonstração e poderá ser expandido com os materiais da Casa Loba."),
+    );
+    artigo.append(
+      criar("p", "tag tag--ameixa", conteudo.categoria),
+      criar("h1", undefined, conteudo.titulo),
+      criar("p", "conteudo-artigo__resumo", conteudo.resumo),
+      corpo,
+    );
+    return artigo;
+  }
+
+  function montarBloqueio(conteudo: ConteudoMembro, usuaria: Usuaria): HTMLElement {
+    const planoNecessario = obterPlano(conteudo.plano);
+    const nomeNecessario = planoNecessario?.nome ?? conteudo.plano;
+    const nomeAtual = obterPlano(usuaria.plano)?.nome ?? "não identificado";
+
+    const bloqueio = criar("section", "conteudo-bloqueado");
+    bloqueio.setAttribute("aria-labelledby", "titulo-bloqueio");
+
+    const titulo = criar("h1", undefined, conteudo.titulo);
+    titulo.id = "titulo-bloqueio";
+
+    const lista = criar("ul", "conteudo-bloqueado__beneficios");
+    for (const beneficio of planoNecessario?.beneficios ?? []) {
+      lista.append(criar("li", undefined, beneficio));
+    }
+
+    const acoes = criar("div", "perfil-acoes");
+    const conhecer = criar("a", "btn btn--vermelho", `Conhecer o plano ${nomeNecessario}`);
+    conhecer.setAttribute("href", "/planos.html");
+    const voltar = criar("a", "btn btn--ghost", "Voltar aos conteúdos");
+    voltar.setAttribute("href", "/membros.html");
+    acoes.append(conhecer, voltar);
+
+    bloqueio.append(
+      criar("p", "tag tag--ameixa", "conteúdo exclusivo"),
+      titulo,
+      criar("p", "conteudo-artigo__resumo", conteudo.resumo),
+      criar(
+        "p",
+        "conteudo-bloqueado__resumo",
+        `Este conteúdo está disponível a partir do plano ${nomeNecessario}. Seu plano atual é ${nomeAtual}.`,
+      ),
+      lista,
+      acoes,
+    );
+    return bloqueio;
+  }
+
+  const usuaria = await usuariaDaPagina();
+  const conteudo = usuaria ? await obterConteudoMembro(slug).catch(() => null) : null;
+
+  if (usuaria && destino) {
+    if (!conteudo) {
       destino.innerHTML =
         '<p role="alert">Não foi possível carregar este conteúdo agora. ' +
         '<a href="/membros.html">Voltar à área de membros</a></p>';
-    }
-  } else if (destino) {
-    const categoria = document.createElement("p");
-    categoria.className = "tag tag--ameixa";
-    categoria.textContent = conteudo.categoria;
-    const titulo = document.createElement("h1");
-    titulo.textContent = conteudo.titulo;
-    const resumo = document.createElement("p");
-    resumo.className = "conteudo-artigo__resumo";
-    resumo.textContent = conteudo.resumo;
-    const liberado = temAcessoAoConteudo(usuaria.plano, conteudo.plano);
-
-    if (liberado) {
-      const artigo = document.createElement("article");
-      artigo.className = "conteudo-artigo";
-      const corpo = document.createElement("div");
-      corpo.className = "conteudo-artigo__corpo";
-      const texto = document.createElement("p");
-      texto.textContent = conteudo.conteudo;
-      const nota = document.createElement("p");
-      nota.textContent = "Este conteúdo é uma demonstração e poderá ser expandido com os materiais da Casa Loba.";
-      if (conteudo.video_url) {
-        const videoWrapper = document.createElement("div");
-        videoWrapper.className = "video-wrapper";
-        const iframe = document.createElement("iframe");
-        iframe.src = conteudo.video_url;
-        iframe.title = `Vídeo: ${conteudo.titulo}`;
-        iframe.loading = "lazy";
-        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-        iframe.allowFullscreen = true;
-        videoWrapper.append(iframe);
-        corpo.append(videoWrapper);
-      }
-      corpo.append(texto, nota);
-      artigo.append(categoria, titulo, resumo, corpo);
-      destino.append(artigo);
     } else {
-      const planoNecessario = obterPlano(conteudo.plano);
-      const planoAtual = obterPlano(usuaria.plano);
-      const bloqueio = document.createElement("section");
-      bloqueio.className = "conteudo-bloqueado";
-      bloqueio.setAttribute("aria-labelledby", "titulo-bloqueio");
-      const aviso = document.createElement("p");
-      aviso.className = "tag tag--ameixa";
-      aviso.textContent = "conteúdo exclusivo";
-      titulo.id = "titulo-bloqueio";
-      const descricao = document.createElement("p");
-      descricao.className = "conteudo-bloqueado__resumo";
-      descricao.textContent = `Este conteúdo está disponível a partir do plano ${planoNecessario?.nome ?? conteudo.plano}. Seu plano atual é ${planoAtual?.nome ?? "não identificado"}.`;
-      const lista = document.createElement("ul");
-      lista.className = "conteudo-bloqueado__beneficios";
-      for (const beneficio of planoNecessario?.beneficios ?? []) {
-        const item = document.createElement("li");
-        item.textContent = beneficio;
-        lista.append(item);
-      }
-      const acoes = document.createElement("div");
-      acoes.className = "perfil-acoes";
-      const conhecer = document.createElement("a");
-      conhecer.className = "btn btn--vermelho";
-      conhecer.href = "/planos.html";
-      conhecer.textContent = `Conhecer o plano ${planoNecessario?.nome ?? conteudo.plano}`;
-      const voltar = document.createElement("a");
-      voltar.className = "btn btn--ghost";
-      voltar.href = "/membros.html";
-      voltar.textContent = "Voltar aos conteúdos";
-      acoes.append(conhecer, voltar);
-      bloqueio.append(aviso, titulo, resumo, descricao, lista, acoes);
-      destino.append(bloqueio);
+      destino.append(
+        temAcessoAoConteudo(usuaria.plano, conteudo.plano)
+          ? montarArtigo(conteudo)
+          : montarBloqueio(conteudo, usuaria),
+      );
     }
   }
 </script>

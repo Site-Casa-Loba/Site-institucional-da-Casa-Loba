@@ -1,5 +1,4 @@
 ---
-// Minha assinatura (V2): plano atual, benefícios e ações de gerenciamento.
 // PLACEHOLDER: sem cobrança ativa, troca/cancelamento são demonstração.
 import Layout from "../../layouts/Layout.astro";
 import Cabecalho from "../../components/Cabecalho.astro";
@@ -85,10 +84,10 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
 </style>
 
 <script>
-  import { auth } from "../../lib/auth";
-  import { obterPlano } from "../../lib/planos";
+  import { usuariaDaPagina } from "../../lib/sessao";
+  import { nomeDoPlano, obterPlano } from "../../lib/planos";
 
-  const usuaria = await auth.usuariaAtual();
+  const usuaria = await usuariaDaPagina();
   const intro = document.querySelector<HTMLElement>("[data-intro-assinatura]");
   const detalhes = document.querySelector<HTMLElement>("[data-detalhes-assinatura]");
   const planoAtual = document.querySelector<HTMLElement>("[data-plano-atual]");
@@ -97,7 +96,7 @@ import AreaProtegida from "../../components/AreaProtegida.astro";
 
   if (usuaria && detalhes) {
     const plano = obterPlano(usuaria.plano);
-    const nomePlano = plano?.nome ?? "Não identificado";
+    const nomePlano = nomeDoPlano(usuaria.plano) ?? "Não identificado";
     if (planoAtual) planoAtual.textContent = nomePlano;
     if (valorPlano) valorPlano.textContent = nomePlano;
     if (intro) {

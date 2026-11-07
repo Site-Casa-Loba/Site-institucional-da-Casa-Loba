@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "check": "astro check",
+    "check": "astro check && node scripts/check-contrato.mjs",
     "preview": "astro preview",
     "wix:check": "node --env-file-if-exists=.env scripts/wix-check.mjs"
   },

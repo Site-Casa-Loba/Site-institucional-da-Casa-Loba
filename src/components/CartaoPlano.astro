@@ -1,6 +1,5 @@
 ---
 // Card de um plano, montado com as classes .plano* de src/styles/global.css.
-// Os dados vêm do catálogo em src/lib/planos.ts.
 import type { Plano } from "../lib/planos";
 
 interface Props {
@@ -30,7 +29,6 @@ const { plano, href } = Astro.props;
     color: var(--ameixa);
   }
 
-  /* H3 de card no guia visual: Outfit 700 */
   .plano__nome {
     font-weight: 700;
   }

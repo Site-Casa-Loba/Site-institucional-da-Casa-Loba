@@ -10,46 +10,41 @@ import "../styles/membros.css";
 </div>
 
 <script>
+  import { exigirLogin } from "../lib/guarda";
   import { auth } from "../lib/auth";
-  import { contasTeste, SENHA_DEMO } from "../lib/auth/mockAuth";
 
   const carregando = document.querySelector<HTMLElement>("[data-guard-loading]");
   const conteudo = document.querySelector<HTMLElement>("[data-guard-content]");
-  const destino = `${window.location.pathname}${window.location.search}`;
 
-  try {
-    const usuaria = await auth.usuariaAtual();
-    if (!usuaria) {
-      window.location.replace(`/entrar.html?redirect=${encodeURIComponent(destino)}`);
-    } else if (carregando && conteudo) {
-      carregando.hidden = true;
-      conteudo.hidden = false;
-      if (import.meta.env.DEV) {
-        const seletor = document.createElement("label");
-        seletor.className = "seletor-plano-dev";
-        seletor.textContent = "Trocar plano (DEV)";
-        const select = document.createElement("select");
-        select.setAttribute("aria-label", "Trocar usuária de demonstração");
-        for (const conta of contasTeste) {
-          const opcao = document.createElement("option");
-          opcao.value = conta.email;
-          opcao.textContent = conta.nome;
-          opcao.selected = usuaria.email === conta.email;
-          select.append(opcao);
-        }
-        select.addEventListener("change", async () => {
-          await auth.entrar(select.value, SENHA_DEMO);
-          window.location.reload();
-        });
-        seletor.append(select);
-        document.body.append(seletor);
-      }
+  async function montarSeletorDev(emailAtual: string): Promise<void> {
+    const contas = await auth.contasDemo();
+    if (contas.length === 0) return;
+
+    const seletor = document.createElement("label");
+    seletor.className = "seletor-plano-dev";
+    seletor.textContent = "Trocar plano (DEV)";
+    const select = document.createElement("select");
+    select.setAttribute("aria-label", "Trocar usuária de demonstração");
+    for (const conta of contas) {
+      const opcao = document.createElement("option");
+      opcao.value = conta.email;
+      opcao.textContent = conta.nome;
+      opcao.selected = emailAtual === conta.email;
+      select.append(opcao);
     }
-  } catch (erro) {
-    if (carregando) {
-      carregando.textContent = erro instanceof Error ? erro.message : "Não foi possível conferir seu acesso.";
-      carregando.setAttribute("role", "alert");
-    }
+    select.addEventListener("change", async () => {
+      await auth.entrarDemo(select.value);
+      window.location.reload();
+    });
+    seletor.append(select);
+    document.body.append(seletor);
+  }
+
+  const usuaria = await exigirLogin();
+  if (usuaria && carregando && conteudo) {
+    carregando.hidden = true;
+    conteudo.hidden = false;
+    if (import.meta.env.DEV) await montarSeletorDev(usuaria.email);
   }
 </script>
 

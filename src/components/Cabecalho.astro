@@ -9,7 +9,6 @@ const { solido = false } = Astro.props;
 <nav
   class:list={["nav-flutuante", { "is-scrolled": solido }]}
   id="navFlutuante"
-  data-sempre-solido={solido ? "" : undefined}
 >
   <div class="container nav-flutuante__inner">
     <a href="/#topo" class="logo">
@@ -29,114 +28,92 @@ const { solido = false } = Astro.props;
   </div>
 </nav>
 
-<script src="../scripts/menu.js"></script>
 <script>
-  import { auth } from "../lib/auth";
-  import { iniciarLoginWix, destinoSeguro } from "../lib/auth/iniciarLoginWix";
+  import { sairDaConta, usuariaDaPagina } from "../lib/sessao";
+  import { ligarBotaoEntrar } from "../lib/auth/iniciarLoginWix";
+  import { destinoSeguro } from "../lib/auth/contrato";
+  import type { Usuaria } from "../lib/usuaria";
 
-  // Entrar/Cadastrar vão direto ao Wix (sem modal, sem página intermediária).
+  const nav = document.getElementById("navFlutuante");
+  if (nav && !nav.classList.contains("is-scrolled")) {
+    window.addEventListener("scroll", () => {
+      nav.classList.toggle("is-scrolled", window.scrollY > 40);
+    });
+  }
+
   const destino = destinoSeguro(new URLSearchParams(window.location.search).get("redirect"));
-
-  const irAoWix = async (botao: HTMLButtonElement, modo: "login" | "signup") => {
-    const rotulo = botao.textContent;
-    botao.disabled = true;
-    botao.textContent = modo === "signup" ? "Abrindo cadastro…" : "Entrando…";
-    try {
-      await iniciarLoginWix(destino, modo);
-    } catch (erro) {
-      console.error("[auth] não foi possível iniciar o fluxo Wix:", erro);
-      botao.disabled = false;
-      botao.textContent = rotulo;
-    }
-  };
-
-  document.addEventListener("click", (evento) => {
-    const alvo = evento.target;
-    if (!(alvo instanceof Element)) return;
-    const entrar = alvo.closest<HTMLButtonElement>("[data-entrar-wix]");
-    if (entrar) void irAoWix(entrar, "login");
-    const cadastrar = alvo.closest<HTMLButtonElement>("[data-cadastrar-wix]");
-    if (cadastrar) void irAoWix(cadastrar, "signup");
-  });
-
-  // Fecha o menu da conta ao clicar fora dele
-  document.addEventListener("click", (evento) => {    const menu = document.querySelector<HTMLDetailsElement>(".perfil-menu");
-    if (!menu || !menu.open) return;
-    if (evento.target instanceof Node && !menu.contains(evento.target)) {
-      menu.open = false;
-    }
-  });
-
   const area = document.querySelector<HTMLElement>("[data-nav-auth]");
-  if (area) {
-    try {
-      const usuaria = await auth.usuariaAtual();
-      area.replaceChildren();
-      if (usuaria) {
-        const menu = document.createElement("details");
-        menu.className = "perfil-menu";
-        const resumo = document.createElement("summary");
-        resumo.className = "perfil-link";
-        resumo.setAttribute("aria-label", `Menu da conta de ${usuaria.nome}`);
-        const avatar = document.createElement("span");
-        avatar.className = "perfil-link__avatar";
-        avatar.setAttribute("aria-hidden", "true");
-        if (usuaria.imagem) {
-          const imagem = document.createElement("img");
-          imagem.src = usuaria.imagem;
-          imagem.alt = "";
-          avatar.append(imagem);
-        } else {
-          avatar.textContent = usuaria.nome.charAt(0).toUpperCase();
-        }
-        const nome = document.createElement("span");
-        nome.className = "perfil-link__nome";
-        nome.textContent = usuaria.nome;
-        resumo.append(avatar, nome);
 
-        const opcoes = document.createElement("div");
-        opcoes.className = "perfil-menu__opcoes";
-        const areaMembros = document.createElement("a");
-        areaMembros.href = "/membros.html";
-        areaMembros.textContent = "Área de membros";
-        const perfil = document.createElement("a");
-        perfil.href = "/membros/perfil.html";
-        perfil.textContent = "Perfil";
-        const sair = document.createElement("button");
-        sair.type = "button";
-        sair.className = "perfil-menu__sair";
-        sair.textContent = "Sair";
-        sair.addEventListener("click", async () => {
-          try {
-            await auth.sair();
-            window.location.assign("/");
-          } catch (erro) {
-            const aviso = document.createElement("span");
-            aviso.setAttribute("role", "alert");
-            aviso.textContent = erro instanceof Error ? erro.message : "Não foi possível sair da conta.";
-            area.append(aviso);
-          }
-        });
-        opcoes.append(areaMembros, perfil, sair);
-        menu.append(resumo, opcoes);
-        area.append(menu);
-      } else {
-        const entrar = document.createElement("button");
-        entrar.type = "button";
-        entrar.className = "btn btn--sm btn--vermelho";
-        entrar.dataset.entrarWix = "";
-        entrar.textContent = "Entrar";
-        const cadastro = document.createElement("button");
-        cadastro.type = "button";
-        cadastro.className = "nav-auth__cadastro";
-        cadastro.dataset.cadastrarWix = "";
-        cadastro.textContent = "Cadastrar";
-        area.append(entrar, cadastro);
+  function montarMenuConta(usuaria: Usuaria): HTMLElement {
+    const menu = document.createElement("details");
+    menu.className = "perfil-menu";
+    const resumo = document.createElement("summary");
+    resumo.className = "perfil-link";
+    resumo.setAttribute("aria-label", `Menu da conta de ${usuaria.nome}`);
+    const avatar = document.createElement("span");
+    avatar.className = "perfil-link__avatar";
+    avatar.setAttribute("aria-hidden", "true");
+    if (usuaria.imagem) {
+      const imagem = document.createElement("img");
+      imagem.src = usuaria.imagem;
+      imagem.alt = "";
+      avatar.append(imagem);
+    } else {
+      avatar.textContent = usuaria.nome.charAt(0).toUpperCase();
+    }
+    const nome = document.createElement("span");
+    nome.className = "perfil-link__nome";
+    nome.textContent = usuaria.nome;
+    resumo.append(avatar, nome);
+
+    const opcoes = document.createElement("div");
+    opcoes.className = "perfil-menu__opcoes";
+    const areaMembros = document.createElement("a");
+    areaMembros.href = "/membros.html";
+    areaMembros.textContent = "Área de membros";
+    const perfil = document.createElement("a");
+    perfil.href = "/membros/perfil.html";
+    perfil.textContent = "Perfil";
+    const sair = document.createElement("button");
+    sair.type = "button";
+    sair.className = "perfil-menu__sair";
+    sair.textContent = "Sair";
+    sair.addEventListener("click", async () => {
+      try {
+        await sairDaConta();
+      } catch (erro) {
+        const aviso = document.createElement("span");
+        aviso.setAttribute("role", "alert");
+        aviso.textContent = erro instanceof Error ? erro.message : "Não foi possível sair da conta.";
+        area?.append(aviso);
       }
+    });
+    opcoes.append(areaMembros, perfil, sair);
+    menu.append(resumo, opcoes);
+    return menu;
+  }
+
+  if (area) {
+    const entrar = area.querySelector<HTMLButtonElement>("[data-entrar-wix]");
+    if (entrar) ligarBotaoEntrar(entrar, { modo: "login", destino });
+    const cadastrar = area.querySelector<HTMLButtonElement>("[data-cadastrar-wix]");
+    if (cadastrar) ligarBotaoEntrar(cadastrar, { modo: "signup", destino });
+
+    try {
+      const usuaria = await usuariaDaPagina();
+      if (usuaria) area.replaceChildren(montarMenuConta(usuaria));
     } catch (erro) {
       console.error("Não foi possível carregar a sessão no cabeçalho.", erro);
     }
   }
+
+  document.addEventListener("click", (evento) => {
+    const menu = document.querySelector<HTMLDetailsElement>(".perfil-menu");
+    if (!menu?.open) return;
+    if (evento.target instanceof Node && !menu.contains(evento.target)) {
+      menu.open = false;
+    }
+  });
 </script>
 
 <style>

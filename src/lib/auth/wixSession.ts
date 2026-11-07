@@ -2,12 +2,8 @@
  * SESSÃO WIX NO NAVEGADOR (client-side).
  */
 import { createClient, OAuthStrategy } from "@wix/sdk";
-
-// A SHAPE DOS TOKENS e esta chave também são usadas por
-// public/auth/callback.html (JS puro, sem bundler) — ao mudar um dos dois,
-// mude o outro junto:
-//   callback.html → chave `casaloba_session`, montagem de { accessToken, refreshToken }.
-export const CHAVE_SESSAO_WIX = "casaloba_session";
+import { lerJson, remover, salvarJson } from "../armazenamento";
+import { CHAVE_SESSAO_WIX } from "./contrato";
 
 export interface TokensWix {
   accessToken: { value: string; expiresAt: number };
@@ -17,45 +13,56 @@ export interface TokensWix {
 /** Módulos Wix usados em cada chamada (ex.: { members }, { items }). */
 export type ModulosWix = Record<string, unknown>;
 
-export function lerSessaoLocal(): TokensWix | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const bruto = window.localStorage.getItem(CHAVE_SESSAO_WIX);
-    if (!bruto) return null;
-    const tokens = JSON.parse(bruto) as TokensWix;
-    if (!tokens?.accessToken?.value || !tokens?.refreshToken?.value) return null;
-    return tokens;
-  } catch {
-    return null;
-  }
+function lerSessaoLocal(): TokensWix | null {
+  const tokens = lerJson<TokensWix | null>(CHAVE_SESSAO_WIX, null);
+  if (!tokens?.accessToken?.value || !tokens?.refreshToken?.value) return null;
+  return tokens;
 }
 
-export function salvarSessaoLocal(tokens: TokensWix): void {
+function salvarSessaoLocal(tokens: TokensWix): void {
   try {
-    window.localStorage.setItem(CHAVE_SESSAO_WIX, JSON.stringify(tokens));
+    salvarJson(CHAVE_SESSAO_WIX, tokens);
   } catch (erro) {
     console.error("Não foi possível salvar a sessão do Wix.", erro);
   }
 }
 
 export function limparSessaoLocal(): void {
+  remover(CHAVE_SESSAO_WIX);
+}
+
+/**
+ * Salva os tokens se o SDK os renovou durante uma chamada (o Wix pode
+ * devolver um refresh token novo sem avisar).
+ */
+export function guardarTokensRenovados(
+  client: { auth: { getTokens(): unknown } },
+  anteriores: TokensWix,
+): void {
   try {
-    window.localStorage.removeItem(CHAVE_SESSAO_WIX);
+    const atuais = client.auth.getTokens() as TokensWix | undefined;
+    if (atuais?.refreshToken?.value && atuais.refreshToken.value !== anteriores.refreshToken.value) {
+      salvarSessaoLocal(atuais);
+    }
   } catch {
-    /* armazenamento indisponível */
+    /* sem renovação: segue com os tokens atuais */
   }
 }
 
-export function acessoExpirado(tokens: TokensWix, margemSegundos = 60): boolean {
-  const bruto = Number(tokens.accessToken?.expiresAt ?? 0);
-  const segundos = bruto > 1e12 ? bruto / 1000 : bruto;
-  return segundos - margemSegundos < Date.now() / 1000;
+/** `expiresAt` chega em segundos, mas aceita ms de versões antigas do callback. */
+function expiraEmSegundos(expiresAt: unknown): number {
+  const bruto = Number(expiresAt ?? 0);
+  return bruto > 1e12 ? Math.floor(bruto / 1000) : bruto;
+}
+
+function acessoExpirado(tokens: TokensWix, margemSegundos = 60): boolean {
+  return expiraEmSegundos(tokens.accessToken?.expiresAt) - margemSegundos < Date.now() / 1000;
 }
 
 /**
  * Devolve tokens válidos, renovando o access token com o refresh token
  * quando necessário (POST /oauth2/token, grant refresh_token).
- * Retorna null quando não há sessão ou ela é irrecuperável — o chamador
+ * Retorna null quando não há sessão ou ela é irrecuperável; o chamador
  * decide o redirect.
  */
 export async function sessaoValida(): Promise<TokensWix | null> {

@@ -38,9 +38,9 @@ Cada arquivo em `src/pages/` vira uma página. No host do Wix Headless os arquiv
 | Página | Arquivo | Observação |
 |---|---|---|
 | Landing (home) | `src/pages/index.astro` | Textos da versão atual; planos ainda sem preço definido |
-| Cadastro | `src/pages/cadastro.astro` | Cadastro local de demonstração (página órfã: o cadastro real é o do Wix, pelo cabeçalho) |
+| Cadastro | removida | O cadastro real é o do Wix, pelos botões do cabeçalho |
 | Login | `src/pages/entrar.astro` | Página de login; os botões Entrar/Cadastrar do cabeçalho vão direto ao login do Wix |
-| Recuperar senha | `src/pages/recuperar-senha.astro` | Simulado; envio real de e-mail só na versão Wix |
+| Recuperar senha | removida | A recuperação acontece na página hospedada do Wix |
 | Perfil da usuária | `src/pages/membros/perfil.astro` | Edição de nome e foto (mock local); e-mail não editável |
 | Planos | `src/pages/planos.astro` | Já implementada. Cards da `GradePlanos.astro`, dados do catálogo em `src/lib/planos.ts` (CMS + fallback). Por enquanto, "assinar" leva à pré-inscrição |
 | Pré-inscrição / lista de espera | `src/pages/pre-inscricao.astro` | Já implementada. Substitui o checkout enquanto a comunidade paga não for lançada. O formulário de e-mail ainda não envia nada |
@@ -52,7 +52,7 @@ Cada arquivo em `src/pages/` vira uma página. No host do Wix Headless os arquiv
 | Termos de uso | `src/pages/termos-de-uso.astro` | Minuta 0.2 com revisão jurídica pendente |
 | Política de privacidade | `src/pages/politica-de-privacidade.astro` | Minuta LGPD 0.2 com revisão jurídica pendente |
 
-> Login e cadastro são páginas (`/entrar.html` e `/cadastro.html`); os botões Entrar/Cadastrar do cabeçalho (e da página de entrar) abrem o login real do Wix. A rota `/login` não existe. Contas de demonstração existem apenas em `npm run dev` — veja `docs/AUTH.md`.
+> Login fica em `/entrar.html`; os botões Entrar/Cadastrar do cabeçalho (e da página de entrar) abrem o login real do Wix. A rota `/login` não existe. Contas de demonstração existem apenas em `npm run dev` e nem entram no bundle de produção. Veja `docs/AUTH.md`.
 
 ### Versão 2
 
@@ -78,7 +78,7 @@ Atualize estas tabelas ao criar, renomear ou remover uma página.
 | Seções da landing (hero, sobre, frentes, planos, para quem é, chamada final) | `src/components/` (um componente por seção), montadas em `src/pages/index.astro` |
 | Variáveis de cor/fonte, reset e estilos globais | `src/styles/` |
 | Estilo que só uma página ou componente usa | dentro do próprio `.astro`, em `<style>` |
-| JavaScript do navegador | `src/scripts/` |
+| JavaScript do navegador | dentro do próprio `.astro`, em `<script>` |
 | Conexão com o Wix, regra de acesso por plano, chamadas de pagamento | `src/lib/` |
 | Logo, favicon, imagens e vídeos de apoio | `public/` (imagens em `public/images/`) |
 | Chaves e IDs de ambiente (Wix, Stripe) | arquivo `.env` local, **nunca** commitado |

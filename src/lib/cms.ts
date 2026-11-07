@@ -1,9 +1,9 @@
 /**
- * SERVIDOR/PREFETCH APENAS — nunca importar em scripts de cliente (.js em
+ * SERVIDOR/PREFETCH APENAS: nunca importar em scripts de cliente (.js em
  * <script>): usa WIX_API_TOKEN (credencial de servidor). Importe só no
  * frontmatter de .astro ou em endpoints, que rodam no build.
  *
- * Contrato: erro não derruba o build — quem chama recebe { ok: false, erro }
+ * Contrato: erro não derruba o build; quem chama recebe { ok: false, erro }
  * e decide o que renderizar.
  */
 import { createClient, OAuthStrategy } from "@wix/sdk";
@@ -12,10 +12,10 @@ import { items } from "@wix/data";
 /**
  * Leitura do CMS (Wix Data) pelo Astro. Ver docs/CMS.md.
  *
- * Caminho principal: SDK com token de visitante (PUBLIC_WIX_CLIENT_ID —
- * é o do próprio site headless; client ID de outro site falha com
+ * Caminho principal: SDK com token de visitante (PUBLIC_WIX_CLIENT_ID,
+ * que é o do próprio site headless; client ID de outro site falha com
  * "WDE0110: Wix CMS app is not installed for site"). Fallback: REST da
- * Data Items API com WIX_API_TOKEN — para o CI/build sem client ID e
+ * Data Items API com WIX_API_TOKEN, para o CI/build sem client ID e
  * para transitórios do SDK; leitura REST lê coleções restritas mesmo
  * para anônimos, por isso também é só-servidor.
  */
@@ -26,14 +26,13 @@ export interface ResultadoCms<T> {
   erro?: string;
 }
 
-interface Consulta {
+export interface Consulta {
   ordenarPor?: string;
   ordem?: "ASC" | "DESC";
   limite?: number;
 }
 
 function ambiente(chave: string): string | undefined {
-  // import.meta.env cobre build e SSR Astro; process.env cobre `node` puro.
   return (import.meta.env as Record<string, string | undefined>)[chave] ??
     process.env[chave];
 }
@@ -81,7 +80,7 @@ async function consultarRest<T>(
   return { ok: true, dados: (corpo.dataItems ?? []).map((item) => item.data) };
 }
 
-export async function consultarSdkVisitante<T>(
+async function consultarSdkVisitante<T>(
   colecao: string,
   limite = 50,
 ): Promise<ResultadoCms<T>> {
@@ -118,9 +117,13 @@ function ordenar<T>(dados: T[], por?: string): T[] {
   );
 }
 
-async function consultar<T>(
+/**
+ * Lê uma coleção: tenta o SDK de visitante e cai no REST com a chave de
+ * servidor. Nunca lança: devolve `{ ok: false, erro }`.
+ */
+export async function consultarColecao<T>(
   colecao: string,
-  consulta: Consulta,
+  consulta: Consulta = {},
 ): Promise<ResultadoCms<T>> {
   const limite = consulta.limite ?? 50;
   try {
@@ -139,22 +142,4 @@ async function consultar<T>(
       return { ok: false, dados: [], erro: `${mensagem} (SDK: ${motivo})` };
     }
   }
-}
-
-export interface PlanoCms {
-  _id?: string;
-  slug: string;
-  nome: string;
-  selo: string;
-  cor: string;
-  preco_texto: string;
-  beneficios: string;
-  ordem: number;
-  destaque: boolean;
-  ativo: boolean;
-}
-
-// Leitura pública (ANYONE): usada na landing e na página de teste.
-export function obterPlanosCms(): Promise<ResultadoCms<PlanoCms>> {
-  return consultar<PlanoCms>("planos", { ordenarPor: "ordem" });
 }
