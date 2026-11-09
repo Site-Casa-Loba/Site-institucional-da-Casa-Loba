@@ -2,7 +2,6 @@
 import Layout from "../layouts/Layout.astro";
 import Cabecalho from "../components/Cabecalho.astro";
 import Rodape from "../components/Rodape.astro";
-import GradePlanos from "../components/GradePlanos.astro";
 ---
 
 <Layout>
@@ -14,18 +13,16 @@ import GradePlanos from "../components/GradePlanos.astro";
     <div class="hero__arco" aria-hidden="true"></div>
 
     <div class="container hero__inner">
-      <p class="tag">Rede de apoio</p>
       <h1 class="hero__titulo">
         Aqui somos uma alcatéia onde<br /> maternidade e carreira andam
         <span class="destaque"> lado a lado</span>
       </h1>
       <p class="hero__texto">
-        Uma comunidade de mulheres que apoiam mulheres, onde mães que trabalham, criam ou empreendem, compartilham saberes e reconstroem 
-        <span class="destaque"> JUNTAS</span> a vila.
+        Uma comunidade de mulheres que apoiam mulheres, onde mães que trabalham, criam ou empreendem, compartilham saberes e reconstroem JUNTAS a vila.
       </p>
       <div class="hero__acoes">
-        <a href="#secao-planos" class="btn btn--vermelho">Quero fazer parte</a>
-        <a href="#secao-sobre" class="btn btn--ghost">Conhecer a Casa</a>
+        <a href="/planos.html" class="btn btn--vermelho">Quero fazer parte</a>
+        <a href="#secao-sobre" class="btn btn--ghost">Conhecer a Casa Loba</a>
       </div>
     </div>
   </section>
@@ -38,7 +35,7 @@ import GradePlanos from "../components/GradePlanos.astro";
       <div class="manifesto__topo">
         <div class="selo-loba">sobre a casa loba</div>
         <h2 class="manifesto__titulo">
-          A casa loba é um <span class="destaque">ecossistema</span> de suporte materno e rede de apoio profissionalizada que traz soluções com foco na mãe que trabalha.
+          A casa loba é um <span class="destaque">ecossistema</span> de suporte materno e rede de apoio profissionalizada que traz soluções com foco na mãe que trabalha
         </h2>
       </div>
 
@@ -71,7 +68,7 @@ import GradePlanos from "../components/GradePlanos.astro";
     <div class="container">
       <header class="section-head">
         <p class="tag tag--ameixa">Nossas frentes</p>
-        <h2 class="section-titulo">Cuidado, trabalho e conexão.</h2>
+        <h2 class="section-titulo">Cuidado, trabalho e conexão</h2>
 
         <ul class="frentes__legenda" aria-label="Legenda das cores dos cards">
           <li class="legenda--empresas">para empresas</li>
@@ -134,29 +131,16 @@ import GradePlanos from "../components/GradePlanos.astro";
     </div>
   </section>
 
-  <section class="planos" id="secao-planos">
-    <div class="container container--largo">
-      <header class="section-head">
-        <p class="tag tag--ameixa">Assinatura</p>
-        <h2 class="section-titulo">Entre para nossa comunidade</h2>
-        <p class="section-sub">
-          Aviso: As assinaturas abrem em breve. Entre na lista de espera: quem entra cedo ajuda a decidir como nossa alcatéia vai funcionar.
-        </p>
-      </header>
-
-      <GradePlanos />
-    </div>
-  </section>
-
   <section class="publico" id="secao-publico">
     <div class="container publico__inner">
       <div class="publico__texto">
         <p class="tag tag--ameixa">Para quem é</p>
-        <h2 class="section-titulo">Para mulheres.<br />Para seus projetos.</h2>
+        <h2 class="section-titulo">Para mulheres que não param </h2>
         <p>
-          Para mães e mulheres que empreendem e buscam com quem contar. Um convite para compartilhar experiências, criar vínculos e dar espaço às suas ideias.
+          Para mães que trabalham, empreendem ou estudam, e que sentem na pele a culpa e a sobrecarga da economia do cuidado. E para quem defende uma maternidade com saúde mental, sendo mãe ou não. 
+          < br>Se você se reconheceu, este lugar também é seu.
         </p>
-        <a href="#secao-planos" class="btn btn--ameixa">Quero fazer parte</a>
+        <a href="/planos.html" class="btn btn--ameixa">Quero fazer parte</a>
       </div>
       <div class="publico__foto" aria-hidden="true">
         <div class="foto-arco"></div>
@@ -168,7 +152,7 @@ import GradePlanos from "../components/GradePlanos.astro";
     <div class="container cta-final__inner">
       <h2>Seu próximo passo começa em rede.</h2>
       <p>Conheça a Casa Loba e descubra novas formas de construir caminhos com outras mulheres.</p>
-      <a href="#secao-planos" class="btn btn--vermelho">Conhecer os planos</a>
+      <a href="/planos.html" class="btn btn--vermelho">Conhecer os planos</a>
     </div>
   </section>
 
