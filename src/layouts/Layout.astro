@@ -4,13 +4,30 @@ import "../styles/formulario.css";
 
 interface Props {
   title?: string;
+  description?: string;
   noindex?: boolean;
+  image?: string;
 }
+
+const DESCRICAO_PADRAO =
+  "Conheça a Casa Loba, uma comunidade para mulheres e mães que aproxima cuidado, empreendedorismo e conexões para desenvolver seus projetos.";
 
 const {
   title = "Casa Loba — Rede de apoio para mulheres e mães",
+  description = DESCRICAO_PADRAO,
   noindex = false,
+  
+  // Caminho dentro de public/. Quando existir uma arte 1200x630, troque aqui.
+  image = "/favicon/icon-512.png",
 } = Astro.props;
+
+let caminho = Astro.url.pathname.replace(/\/index(\.html)?$/, "/");
+if (caminho !== "/" && !caminho.endsWith(".html")) {
+  caminho = `${caminho.replace(/\/$/, "")}.html`;
+}
+const base = Astro.site ?? Astro.url;
+const canonical = new URL(caminho, base).href;
+const imagemAbsoluta = new URL(image, base).href;
 ---
 
 <!DOCTYPE html>
@@ -19,15 +36,22 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
-    {noindex && <meta name="robots" content="noindex,nofollow" />}
-    <meta name="description" content="Conheça a Casa Loba, uma comunidade para mulheres e mães que aproxima cuidado, empreendedorismo e conexões para desenvolver seus projetos." />
-    <meta property="og:title" content="Casa Loba" />
-    <meta property="og:description" content="Uma rede para mulheres e mães compartilharem experiências, criarem conexões e desenvolverem seus projetos. Conheça a Casa Loba." />
+    <meta name="description" content={description} />
+    {noindex
+      ? <meta name="robots" content="noindex,nofollow" />
+      : <link rel="canonical" href={canonical} />}
+    <meta property="og:locale" content="pt_BR" />
     <meta property="og:site_name" content="Casa Loba" />
     <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {!noindex && <meta property="og:url" content={canonical} />}
+    <meta property="og:image" content={imagemAbsoluta} />
+    <meta property="og:image:alt" content="Logo da Casa Loba" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Casa Loba" />
-    <meta name="twitter:description" content="Uma rede para mulheres e mães compartilharem experiências, criarem conexões e desenvolverem seus projetos. Conheça a Casa Loba." />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imagemAbsoluta} />
     <link rel="icon" href="/favicon/favicon.ico" sizes="any" />
     <link rel="icon" href="/favicon/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />

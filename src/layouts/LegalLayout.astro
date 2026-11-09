@@ -12,9 +12,11 @@ interface Props {
 
 const { title, intro, current, headings } = Astro.props as Props;
 const sections = headings.filter((heading) => heading.depth === 2);
+
+const titulo = `${title.charAt(0).toUpperCase()}${title.slice(1)} — Casa Loba`;
 ---
 
-<Layout title={`Casa Loba — ${title}`} noindex>
+<Layout title={titulo} description={intro} noindex>
   <div class="legal-page">
     <a href="#documento" class="legal-skip">Ir para o documento</a>
     <header class="legal-header">

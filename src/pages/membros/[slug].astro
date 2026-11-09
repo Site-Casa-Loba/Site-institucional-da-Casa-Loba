@@ -15,7 +15,7 @@ export function getStaticPaths() {
 const { slug } = Astro.params;
 ---
 
-<Layout title="Membro — Casa Loba">
+<Layout title="Membro — Casa Loba" noindex>
   <Cabecalho solido />
   <AreaProtegida>
     <main class="pagina-conteudo-membro" data-pagina-conteudo data-slug={slug}>
