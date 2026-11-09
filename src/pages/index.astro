@@ -30,20 +30,40 @@ import GradePlanos from "../components/GradePlanos.astro";
     </div>
   </section>
 
+    <!-- sobre -->
   <section class="manifesto" id="secao-sobre">
-    <div class="container manifesto__inner">
-      <div class="uivo" aria-hidden="true">
-        <span></span><span></span><span></span>
+    <div class="container">
+      
+      <!-- Topo com Título -->
+      <div class="manifesto__topo">
+        <div class="selo-loba">sobre a casa loba</div>
+        <h2 class="manifesto__titulo">
+          A casa loba é um <span class="destaque">ecossistema</span> de suporte materno e rede de apoio profissionalizada que traz soluções com foco na mãe que trabalha.
+        </h2>
       </div>
 
-      <h2 class="manifesto__titulo">
-        A casa loba é um ecossistema de suporte materno e rede de apoio profissionalizada que traz soluções com foco na mãe que trabalha.
-      </h2>
+      <!-- Grid de Cards -->
+      <div class="manifesto__grid">
+        
+        <!-- Card 1 (Empresas) -->
+        <article class="card-arco card-arco--rosa">
+          <div class="card-icone">1</div>
+          <h3 class="card-titulo">para as empresas</h3>
+          <p class="card-texto">
+            Para que mantenham seus talentos mesmo após a vinda da maternidade, levamos a cuidadoteca in loco montada e customizada em tamanho e duração de acordo com a necessidade, seja dentro do escritório, em congressos ou eventos corporativos.
+          </p>
+        </article>
 
-      <p class="manifesto__texto">
-        Para que as empresas mantenham seus talentos mesmo após a vinda da maternidade, levamos a cuidadoteca in loco montada e customizada em tamanho e duração de acordo com a necessidade, seja dentro do escritório, em congressos ou eventos corporativos.
-        Para as mulheres, trazemos uma comunidade ativa construída por outras mães que entendem as suas dores e sobrecarga do dia a dia, unidas por um propósito maior de crescimento conjunto, network e muita troca.
-      </p>
+        <!-- Card 2 (Mães) -->
+        <article class="card-arco card-arco--vermelho">
+          <div class="card-icone">2</div>
+          <h3 class="card-titulo">para as mães</h3>
+          <p class="card-texto">
+            Trazemos uma comunidade ativa construída por outras mães que entendem as suas dores e sobrecarga do dia a dia, unidas por um propósito maior de crescimento conjunto, network e muita troca.
+          </p>
+        </article>
+
+      </div>
     </div>
   </section>
 
