@@ -206,7 +206,7 @@ h1, h2, h3 {
 }
 
 .hero__texto {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   max-width: 520px;
   margin-bottom: 36px;
 }
@@ -264,18 +264,18 @@ h1, h2, h3 {
 .manifesto__grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 32px;
+  gap: 52px;
 }
 
 .card-arco {
   border-radius: 999px 999px var(--raio) var(--raio); 
-  padding: 140px 40px 40px 40px;
+  padding: 110px 40px 40px 40px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 15px;
   text-align: center;
   transition: transform 0.3s ease;
-  min-height: 450px;
+  min-height: 350px;
 }
 
 .card-arco:hover {
@@ -324,7 +324,7 @@ h1, h2, h3 {
 }
 
 .card-texto {
-  font-size: 1.05rem; 
+  font-size: 1.2rem; 
   line-height: 1.7;
   margin: 0;
   text-align: left; 
@@ -457,22 +457,6 @@ h1, h2, h3 {
   line-height: 1.5;
 }
 
-/* planos*/
-.planos {
-  padding: 120px 0;
-  background: var(--bordo);
-}
-
-.planos .section-titulo,
-.planos .section-sub {
-  color: var(--creme);
-}
-
-.planos .tag--ameixa {
-  color: var(--creme);
-  border-color: var(--creme);
-}
-
 .plano {
   position: relative;
   background: var(--creme);
@@ -528,7 +512,7 @@ h1, h2, h3 {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  font-size: 1rem;
+  font-size: 1.10rem;
   margin: 8px 0 12px;
 }
 
@@ -547,7 +531,7 @@ h1, h2, h3 {
 .publico__inner {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 64px;
+  gap: 94px;
   align-items: center;
 }
 
@@ -556,12 +540,12 @@ h1, h2, h3 {
 
 .publico__foto {
   display: flex;
-  justify-content: center;
+  justify-content: right;
 }
 
 .foto-arco {
   width: 100%;
-  max-width: 360px;
+  max-width: 350px;
   aspect-ratio: 3 / 4;
   background: var(--creme);
   border-radius: 180px 180px 0 0;
