@@ -17,9 +17,10 @@ import { join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const SITE_URL = (
-  process.env.WIX_SITE_URL ??
-  "https://headless-urlsttluzfw-arthursoares1234-1410.wix-site-host.com"
+  process.env.WIX_SITE_URL ?? "https://www.casaloba.com.br"
 ).replace(/\/+$/, "");
+
+const ARQUIVOS_DO_WIX = new Set(["robots.txt", "sitemap.xml"]);
 
 const DIST = fileURLToPath(new URL("../dist/", import.meta.url));
 const RETRIES = Number(process.env.CHECK_RETRIES ?? 5);
@@ -52,7 +53,10 @@ async function fetchLive(path) {
   return { ok: true, body: Buffer.from(await response.arrayBuffer()) };
 }
 
-const files = await listFiles(DIST);
+const files = (await listFiles(DIST)).filter((file) => {
+  const path = relative(DIST, file).split(sep).join("/");
+  return !ARQUIVOS_DO_WIX.has(path);
+});
 
 if (files.length === 0) {
   console.error("dist/ está vazio. Rode `npm run build` antes.");

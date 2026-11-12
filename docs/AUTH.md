@@ -56,7 +56,7 @@ mock sempre foi).
   Settings → Clientes headless* do dashboard) — é o `PUBLIC_WIX_CLIENT_ID`
   do `.env` (e está no CI, pois client ID é público).
 - **Redirect URIs necessárias** (correspondência exata):
-  - Produção: `https://headless-urlsttluzfw-arthursoares1234-1410.wix-site-host.com/auth/callback.html`
+  - Produção: `https://www.casaloba.com.br/auth/callback.html`
   - Local: `http://localhost:4321/auth/callback.html`
 - **O host estático reserva `/api/*` (404)**, então as URIs antigas
   `/api/auth/callback` não servem em produção; a do item acima é a

@@ -109,7 +109,7 @@ npm run wix:check  # confere se o site no ar está igual ao dist/
 ## Deploy
 
 O site fica no Wix Headless em
-<https://headless-urlsttluzfw-arthursoares1234-1410.wix-site-host.com>
+<https://www.casaloba.com.br>
 (site `5542fcdd-bc0a-4731-aa1b-6fa3c00f8082`).
 
 O deploy é automático: cada push na `main` dispara o workflow

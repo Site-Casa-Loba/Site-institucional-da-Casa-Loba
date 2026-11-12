@@ -14,7 +14,7 @@ concurrency:
 
 env:
   WIX_SITE_ID: 5542fcdd-bc0a-4731-aa1b-6fa3c00f8082
-  WIX_SITE_URL: https://headless-urlsttluzfw-arthursoares1234-1410.wix-site-host.com
+  WIX_SITE_URL: https://www.casaloba.com.br
   # ID público do cliente headless (não é secret) — permite ao build ler o CMS.
   PUBLIC_WIX_CLIENT_ID: 177d2fe1-7c67-4af7-a2e0-482dc527d3aa
 
