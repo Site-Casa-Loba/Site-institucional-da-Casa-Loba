@@ -32,10 +32,11 @@
    * e falha se os literais divergirem):
    *   - chave `casaloba_session` e shape dos tokens:
    *     src/lib/auth/wixSession.ts
-   *   - chave `casaloba_oauth`, RETORNO_PADRAO e destino seguro:
-   *     src/lib/auth/contrato.ts
+   *   - chave `casaloba_oauth`, RETORNO_PADRAO, CAMINHO_CALLBACK e
+   *     destino seguro: src/lib/auth/contrato.ts
    */
   var CLIENT_ID = "177d2fe1-7c67-4af7-a2e0-482dc527d3aa";
+  var CAMINHO_CALLBACK = "/auth/callback.html";
   var statusEl = document.getElementById("status");
 
   function falhar(mensagem) {
@@ -89,7 +90,7 @@
         body: JSON.stringify({
           clientId: CLIENT_ID,
           grantType: "authorization_code",
-          redirectUri: window.location.origin + "/auth/callback.html",
+          redirectUri: window.location.origin + CAMINHO_CALLBACK,
           code: code,
           codeVerifier: salvo.oauthData.codeVerifier,
         }),

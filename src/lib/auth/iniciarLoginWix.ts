@@ -1,5 +1,5 @@
 import { createClient, OAuthStrategy } from "@wix/sdk";
-import { CHAVE_OAUTH, RETORNO_PADRAO, destinoSeguro } from "./contrato";
+import { CHAVE_OAUTH, RETORNO_PADRAO, destinoSeguro, uriCallback } from "./contrato";
 
 export interface OpcoesBotaoEntrar {
   modo?: "login" | "signup";
@@ -51,9 +51,9 @@ export async function iniciarLoginWix(
   if (!clientId) throw new Error("PUBLIC_WIX_CLIENT_ID não configurado.");
   const destino = destinoSeguro(retorno);
   // O host estático do Wix reserva /api/* (nada ali responde), então o
-  // callback é /auth/callback.html. A URI exata precisa estar na lista de
-  // redirect URIs do app OAuth (Headless Settings). Ver docs/AUTH.md.
-  const redirectUri = `${window.location.origin}/auth/callback.html`;
+  // callback é public/auth/callback.html. A URI exata precisa estar na lista
+  // de redirect URIs do app OAuth (Headless Settings). Ver docs/AUTH.md.
+  const redirectUri = uriCallback(window.location.origin);
 
   const client = createClient({ auth: OAuthStrategy({ clientId }) });
   const oauthData = client.auth.generateOAuthData(redirectUri, destino);

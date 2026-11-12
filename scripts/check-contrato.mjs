@@ -26,6 +26,9 @@ function extrair(fonte, nome) {
 const chaveSessao = extrair(contrato, "CHAVE_SESSAO_WIX");
 const chaveOauth = extrair(contrato, "CHAVE_OAUTH");
 const retornoPadrao = extrair(contrato, "RETORNO_PADRAO");
+const caminhoCallback = extrair(contrato, "CAMINHO_CALLBACK");
+
+let ok = true;
 
 const idNoCallback = callback.match(/var CLIENT_ID = "([^"]+)"/)?.[1];
 if (!idNoCallback) {
@@ -44,9 +47,9 @@ const regras = [
   [chaveSessao, "chave de sessão (`casaloba_session`)"],
   [chaveOauth, "chave do fluxo OAuth (`casaloba_oauth`)"],
   [retornoPadrao, "retorno padrão (`/membros.html`)"],
+  [`CAMINHO_CALLBACK = "${caminhoCallback}"`, "caminho do callback (`/auth/callback.html`)"],
 ];
 
-let ok = true;
 for (const [literal, rotulo] of regras) {
   if (!callback.includes(literal)) {
     console.error(`contrato divergiu: callback.html não contém ${rotulo}.`);

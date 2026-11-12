@@ -55,12 +55,21 @@ mock sempre foi).
 - O site **Casa Loba | Headless** tem o cliente headless (tela *Headless
   Settings → Clientes headless* do dashboard) — é o `PUBLIC_WIX_CLIENT_ID`
   do `.env` (e está no CI, pois client ID é público).
-- **Redirect URIs necessárias** (correspondência exata):
+- **Redirect URIs necessárias** (correspondência exata, sem curinga):
   - Produção: `https://www.casaloba.com.br/auth/callback.html`
+  - Produção (sem `www`): `https://casaloba.com.br/auth/callback.html`
+  - Subdomínios: `https://(*).casaloba.com.br/auth/callback.html`
   - Local: `http://localhost:4321/auth/callback.html`
-- **O host estático reserva `/api/*` (404)**, então as URIs antigas
-  `/api/auth/callback` não servem em produção; a do item acima é a
-  correta.
+- O caminho é **um só**, definido em `CAMINHO_CALLBACK`
+  (`src/lib/auth/contrato.ts`) e repetido em `public/auth/callback.html`;
+  `npm run check` falha se divergirem. Não invente outra URI: o valor
+  enviado é sempre `origem + CAMINHO_CALLBACK`.
+- **Os *Redirect domains* não bastam.** O Wix trata `redirect_uri` com
+  correspondência exata; a lista de domínios permite só o PUT do valor
+  final. Ter o domínio cadastrado e a URI não é exatamente o mesmo erro.
+- **O host estático reserva `/api/*` (404)**, então as URIs herdadas do
+  template (`/api/auth/callback`) não servem em produção; as do item
+  acima são as corretas.
 - **A API não permite editar a lista** de redirect URIs (testado em
   04/11/2026: o campo é ignorado). A edição é manual no painel
   (Headless Settings → Clientes headless → CompanionApp → Redirect URIs).
