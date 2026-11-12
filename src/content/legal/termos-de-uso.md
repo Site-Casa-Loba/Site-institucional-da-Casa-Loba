@@ -1,81 +1,42 @@
-## 1 Quem oferece os serviços
+## 1. Quem é responsável pelo site
 
-A Casa Loba é uma comunidade voltada a mulheres e mães empreendedoras. O site [PREENCHER_DOMINIO] é operado por [PREENCHER_RESPONSAVEL_LEGAL], inscrito no [PREENCHER_CNPJ_OU_IDENTIFICACAO_APLICAVEL], com endereço em [PREENCHER_ENDERECO_COMPLETO], responsável pela oferta e pelo atendimento previstos nestes Termos.
+O site **www.casaloba.com.br** é operado pelo **Grupo Casa Loba e Argos Ltda.**, CNPJ **39.713.134/0001-95**, representado por Larissa Mayumi Tanaka Onuki. O endereço do fornecedor é **[endereço cadastral a confirmar]**.
 
-Para dúvidas, suporte, cancelamentos e reembolsos, fale com [PREENCHER_EMAIL_ATENDIMENTO]. Para questões sobre dados pessoais, utilize [PREENCHER_EMAIL_PRIVACIDADE].
+Para dúvidas sobre a Casa Loba, problemas de acesso, cobranças, cancelamentos ou reembolsos, escreva para **contato@casaloba.com.br**.
 
-## 2 O que o site oferece
+## 2. Lista de espera e acesso à comunidade
 
-O site apresenta a Casa Loba e utiliza a plataforma Wix para sua estrutura digital, conforme os recursos ativados. Quando disponibilizados, os recursos permitem cadastro, acesso a conteúdos e contratação de planos de participação na comunidade. Os serviços incluídos são exclusivamente os descritos na oferta vigente e no resumo apresentado antes da contratação.
+O lançamento da comunidade começa pela lista de espera. A inscrição é gratuita e serve para solicitar um aviso sobre a abertura da comunidade. Inscrever-se não gera cobrança ou assinatura, nem garante vaga ou preço.
 
-Iniciativas identificadas como “em breve”, incluindo Cuidadoteca, eventos próprios e parcerias com coworkings, estão em desenvolvimento. Sua divulgação não significa disponibilidade atual, reserva de vaga ou inclusão em uma assinatura.
+Quando a área de membros estiver disponível, o acesso a vídeos, materiais e demais recursos seguirá as condições de cada plano. Mantenha seus dados de cadastro atualizados e proteja suas credenciais. O mural é restrito às integrantes da comunidade. A participação no grupo de WhatsApp é opcional.
 
-Uma lista de espera ou pré-inscrição é gratuita, não gera cobrança, não constitui assinatura e não garante vaga, preço ou data de lançamento. A contratação paga exige uma oferta específica e a confirmação expressa da interessada.
+## 3. Planos e pagamentos
 
-## 3 Cadastro e acesso
+- **Loba Livre** oferece acesso aos conteúdos abertos da Casa Loba.
+- **Loba Essencial** inclui os conteúdos do Loba Livre, materiais exclusivos em PDF e convites para rodas de conversa.
+- **Loba Ativa** inclui os benefícios do Loba Essencial e desconto na inscrição do Sábado Loba.
+- **Loba Rede** reúne os benefícios dos planos anteriores e inclui cortesia de inscrição no Sábado Loba e mentoria. As condições da cortesia e da mentoria serão apresentadas na oferta.
 
-A contratação e a conta de membro destinam-se a pessoas com 18 anos ou mais. Esta é uma regra da oferta da Casa Loba. Forneça informações corretas, mantenha seus contatos atualizados e proteja sua senha. Não compartilhe credenciais ou utilize a conta de outra pessoa.
+Quando a contratação estiver disponível, você poderá conferir o preço, os benefícios, a periodicidade, as condições de renovação e os canais de cancelamento antes de confirmar a compra. Os planos pagos terão cobrança mensal com renovação automática. A **Ticto** processará os pagamentos. Informe os dados do cartão apenas no checkout indicado.
 
-Se identificar uso indevido de sua conta, comunique o atendimento para que possamos avaliar medidas de proteção. A Casa Loba também deve manter a segurança dos serviços sob sua responsabilidade. Problemas de acesso ou de reconhecimento do pagamento podem ser informados pelo mesmo canal.
+O acesso ao plano pago será liberado em **até dois dias após a confirmação do pagamento**. Se esse prazo passar e você ainda não tiver acesso, fale com a Casa Loba pelo e-mail de atendimento.
 
-## 4 Planos e contratação
+## 4. Mudança de plano, cancelamento e reembolso
 
-Antes de confirmar uma compra, você terá acesso ao nome do plano, benefícios, restrições, preço total, eventuais parcelas e juros, periodicidade das cobranças, duração, regras de renovação, prazo de liberação e forma de cancelamento. Você poderá corrigir os dados antes da conclusão e receberá uma confirmação em meio que permita guardar as condições contratadas.
+A Casa Loba comunicará alterações de preço ou benefícios para períodos futuros com **um mês de antecedência**, respeitando as condições do período já contratado e os direitos da consumidora. **[Confirmar como funcionam as trocas de plano e os ajustes de valor.]**
 
-O acesso será liberado após a confirmação do pagamento, dentro do prazo informado na oferta. O fato de uma página mencionar cursos, murais ou grupos não torna esses recursos parte de todos os planos. Não há promessa de renda, vendas, clientes ou resultados profissionais específicos.
+Para cancelar a renovação ou solicitar reembolso, escreva para **contato@casaloba.com.br**. O cancelamento impede a próxima renovação e mantém o acesso até o fim do período pago, preservados os reembolsos legalmente devidos.
 
-Uma assinatura recorrente gera novas cobranças por período, conforme autorização expressa no checkout. Uma compra parcelada divide o preço de uma contratação e não se transforma em assinatura por esse motivo. A oferta deve deixar essa diferença clara. Não haverá conversão automática de lista de espera em plano pago.
+Nas compras pela internet, você pode exercer o direito de arrependimento em até **sete dias**, contados da assinatura ou do recebimento do serviço, conforme o caso. Você poderá fazer o pedido pela ferramenta usada na contratação, em **[indicar o caminho no checkout]**, ou pelo e-mail de atendimento. A Casa Loba confirmará o recebimento e providenciará a restituição integral dos valores pagos quando o direito for exercido dentro do prazo aplicável. [Código de Defesa do Consumidor, art. 49](https://www2.camara.leg.br/legin/fed/lei/1990/lei-8078-11-setembro-1990-365086-normaatualizada-pl.html) · [Decreto do comércio eletrônico, art. 5º](https://www2.camara.leg.br/legin/fed/decret/2013/decreto-7962-15-marco-2013-775557-publicacaooriginal-139266-pe.html).
 
-## 5 Pagamento por cartão
+## 5. Convivência e uso dos materiais
 
-O pagamento será processado pela Ticto, identificada antes da confirmação da compra, com política de privacidade disponível em [PREENCHER_URL_PRIVACIDADE_TICTO]. A aprovação depende das verificações do prestador e do emissor do cartão. A Casa Loba permanece responsável pelas suas obrigações como fornecedora.
+Respeite as integrantes da comunidade. Compartilhe informações de outras pessoas somente quando tiver autorização. A Casa Loba pode remover publicações que envolvam assédio, discriminação, fraude, ameaças ou exposição indevida de dados. Conforme a gravidade da situação, poderá advertir ou suspender a conta. Envie denúncias e pedidos de revisão para **contato@casaloba.com.br**, aos cuidados de Larissa.
 
-Use apenas cartão próprio ou cujo uso tenha sido autorizado pelo titular. Insira os dados do cartão somente no ambiente seguro de pagamento indicado no checkout. Não envie número completo, foto do cartão, senha ou código de segurança por WhatsApp, e-mail, formulário de contato ou mural.
+Os conteúdos da Casa Loba podem ser usados para aprendizado e participação, conforme as condições do plano. A reprodução, redistribuição ou venda de materiais protegidos exige autorização, ressalvados os usos permitidos por lei.
 
-Em caso de cobrança recusada, duplicada, não reconhecida ou de acesso não liberado, procure nosso atendimento. A contestação perante a instituição financeira continua disponível. Antes de suspender o acesso por falta de pagamento, informaremos a ocorrência e o meio de regularização; suspeitas de fraude podem exigir proteção imediata, com possibilidade de contestação.
+## 6. Eventos e Cuidadoteca
 
-## 6 Renovação e mudanças de plano
+Cada edição terá programação, disponibilidade e condições de inscrição próprias. Os descontos e as cortesias para o Sábado Loba seguirão as condições informadas na oferta do plano e na inscrição do evento.
 
-Quando houver renovação automática, sua periodicidade e valor serão apresentados de forma destacada antes do aceite. Você poderá impedir cobranças futuras pelo procedimento de cancelamento abaixo. Alterações de plano dependerão de sua solicitação, com informação prévia sobre preço, início dos novos benefícios e eventual ajuste proporcional.
-
-Mudanças de preço ou de benefícios para períodos futuros serão comunicadas com antecedência de [PREENCHER_ANTECEDENCIA_ALTERACOES] dias, permitindo decidir pela continuidade ou pelo cancelamento antes da próxima cobrança. As condições do período já contratado serão respeitadas, assim como as normas aplicáveis à alteração contratual.
-
-## 7 Cancelamento e reembolsos
-
-Você pode solicitar o cancelamento a qualquer momento por [PREENCHER_CANAL_CANCELAMENTO] ou pelo e-mail de atendimento. A Casa Loba enviará confirmação do recebimento e do resultado. Nas assinaturas recorrentes, a solicitação impede as próximas renovações. Se uma cobrança posterior ocorrer por falha de processamento, será corrigida com o respectivo estorno.
-
-Fora do prazo de arrependimento, o cancelamento de uma assinatura preserva o acesso até o fim do período pago. Não há devolução automática do período regularmente disponibilizado apenas por deixar de utilizar o serviço. Permanecem assegurados os reembolsos devidos por falha, descumprimento da oferta ou outras hipóteses legais. Cancelar renovação não elimina, por si só, parcelas de uma compra única válida; eventual rescisão dessa compra será analisada conforme a oferta e a legislação.
-
-Nas contratações pela internet, você pode exercer o direito de arrependimento em até sete dias da assinatura do contrato ou do recebimento do produto ou serviço, conforme o caso, nos termos do art. 49 do Código de Defesa do Consumidor. Utilize o canal de cancelamento ou o atendimento, inclusive pela mesma ferramenta de contratação. O exercício desse direito não exige justificativa e implica devolução integral dos valores pagos, sem multa. O simples acesso ao conteúdo digital não implica renúncia automática a esse direito.
-
-A Casa Loba comunicará imediatamente o pedido de arrependimento à instituição financeira ou administradora do cartão para impedir o lançamento ou efetuar o estorno, conforme o caso, e confirmará a solicitação à consumidora. O prazo de visualização do crédito na fatura depende do processamento do emissor, sem afastar nossa obrigação de acompanhar a solução.
-
-## 8 Convivência na comunidade
-
-Respeite as outras participantes. São proibidos assédio, discriminação, ameaças, fraude, spam, divulgação não autorizada de dados de terceiros, violação de direitos autorais e exposição indevida de crianças. Não publique informações de saúde ou outros dados sensíveis em espaços coletivos. Denúncias podem ser enviadas ao atendimento.
-
-Murais e grupos de WhatsApp, quando oferecidos, terão indicação de quem pode visualizar as publicações. Em grupos de WhatsApp, seu número, nome, foto e mensagens podem ficar visíveis a outros participantes conforme as funcionalidades e configurações do aplicativo. A entrada depende de uma ação sua. Você pode sair do grupo; antes da contratação, a oferta informará se essa participação integra algum benefício essencial do plano.
-
-Violações podem resultar em remoção de conteúdo, advertência, suspensão ou encerramento de conta, de forma proporcional à gravidade e ao risco. Situações urgentes podem exigir ação imediata. Você será informada do motivo, quando isso não comprometer a segurança ou obrigações legais, e poderá pedir reavaliação pelo atendimento. Eventuais valores devidos serão tratados conforme a lei, sem perda automática de todo o período pago.
-
-## 9 Conteúdos e direitos de uso
-
-Os conteúdos disponibilizados pela Casa Loba podem ser utilizados para aprendizado e participação pessoal, nos limites do plano contratado. Não é permitido revender, redistribuir ou publicar materiais protegidos sem autorização, ressalvadas as utilizações permitidas por lei.
-
-Você conserva os direitos sobre o conteúdo que publicar. Autoriza apenas sua hospedagem, exibição ao público informado e moderação necessárias ao funcionamento do recurso utilizado. O uso de sua imagem, depoimento ou publicação em publicidade da Casa Loba exige autorização específica, separada da contratação.
-
-## 10 Disponibilidade e responsabilidade
-
-Manutenções e falhas técnicas podem afetar temporariamente o acesso. A Casa Loba informará interrupções relevantes e adotará providências para restabelecer o serviço. Se houver descumprimento da oferta, serão observados os direitos da consumidora, inclusive as soluções legalmente cabíveis de reexecução, abatimento ou restituição.
-
-Quando houver contratação separada com um parceiro, identificaremos quem oferece e executa o serviço e suas condições antes da compra. A participação de plataformas ou parceiros não afasta as responsabilidades legais de cada integrante da relação de consumo. Estes Termos não excluem direitos obrigatórios nem afastam responsabilidade por falhas atribuíveis à Casa Loba.
-
-## 11 Privacidade e alterações destes Termos
-
-O tratamento de dados é explicado na [Política de Privacidade](/politica-de-privacidade.html). A ciência dessa política não equivale a autorização genérica para qualquer uso de dados. Marketing e outras atividades que dependam de consentimento terão escolhas específicas.
-
-Alterações relevantes destes Termos serão comunicadas com destaque, indicação da nova versão e data de vigência. Não serão aplicadas retroativamente para retirar direitos já adquiridos. Quando a mudança exigir novo aceite ou autorização, ele será solicitado antes de sua aplicação.
-
-## 12 Lei aplicável e atendimento
-
-Aplicam-se as leis brasileiras. Você pode buscar o atendimento da Casa Loba, os órgãos de defesa do consumidor e as autoridades competentes. Para demandas de consumo, é preservado o foro do seu domicílio, conforme a legislação aplicável.
+A inscrição na Cuidadoteca deve ser feita pela pessoa responsável pela criança. As condições de atendimento e o aviso de privacidade serão apresentados antes da inscrição. O uso de imagens ou depoimentos para divulgação será tratado em autorização específica.
