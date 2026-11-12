@@ -4,11 +4,30 @@ import { PLANO_LIVRE, obterPlano, obterPlanos } from "../lib/planos";
 
 const planoLivre = obterPlano(PLANO_LIVRE);
 const planosPagos = await obterPlanos();
+
+const CHECKOUT_TICTO: Record<string, string> = {
+  "loba-essencial": "https://payment.ticto.app/OECFA7173",
+  "loba-ativa": "https://payment.ticto.app/OE159E066",
+  "loba-rede": "https://payment.ticto.app/OE887B542",
+};
+
+function obterLinkCheckout(plano: (typeof planosPagos)[number]): string {
+  if (plano.id && CHECKOUT_TICTO[plano.id]) {
+    return CHECKOUT_TICTO[plano.id];
+  }
+
+  const nome = (plano.nome || "").toLowerCase();
+  if (nome.includes("essencial")) return CHECKOUT_TICTO["loba-essencial"];
+  if (nome.includes("ativa")) return CHECKOUT_TICTO["loba-ativa"];
+  if (nome.includes("rede")) return CHECKOUT_TICTO["loba-rede"];
+
+  return "/pre-inscricao.html";
+}
 ---
 
 <div class="grid-planos">
   {planoLivre && <CartaoPlano plano={planoLivre} />}
-  {planosPagos.map((plano) => <CartaoPlano plano={plano} href="/pre-inscricao.html" />)}
+  {planosPagos.map((plano) => <CartaoPlano plano={plano} href={obterLinkCheckout(plano)} />)}
 </div>
 
 <style>
