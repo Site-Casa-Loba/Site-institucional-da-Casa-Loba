@@ -36,7 +36,7 @@ body {
   font-family: var(--font-corpo);
   background: var(--creme);
   color: var(--ameixa);
-  font-size: 18px;
+  font-size: 1.35rem;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
@@ -69,7 +69,7 @@ h1, h2, h3 {
   display: inline-block;
   font-family: var(--font-titulo);
   font-weight: 600;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   letter-spacing: 0.12em;
   text-transform: lowercase;
   padding: 6px 16px;
@@ -92,7 +92,7 @@ h1, h2, h3 {
 }
 
 .section-titulo {
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
   margin-bottom: 16px;
 }
 
@@ -108,7 +108,7 @@ h1, h2, h3 {
   justify-content: center;
   font-family: var(--font-titulo);
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 1.20rem;
   line-height: inherit;
   text-align: inherit;
   padding: 14px 28px;
@@ -272,7 +272,7 @@ h1, h2, h3 {
   padding: 110px 40px 40px 40px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
   text-align: center;
   transition: transform 0.3s ease;
   min-height: 350px;
@@ -317,14 +317,14 @@ h1, h2, h3 {
 
 .card-titulo {
   font-family: var(--font-titulo);
-  font-size: 1.5rem; 
+  font-size: 1.75rem; 
   font-weight: 800; 
   margin: 0;
   text-transform: lowercase;
 }
 
 .card-texto {
-  font-size: 1.2rem; 
+  font-size: 1.35rem; 
   line-height: 1.7;
   margin: 0;
   text-align: left; 
@@ -333,7 +333,7 @@ h1, h2, h3 {
 
 /* frentes*/
 .frentes {
-  padding: 140px 0;
+  padding: 150px 0;
   background: var(--creme);
 }
 
@@ -373,6 +373,7 @@ h1, h2, h3 {
 
 /* ---------- Nossas frentes: 6 cards (empresas = vermelho, mães = rosa) ---------- */
 .frentes .section-head {
+  max-width: 900px;
   margin-bottom: 48px;
 }
 
@@ -390,7 +391,7 @@ h1, h2, h3 {
   gap: 10px;
   font-family: var(--font-titulo);
   font-weight: 600;
-  font-size: 1.05rem;
+  font-size: 1.10rem;
   letter-spacing: 0.04em;
   text-transform: lowercase;
   color: var(--ameixa);
@@ -448,7 +449,7 @@ h1, h2, h3 {
 
 .frente__titulo {
   font-family: var(--font-titulo);
-  font-size: clamp(1.4rem, 2vw, 1.65rem);
+  font-size: clamp(1.4rem, 2vw, 1.75rem);
   font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1.15;
@@ -456,7 +457,7 @@ h1, h2, h3 {
 
 .frente__texto {
   font-family: var(--font-corpo);
-  font-size: 1.15rem;
+  font-size: 1.35rem;
   line-height: 1.55;
 }
 
