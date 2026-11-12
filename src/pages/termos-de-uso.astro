@@ -1,6 +1,6 @@
 ---
 import LegalLayout from "../layouts/LegalLayout.astro";
-import { Content, getHeadings } from "../content/legal/termos-de-uso.md";
+import { Content, getHeadings, frontmatter } from "../content/legal/termos-de-uso.md";
 
 const headings = getHeadings();
 ---
@@ -10,6 +10,7 @@ const headings = getHeadings();
   intro="Conheça as condições de participação na Casa Loba, contratação de planos, pagamentos e cancelamentos."
   current="termos"
   headings={headings}
+  atualizadaEm={frontmatter.atualizadaEm}
 >
   <Content />
 </LegalLayout>

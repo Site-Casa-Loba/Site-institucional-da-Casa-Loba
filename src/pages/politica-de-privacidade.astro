@@ -1,6 +1,6 @@
 ---
 import LegalLayout from "../layouts/LegalLayout.astro";
-import { Content, getHeadings } from "../content/legal/politica-de-privacidade.md";
+import { Content, getHeadings, frontmatter } from "../content/legal/politica-de-privacidade.md";
 
 const headings = getHeadings();
 ---
@@ -10,6 +10,7 @@ const headings = getHeadings();
   intro="Entenda como seus dados são utilizados, com quem são compartilhados e como exercer seus direitos."
   current="privacidade"
   headings={headings}
+  atualizadaEm={frontmatter.atualizadaEm}
 >
   <Content />
 </LegalLayout>
