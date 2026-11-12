@@ -1,3 +1,7 @@
+---
+atualizadaEm: 2026-11-12
+---
+
 ## 1. Quem é responsável pelo site
 
 O site **www.casaloba.com.br** é operado pelo **Grupo Casa Loba e Argos Ltda.**, CNPJ **39.713.134/0001-95**, representado por Larissa Mayumi Tanaka Onuki.

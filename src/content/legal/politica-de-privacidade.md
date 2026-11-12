@@ -1,3 +1,7 @@
+---
+atualizadaEm: 2026-11-12
+---
+
 ## 1. Quem cuida dos seus dados
 
 O **Grupo Casa Loba e Argos Ltda.**, CNPJ **39.713.134/0001-95**, é responsável pelo tratamento de dados pessoais descrito nesta política. Para tirar dúvidas ou fazer um pedido sobre seus dados, escreva para **contato@casaloba.com.br**. **Amabile Carvalho** é o contato indicado para receber essas solicitações.

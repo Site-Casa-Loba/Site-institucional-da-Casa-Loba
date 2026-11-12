@@ -8,9 +8,13 @@ interface Props {
   intro: string;
   current: "termos" | "privacidade";
   headings: { depth: number; slug: string; text: string }[];
+  atualizadaEm: string;
 }
 
-const { title, intro, current, headings } = Astro.props as Props;
+const { title, intro, current, headings, atualizadaEm } = Astro.props as Props;
+const [ano, mes, dia] = atualizadaEm.slice(0, 10).split("-");
+const MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+const dataBonita = `${Number(dia)} de ${MESES[Number(mes) - 1]} de ${ano}`;
 const sections = headings.filter((heading) => heading.depth === 2);
 
 const titulo = `${title.charAt(0).toUpperCase()}${title.slice(1)} — Casa Loba`;
@@ -33,7 +37,7 @@ const titulo = `${title.charAt(0).toUpperCase()}${title.slice(1)} — Casa Loba`
           <span class="tag">informações da casa</span>
           <h1 id="legal-title">{title}</h1>
           <p class="legal-hero__intro">{intro}</p>
-          <p class="legal-meta">Versão 0.2 para aprovação · Atualizada em <time datetime="2026-10-28">28 de outubro de 2026</time></p>
+          <p class="legal-meta">Atualizada em <time datetime={atualizadaEm.slice(0, 10)}>{dataBonita}</time></p>
           <nav class="legal-tabs" aria-label="Documentos legais">
             <a href="/termos-de-uso.html" aria-current={current === "termos" ? "page" : undefined}>termos de uso</a>
             <a href="/politica-de-privacidade.html" aria-current={current === "privacidade" ? "page" : undefined}>política de privacidade</a>
