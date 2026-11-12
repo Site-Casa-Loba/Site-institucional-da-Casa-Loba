@@ -36,6 +36,8 @@ publicados; as decisões pendentes vivem aqui.
       vale desde a publicação. A linha foi removida.
 - [x] **Versão/rótulo de rascunho:** o cabeçalho agora mostra apenas
       "Atualizada em [data]", vinda do frontmatter `atualizadaEm` dos `.md`.
+- [x] **Banner "minuta para revisão":** removido do `LegalLayout.astro`. A
+      revisão jurídica dos textos continua pendente — ver itens acima.
 
 ## Seções removidas em relação à versão anterior
 

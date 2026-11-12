@@ -45,13 +45,6 @@ const titulo = `${title.charAt(0).toUpperCase()}${title.slice(1)} — Casa Loba`
         </div>
       </section>
 
-      <div class="container legal-notice">
-        <aside aria-label="Situação desta minuta">
-          <strong>minuta para revisão</strong>
-          <p>Este texto precisa de revisão jurídica antes de ser considerado final. Wix e Ticto são as plataformas escolhidas. Os campos em aberto e a configuração dos serviços devem ser confirmados antes da publicação definitiva, que depende da aprovação das sócias.</p>
-        </aside>
-      </div>
-
       <div class="container legal-body">
         <nav class="legal-index" aria-label="Seções do documento">
           <h2>neste documento</h2>
@@ -89,8 +82,6 @@ const titulo = `${title.charAt(0).toUpperCase()}${title.slice(1)} — Casa Loba`
   .legal-tabs a { padding: 10px 20px; border: 1.5px solid var(--ameixa); border-radius: var(--capsula); font-family: var(--font-titulo); font-weight: 700; font-size: 1rem; }
   .legal-tabs a[aria-current="page"] { background: var(--ameixa); color: var(--creme); }
   .legal-tabs a:hover { text-decoration: underline; text-underline-offset: 4px; }
-  .legal-notice aside { background: var(--rosa); border-radius: var(--raio); padding: 32px; }
-  .legal-notice strong { display: block; font-family: var(--font-titulo); font-size: 1.25rem; margin-bottom: 8px; }
   .legal-body { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: var(--gap); align-items: start; padding-top: 64px; padding-bottom: 120px; }
   .legal-index { position: sticky; top: 104px; max-height: calc(100dvh - 128px); overflow-y: auto; padding: 4px 12px 12px 4px; }
   .legal-index h2 { font-size: 1.25rem; margin-bottom: 20px; }
@@ -119,7 +110,6 @@ const titulo = `${title.charAt(0).toUpperCase()}${title.slice(1)} — Casa Loba`
     .legal-hero h1 { font-size: clamp(2rem, 10vw, 3rem); }
     .legal-tabs { flex-direction: column; }
     .legal-tabs a { text-align: center; }
-    .legal-notice aside { padding: 24px; }
     .legal-body { padding-top: 40px; padding-bottom: 64px; }
     .legal-index ol { grid-template-columns: minmax(0, 1fr); }
     .legal-copy { padding: 32px 24px; }
