@@ -1,6 +1,6 @@
 ## 1. Quem é responsável pelo site
 
-O site **www.casaloba.com.br** é operado pelo **Grupo Casa Loba e Argos Ltda.**, CNPJ **39.713.134/0001-95**, representado por Larissa Mayumi Tanaka Onuki. O endereço do fornecedor é **[endereço cadastral a confirmar]**.
+O site **www.casaloba.com.br** é operado pelo **Grupo Casa Loba e Argos Ltda.**, CNPJ **39.713.134/0001-95**, representado por Larissa Mayumi Tanaka Onuki.
 
 Para dúvidas sobre a Casa Loba, problemas de acesso, cobranças, cancelamentos ou reembolsos, escreva para **contato@casaloba.com.br**.
 
@@ -23,11 +23,11 @@ O acesso ao plano pago será liberado em **até dois dias após a confirmação 
 
 ## 4. Mudança de plano, cancelamento e reembolso
 
-A Casa Loba comunicará alterações de preço ou benefícios para períodos futuros com **um mês de antecedência**, respeitando as condições do período já contratado e os direitos da consumidora. **[Confirmar como funcionam as trocas de plano e os ajustes de valor.]**
+A Casa Loba comunicará alterações de preço ou benefícios para períodos futuros com **um mês de antecedência**, respeitando as condições do período já contratado e os direitos da consumidora.
 
 Para cancelar a renovação ou solicitar reembolso, escreva para **contato@casaloba.com.br**. O cancelamento impede a próxima renovação e mantém o acesso até o fim do período pago, preservados os reembolsos legalmente devidos.
 
-Nas compras pela internet, você pode exercer o direito de arrependimento em até **sete dias**, contados da assinatura ou do recebimento do serviço, conforme o caso. Você poderá fazer o pedido pela ferramenta usada na contratação, em **[indicar o caminho no checkout]**, ou pelo e-mail de atendimento. A Casa Loba confirmará o recebimento e providenciará a restituição integral dos valores pagos quando o direito for exercido dentro do prazo aplicável. [Código de Defesa do Consumidor, art. 49](https://www2.camara.leg.br/legin/fed/lei/1990/lei-8078-11-setembro-1990-365086-normaatualizada-pl.html) · [Decreto do comércio eletrônico, art. 5º](https://www2.camara.leg.br/legin/fed/decret/2013/decreto-7962-15-marco-2013-775557-publicacaooriginal-139266-pe.html).
+Nas compras pela internet, você pode exercer o direito de arrependimento em até **sete dias**, contados da assinatura ou do recebimento do serviço, conforme o caso. Você poderá fazer o pedido pela ferramenta usada na contratação ou pelo e-mail de atendimento. A Casa Loba confirmará o recebimento e providenciará a restituição integral dos valores pagos quando o direito for exercido dentro do prazo aplicável. [Código de Defesa do Consumidor, art. 49](https://www2.camara.leg.br/legin/fed/lei/1990/lei-8078-11-setembro-1990-365086-normaatualizada-pl.html) · [Decreto do comércio eletrônico, art. 5º](https://www2.camara.leg.br/legin/fed/decret/2013/decreto-7962-15-marco-2013-775557-publicacaooriginal-139266-pe.html).
 
 ## 5. Convivência e uso dos materiais
 

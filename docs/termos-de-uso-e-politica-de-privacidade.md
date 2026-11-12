@@ -4,7 +4,7 @@
 
 ## 1. Quem é responsável pelo site
 
-O site **[www.casaloba.com.br](http://www.casaloba.com.br/)** é operado pelo **Grupo Casa Loba e Argos Ltda.**, CNPJ **39.713.134/0001-95**, representado por Larissa Mayumi Tanaka Onuki. O endereço do fornecedor é **[endereço cadastral a confirmar]**.
+O site **[www.casaloba.com.br](http://www.casaloba.com.br/)** é operado pelo **Grupo Casa Loba e Argos Ltda.**, CNPJ **39.713.134/0001-95**, representado por Larissa Mayumi Tanaka Onuki. 
 
 Para dúvidas sobre a Casa Loba, problemas de acesso, cobranças, cancelamentos ou reembolsos, escreva para **contato@casaloba.com.br**.
 
@@ -27,11 +27,11 @@ O acesso ao plano pago será liberado em **até dois dias após a confirmação 
 
 ## 4. Mudança de plano, cancelamento e reembolso
 
-A Casa Loba comunicará alterações de preço ou benefícios para períodos futuros com **um mês de antecedência**, respeitando as condições do período já contratado e os direitos da consumidora. **[Confirmar como funcionam as trocas de plano e os ajustes de valor.]**
+A Casa Loba comunicará alterações de preço ou benefícios para períodos futuros com **um mês de antecedência**, respeitando as condições do período já contratado e os direitos da consumidora.
 
 Para cancelar a renovação ou solicitar reembolso, escreva para **contato@casaloba.com.br**. O cancelamento impede a próxima renovação e mantém o acesso até o fim do período pago, preservados os reembolsos legalmente devidos.
 
-Nas compras pela internet, você pode exercer o direito de arrependimento em até **sete dias**, contados da assinatura ou do recebimento do serviço, conforme o caso. Você poderá fazer o pedido pela ferramenta usada na contratação, em **[indicar o caminho no checkout]**, ou pelo e-mail de atendimento. A Casa Loba confirmará o recebimento e providenciará a restituição integral dos valores pagos quando o direito for exercido dentro do prazo aplicável. [Código de Defesa do Consumidor, art. 49](https://www2.camara.leg.br/legin/fed/lei/1990/lei-8078-11-setembro-1990-365086-normaatualizada-pl.html) · [Decreto do comércio eletrônico, art. 5º](https://www2.camara.leg.br/legin/fed/decret/2013/decreto-7962-15-marco-2013-775557-publicacaooriginal-139266-pe.html).
+Nas compras pela internet, você pode exercer o direito de arrependimento em até **sete dias**, contados da assinatura ou do recebimento do serviço, conforme o caso. Você poderá fazer o pedido pela ferramenta usada na contratação ou pelo e-mail de atendimento. A Casa Loba confirmará o recebimento e providenciará a restituição integral dos valores pagos quando o direito for exercido dentro do prazo aplicável. [Código de Defesa do Consumidor, art. 49](https://www2.camara.leg.br/legin/fed/lei/1990/lei-8078-11-setembro-1990-365086-normaatualizada-pl.html) · [Decreto do comércio eletrônico, art. 5º](https://www2.camara.leg.br/legin/fed/decret/2013/decreto-7962-15-marco-2013-775557-publicacaooriginal-139266-pe.html).
 
 ## 5. Convivência e uso dos materiais
 
@@ -51,16 +51,16 @@ A inscrição na Cuidadoteca deve ser feita pela pessoa responsável pela crian�
 
 ## 1. Quem cuida dos seus dados
 
-O **Grupo Casa Loba e Argos Ltda.**, CNPJ **39.713.134/0001-95**, é responsável pelo tratamento de dados pessoais descrito nesta política. Para tirar dúvidas ou fazer um pedido sobre seus dados, escreva para **contato@casaloba.com.br**. **Amabile Carvalho** é o contato indicado para receber essas solicitações. **[Validar a indicação formal de encarregado, quando aplicável.]**
+O **Grupo Casa Loba e Argos Ltda.**, CNPJ **39.713.134/0001-95**, é responsável pelo tratamento de dados pessoais descrito nesta política. Para tirar dúvidas ou fazer um pedido sobre seus dados, escreva para **contato@casaloba.com.br**. **Amabile Carvalho** é o contato indicado para receber essas solicitações.
 
 ## 2. Quais dados usamos e para quê
 
 - **Lista de espera.** Usamos seu e-mail para registrar a inscrição, avisar sobre a abertura da comunidade e atender pedidos relacionados à lista.
-- **Conta e área de membros.** Quando estiverem disponíveis, usaremos os dados necessários para criar sua conta, confirmar sua identidade no acesso, administrar seu perfil e liberar os recursos do plano. **[Confirmar os campos de cadastro e quais informações do perfil ficarão visíveis às integrantes.]**
+- **Conta e área de membros.** Quando estiverem disponíveis, usaremos os dados necessários para criar sua conta, confirmar sua identidade no acesso, administrar seu perfil e liberar os recursos do plano.
 - **Atendimento.** Usamos os dados de contato e o conteúdo da sua mensagem para responder ao pedido e acompanhar sua resolução.
 - **Assinaturas.** Quando a contratação for aberta, usaremos as informações necessárias para identificar a compra, confirmar o pagamento, liberar o acesso e atender pedidos de cancelamento e reembolso.
 
-Os dados necessários à contratação e à prestação do serviço são usados para executar o contrato. Podemos usar dados para cumprir obrigações legais, quando aplicável. Para comunicações promocionais, usamos o consentimento dado no canal escolhido. **[Validar as bases legais da lista de espera, do atendimento, da moderação e das inscrições em eventos.]**
+Os dados necessários à contratação e à prestação do serviço são usados para executar o contrato. Podemos usar dados para cumprir obrigações legais, quando aplicável. Para comunicações promocionais, usamos o consentimento dado no canal escolhido.
 
 ## 3. Novidades por e-mail ou WhatsApp
 
@@ -74,19 +74,18 @@ Os perfis e as publicações do mural ficam visíveis às integrantes da comunid
 
 O **Wix** é a plataforma escolhida para a estrutura do site. A **Ticto** processará os pagamentos quando a contratação estiver disponível. A Casa Loba usará os dados da transação necessários para administrar a assinatura e prestar atendimento. Os dados do cartão devem ser informados no checkout indicado.
 
-**[Confirmar quais dados são tratados no Wix, quais a Casa Loba recebe da Ticto, os links de privacidade dos fornecedores e se haverá compartilhamento com prestadores ou parceiros de eventos e da Cuidadoteca. Informar as finalidades e eventuais transferências internacionais.]**
 
 ## 6. Eventos, Cuidadoteca e uso de imagem
 
 Usamos os dados necessários para organizar a inscrição e o atendimento de cada evento. A Cuidadoteca coleta dados da criança atendida e da pessoa responsável. Antes do envio, o aviso específico da inscrição informará quais dados serão solicitados, para que serão usados, quem poderá acessá-los, por quanto tempo serão guardados e como exercer direitos.
 
-A Casa Loba considerará o melhor interesse da criança ao definir o que é necessário coletar e como usar essas informações. **[Validar os campos, as bases legais e a eventual coleta de dados de saúde antes de abrir a inscrição.]** [Orientação da ANPD sobre dados de crianças e adolescentes](https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-divulga-enunciado-sobre-o-tratamento-de-dados-pessoais-de-criancas-e-adolescentes).
+A Casa Loba considerará o melhor interesse da criança ao definir o que é necessário coletar e como usar essas informações. [Orientação da ANPD sobre dados de crianças e adolescentes](https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-divulga-enunciado-sobre-o-tratamento-de-dados-pessoais-de-criancas-e-adolescentes).
 
 Para divulgar imagens, vídeos ou depoimentos de participantes, a Casa Loba apresentará uma autorização específica na inscrição, com a finalidade, os canais de divulgação e o prazo de uso. Se houver registro de imagens de crianças para divulgação, a autorização será tratada separadamente com a pessoa responsável.
 
 ## 7. Cookies, guarda e segurança
 
-O site usa **[informar cookies e tecnologias efetivamente utilizados, suas finalidades, durações e opções de preferência]**. Mantemos os dados pelo tempo necessário à finalidade informada, observadas as obrigações legais e a necessidade de preservar direitos. **[Definir os prazos ou critérios de guarda por categoria e descrever as medidas de proteção efetivamente adotadas.]**
+O site usa cookies estritamente necessários ao funcionamento, à autenticação e à segurança. Mantemos os dados pelo tempo necessário à finalidade informada, observadas as obrigações legais e a necessidade de preservar direitos.
 
 ## 8. Seus direitos e como solicitar
 
