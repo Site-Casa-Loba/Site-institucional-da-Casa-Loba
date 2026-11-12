@@ -32,6 +32,11 @@ publicados; as decisões pendentes vivem aqui.
 - [ ] **Arrependimento:** indicar o caminho concreto no checkout para exercer o
       direito de arrependimento em 7 dias.
 
+- [ ] **Vigência:** definir a data de vigência dos documentos (a linha
+      "Vigência" foi removida do `LegalLayout.astro` até a data existir).
+- [ ] **Versão:** o cabeçalho das páginas legais exibe "Versão 0.2 para
+      aprovação" — revisar o rótulo antes de publicar em produção.
+
 ## Seções removidas em relação à versão anterior
 
 A versão anterior (revertida em `3a55b7b`) trazia seções que não existem mais:
