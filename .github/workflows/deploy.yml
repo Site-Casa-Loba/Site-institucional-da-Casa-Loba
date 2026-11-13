@@ -36,6 +36,9 @@ env:
   WIX_CLIENT_INSTANCE_ID: ci-placeholder
   WIX_CLIENT_PUBLIC_KEY: ci-placeholder
   WIX_CLIENT_SECRET: ci-placeholder
+  # Token que a Ticto envia no webhook; é embutido no bundle server no build.
+  # Configure o mesmo valor em Settings → Secrets → Actions.
+  TICTO_WEBHOOK_TOKEN: ${{ secrets.TICTO_WEBHOOK_TOKEN }}
 
 jobs:
   deploy:
