@@ -22,6 +22,10 @@ const SITE_URL = (
 
 const ARQUIVOS_DO_WIX = new Set(["robots.txt", "sitemap.xml"]);
 
+// Pastas do bundle server-side (Wix Astro build): nunca são servidas como
+// arquivos — o worker do Wix executa o entry.mjs. Fora da comparação.
+const PASTAS_SERVER = ["server/", "_wix/"];
+
 const DIST = fileURLToPath(new URL("../dist/", import.meta.url));
 const RETRIES = Number(process.env.CHECK_RETRIES ?? 5);
 
@@ -55,7 +59,7 @@ async function fetchLive(path) {
 
 const files = (await listFiles(DIST)).filter((file) => {
   const path = relative(DIST, file).split(sep).join("/");
-  return !ARQUIVOS_DO_WIX.has(path);
+  return !ARQUIVOS_DO_WIX.has(path) && !PASTAS_SERVER.some((p) => path.startsWith(p));
 });
 
 if (files.length === 0) {

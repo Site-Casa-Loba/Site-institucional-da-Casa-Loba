@@ -10,6 +10,7 @@
     "wix:check": "node --env-file-if-exists=.env scripts/wix-check.mjs"
   },
   "dependencies": {
+    "@wix/astro": "^3.1.2",
     "@wix/data": "^1.0.541",
     "@wix/members": "^1.0.541",
     "@wix/pricing-plans": "^1.0.439",
@@ -18,6 +19,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
+    "@wix/astro-wix-hosting-adapter": "^3.0.5",
     "typescript": "^6.0.3"
   }
 }

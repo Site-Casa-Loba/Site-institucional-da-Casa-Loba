@@ -2,6 +2,18 @@ name: Deploy
 
 # Publica o site no Wix Headless a cada push na main.
 # Precisa do secret WIX_API_TOKEN (chave de API com acesso ao site Headless).
+#
+# IMPORTANTE: o site NÃO é mais um drop estático. Desde o release do webhook da
+# Ticto, o site é um "Wix Astro build" server-rendered (páginas pré-renderizadas
+# + rotas on-demand em src/pages/api, ex.: /api/webhooks/ticto). Um drop
+# estático substituiria o release inteiro e MATARIA o webhook — por isso o
+# deploy usa o Wix CLI (`wix release`), que publica o build com os metadados
+# gerados pela integração @wix/astro (.wix/build-metadata.json).
+#
+# A chave de API usada no CI precisa da permissão VELO.APP_PROJECT_READ sobre o
+# app do projeto (appId em wix.config.json). Sem ela o release falha com
+# PERMISSION_DENIED — o que é o comportamento desejado: falha barulhenta em vez
+# de sobrescrever o site server-renderado com arquivos estáticos.
 
 on:
   push:
@@ -17,6 +29,13 @@ env:
   WIX_SITE_URL: https://www.casaloba.com.br
   # ID público do cliente headless (não é secret) — permite ao build ler o CMS.
   PUBLIC_WIX_CLIENT_ID: 177d2fe1-7c67-4af7-a2e0-482dc527d3aa
+  # Exigidas pela integração @wix/astro para gerar os metadados do release.
+  # O site usa auth client-side e o webhook ainda não chama APIs do Wix no
+  # servidor, então valores provisórios bastam para o build (nunca versionados).
+  WIX_CLIENT_ID: 177d2fe1-7c67-4af7-a2e0-482dc527d3aa
+  WIX_CLIENT_INSTANCE_ID: ci-placeholder
+  WIX_CLIENT_PUBLIC_KEY: ci-placeholder
+  WIX_CLIENT_SECRET: ci-placeholder
 
 jobs:
   deploy:
@@ -33,19 +52,15 @@ jobs:
 
       - run: npm run build
 
-      # O drop substitui o conjunto inteiro de arquivos: dist/ é o site.
-      - name: Publicar build no Wix Headless
+      # Publica o build server-rendered. O CLI sobe o que está em dist/
+      # (outputDirectory em wix.config.json) e faz o release na produção.
+      - name: Publicar build no Wix Headless (wix release)
         env:
-          WIX_API_TOKEN: ${{ secrets.WIX_API_TOKEN }}
+          WIX_API_KEY: ${{ secrets.WIX_API_TOKEN }}
         run: |
-          cd dist
-          zip -qr "$RUNNER_TEMP/site.zip" *
-          cd "$GITHUB_WORKSPACE"
-          curl -sS --fail-with-body -X POST \
-            "https://www.wixapis.com/headless-business-setup/v1/headless-business/$WIX_SITE_ID/drop?campaign=ci&agent=github-actions" \
-            -H "Authorization: $WIX_API_TOKEN" \
-            -F "files=@$RUNNER_TEMP/site.zip" | tee "$RUNNER_TEMP/drop.json"
-          grep -q '"siteUrl"' "$RUNNER_TEMP/drop.json"
+          npx -y @wix/cli@latest login --api-key "$WIX_API_KEY"
+          npx -y @wix/cli@latest release \
+            -c "deploy $GITHUB_SHA" --version-type minor
 
-      - name: Conferir se o ar está igual ao build
+      - name: Conferir se o ar é igual ao build
         run: npm run wix:check
