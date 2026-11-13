@@ -9,3 +9,4 @@ tasks.md
 
 # Metadados gerados pela integracao @wix/astro no build
 .wix/
+.wrangler/
