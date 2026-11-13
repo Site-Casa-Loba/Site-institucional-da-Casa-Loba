@@ -1,19 +1,22 @@
-name: Deploy
+name: Build e checagem
 
-# Publica o site no Wix Headless a cada push na main.
-# Precisa do secret WIX_API_TOKEN (chave de API com acesso ao site Headless).
+# O site é um "Wix Astro build" server-rendered no Wix Headless (páginas
+# pré-renderizadas + rotas on-demand em src/pages/api, ex.:
+# /api/webhooks/ticto). O release NÃO pode ser feito por este workflow:
 #
-# IMPORTANTE: o site NÃO é mais um drop estático. Desde o release do webhook da
-# Ticto, o site é um "Wix Astro build" server-rendered (páginas pré-renderizadas
-# + rotas on-demand em src/pages/api, ex.: /api/webhooks/ticto). Um drop
-# estático substituiria o release inteiro e MATARIA o webhook — por isso o
-# deploy usa o Wix CLI (`wix release`), que publica o build com os metadados
-# gerados pela integração @wix/astro (.wix/build-metadata.json).
+#  - um drop estático (API headless-business-setup/drop) substituiria o
+#    release inteiro e MATARIA o webhook;
+#  - `wix release` (Wix CLI) neste projeto publica apenas os arquivos de
+#    site.outputDirectory como site estático — o bundle server em dist/server
+#    não vira worker e o webhook volta a 404 (verificado em produção).
 #
-# A chave de API usada no CI precisa da permissão VELO.APP_PROJECT_READ sobre o
-# app do projeto (appId em wix.config.json). Sem ela o release falha com
-# PERMISSION_DENIED — o que é o comportamento desejado: falha barulhenta em vez
-# de sobrescrever o site server-renderado com arquivos estáticos.
+# O release é feito pelo fluxo de upload do Wix MCP (UploadHeadlessWebsiteFiles:
+# prepare → PUT no S3 → release com o build de .wix/ + dist/), que mantém o
+# site server-rendered. Este workflow então só builda, roda as checagens e
+# guarda o dist/ como artifact para conferência.
+#
+# Com isso o CI não precisa de chave de API do Wix — o secret WIX_API_TOKEN
+# pode ser removido do repositório.
 
 on:
   push:
@@ -21,17 +24,16 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: deploy-wix
+  group: build-casaloba
   cancel-in-progress: true
 
 env:
-  WIX_SITE_ID: 5542fcdd-bc0a-4731-aa1b-6fa3c00f8082
   WIX_SITE_URL: https://www.casaloba.com.br
   # ID público do cliente headless (não é secret) — permite ao build ler o CMS.
   PUBLIC_WIX_CLIENT_ID: 177d2fe1-7c67-4af7-a2e0-482dc527d3aa
   # Exigidas pela integração @wix/astro para gerar os metadados do release.
-  # O site usa auth client-side e o webhook ainda não chama APIs do Wix no
-  # servidor, então valores provisórios bastam para o build (nunca versionados).
+  # O site usa auth client-side e o webhook não usa essas credenciais, então
+  # valores provisórios bastam para o build (nunca versionar segredos reais).
   WIX_CLIENT_ID: 177d2fe1-7c67-4af7-a2e0-482dc527d3aa
   WIX_CLIENT_INSTANCE_ID: ci-placeholder
   WIX_CLIENT_PUBLIC_KEY: ci-placeholder
@@ -41,7 +43,7 @@ env:
   TICTO_WEBHOOK_TOKEN: ${{ secrets.TICTO_WEBHOOK_TOKEN }}
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -53,17 +55,17 @@ jobs:
 
       - run: npm ci
 
+      - name: Checagens (contrato auth + astro check)
+        run: npm run check
+
       - run: npm run build
 
-      # Publica o build server-rendered. O CLI sobe o que está em dist/
-      # (outputDirectory em wix.config.json) e faz o release na produção.
-      - name: Publicar build no Wix Headless (wix release)
-        env:
-          WIX_API_KEY: ${{ secrets.WIX_API_TOKEN }}
-        run: |
-          npx -y @wix/cli@latest login --api-key "$WIX_API_KEY"
-          npx -y @wix/cli@latest release \
-            -c "deploy $GITHUB_SHA" --version-type minor
-
-      - name: Conferir se o ar é igual ao build
-        run: npm run wix:check
+      - name: Guardar dist/ como artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: |
+            dist
+            .wix
+          retention-days: 7
+          if-no-files-found: error
