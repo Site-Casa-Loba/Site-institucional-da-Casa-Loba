@@ -1,22 +1,18 @@
-name: Build e checagem
+name: Deploy
 
-# O site é um "Wix Astro build" server-rendered no Wix Headless (páginas
-# pré-renderizadas + rotas on-demand em src/pages/api, ex.:
-# /api/webhooks/ticto). O release NÃO pode ser feito por este workflow:
+# Publica o site no Wix Headless a cada push na main.
 #
-#  - um drop estático (API headless-business-setup/drop) substituiria o
-#    release inteiro e MATARIA o webhook;
-#  - `wix release` (Wix CLI) neste projeto publica apenas os arquivos de
-#    site.outputDirectory como site estático — o bundle server em dist/server
-#    não vira worker e o webhook volta a 404 (verificado em produção).
+# O site é um "Wix Astro build" server-rendered (páginas pré-renderizadas +
+# rotas on-demand em src/pages/api, ex.: /api/webhooks/ticto). Nem o drop
+# estático nem o `wix release` do CLI servem — ambos publicam só arquivos e
+# derrubam o worker (o webhook volta a 404; verificado em produção). O release
+# correto passa pela ferramenta UploadHeadlessWebsiteFiles do Wix MCP
+# (https://mcp.wix.com/mcp), autenticado com a chave de API da conta — é o que
+# scripts/wix-release.mjs faz.
 #
-# O release é feito pelo fluxo de upload do Wix MCP (UploadHeadlessWebsiteFiles:
-# prepare → PUT no S3 → release com o build de .wix/ + dist/), que mantém o
-# site server-rendered. Este workflow então só builda, roda as checagens e
-# guarda o dist/ como artifact para conferência.
-#
-# Com isso o CI não precisa de chave de API do Wix — o secret WIX_API_TOKEN
-# pode ser removido do repositório.
+# Secrets necessários (Settings → Secrets → Actions):
+#   WIX_API_TOKEN       — chave de API da conta Wix (a da conta casaloba)
+#   TICTO_WEBHOOK_TOKEN — token que a Ticto envia no webhook
 
 on:
   push:
@@ -24,7 +20,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: build-casaloba
+  group: deploy-wix
   cancel-in-progress: true
 
 env:
@@ -43,7 +39,7 @@ env:
   TICTO_WEBHOOK_TOKEN: ${{ secrets.TICTO_WEBHOOK_TOKEN }}
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -60,12 +56,15 @@ jobs:
 
       - run: npm run build
 
-      - name: Guardar dist/ como artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: |
-            dist
-            .wix
-          retention-days: 7
-          if-no-files-found: error
+      # Publica o build server-rendered via Wix MCP autenticado pela chave de
+      # API da conta. Requer os secrets WIX_API_TOKEN (chave de API da conta
+      # correta) e TICTO_WEBHOOK_TOKEN.
+      - name: Publicar build no Wix Headless (release server-rendered)
+        env:
+          WIX_API_KEY: ${{ secrets.WIX_API_TOKEN }}
+          WIX_ACCOUNT_ID: 980d7438-c1dd-4311-9ef1-a414a0dcb54f
+        run: node scripts/wix-release.mjs
+
+      # Confere se o ar ficou igual ao build (arquivos do cliente).
+      - name: Conferir se o ar é igual ao build
+        run: npm run wix:check
